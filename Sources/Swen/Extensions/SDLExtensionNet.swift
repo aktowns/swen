@@ -7,10 +7,6 @@ public class SDLExtensionNet : SDLExtension {
     }
   }
 
-  public func start() throws {
-
-  }
-
   public func quit() {
     SDLNet_Quit()
   }

@@ -25,9 +25,7 @@ public class SDLExtensionCore : SDLExtension {
     if SDL_Init(flags) < 0 {
       throw SDLError.InitialisationError(message: "SDL_Init: \(SDL.getErrorMessage())")
     }
-  }
 
-  public func start() throws {
     print("** Initializing subsystems")
     for (name, subsystem) in self.subsystems {
       if SDL_InitSubSystem(UInt32(subsystem)) < 0 {
@@ -35,7 +33,6 @@ public class SDLExtensionCore : SDLExtension {
       } else {
         print("Loaded subsystem: \(name)")
       }
-
     }
   }
 

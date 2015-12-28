@@ -19,7 +19,6 @@ public class SDLExtensionLoader {
       print("loading extension: \(ext)")
 
       try ext.prepare()
-      try ext.start()
     }
   }
 
