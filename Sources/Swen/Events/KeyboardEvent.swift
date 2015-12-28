@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 public enum KeyState: Uint8 {
@@ -30,12 +29,12 @@ struct KeyboardSymbol {
 // SDL_Keysym keysym;  /**< The key that was pressed or released */
 
 public class KeyboardEvent : CommonEvent {
-  private var keyMem: SDL_KeyboardEvent { return self.handle.memory.key }
+  private var keyEvent: SDL_KeyboardEvent { return self.handle.key }
 
-  public var windowId: UInt32 { return keyMem.windowID }
-  public var state: UInt8 { return keyMem.state }
-  public var keyRepeat: Bool { return keyMem.`repeat` != 0 }
-  public var keySym: SDL_Keysym { return keyMem.keysym }
+  public var windowId: UInt32 { return keyEvent.windowID }
+  public var state: UInt8 { return keyEvent.state }
+  public var keyRepeat: Bool { return keyEvent.`repeat` != 0 }
+  public var keySym: SDL_Keysym { return keyEvent.keysym }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), windowId:\(windowId) " +

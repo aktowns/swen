@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 public struct RenderFlip : OptionSetType {

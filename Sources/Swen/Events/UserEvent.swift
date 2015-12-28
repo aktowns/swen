@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_USEREVENT through ::SDL_LASTEVENT-1 */
@@ -9,12 +8,12 @@ import CSDL
 // void *data2;        /**< User defined data pointer */
 
 public class UserEvent : CommonEvent {
-  private var userMem: SDL_UserEvent { return self.handle.memory.user }
+  private var userEvent: SDL_UserEvent { return self.handle.user }
 
-  public var windowId: UInt32 { return userMem.windowID }
-  public var code: Int32 { return userMem.code }
-  public var data1: UnsafeMutablePointer<Void> { return userMem.data1 }
-  public var data2: UnsafeMutablePointer<Void> { return userMem.data2 }
+  public var windowId: UInt32 { return userEvent.windowID }
+  public var code: Int32 { return userEvent.code }
+  public var data1: UnsafeMutablePointer<Void> { return userEvent.data1 }
+  public var data2: UnsafeMutablePointer<Void> { return userEvent.data2 }
 
   override public var description : String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), windowId:\(windowId), " +

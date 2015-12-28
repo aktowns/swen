@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;                                /**< ::SDL_TEXTEDITING */
@@ -9,16 +8,16 @@ import CSDL
 // Sint32 length;                              /**< The length of selected editing text */
 
 public class TextEditingEvent : CommonEvent {
-  private var editMem: SDL_TextEditingEvent { return self.handle.memory.edit }
+  private var editEvent: SDL_TextEditingEvent { return self.handle.edit }
 
-  public var windowId: UInt32 { return editMem.windowID }
+  public var windowId: UInt32 { return editEvent.windowID }
   public var text: String? {
     // for some reason fixed width arrays are converted to tuples..
-    let mirror: Array<Int8> = Mirror(reflecting: editMem.text).children.map{$0.value as! Int8}
+    let mirror: Array<Int8> = Mirror(reflecting: editEvent.text).children.map{$0.value as! Int8}
     return String.fromCString(UnsafePointer(mirror))
   }
-  public var start: Int32 { return editMem.start }
-  public var length: Int32 { return editMem.length }
+  public var start: Int32 { return editEvent.start }
+  public var length: Int32 { return editEvent.length }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), " +

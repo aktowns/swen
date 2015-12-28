@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 public class Texture {
@@ -8,8 +7,8 @@ public class Texture {
   private let renderer: Renderer
 
   /// Create a texture for a rendering context.
-  init(withRenderer renderer: Renderer, format: UInt32, access: Int32, andSize size: Point<Int32>) throws {
-    self.handle = SDL_CreateTexture(renderer.handle, format, access, size.x, size.y)
+  init(withRenderer renderer: Renderer, format: UInt32, access: Int32, andSize size: Size<Int32>) throws {
+    self.handle = SDL_CreateTexture(renderer.handle, format, access, size.w, size.h)
     self.renderer = renderer
 
     if self.handle == nil {
@@ -33,7 +32,7 @@ public class Texture {
     self.renderer = renderer
 
     if self.handle == nil {
-      throw SDLError.MediaLoadError(message: "init(fromHandle:andRenderer:) given a null handle")
+      throw SDLError.BadHandleError(message: "Texture.init(fromHandle:andRenderer:) given a null handle")
     }
   }
 
@@ -47,7 +46,7 @@ public class Texture {
 
   public func render(atPoint point: Point<Int32>) {
     let destRect = Rect(x: point.x, y: point.y, sizeX: self.size.w, sizeY: self.size.h)
-    print(destRect)
+
     self.renderer.copy(texture: self, sourceRect: nil, destinationRect: destRect)
   }
 

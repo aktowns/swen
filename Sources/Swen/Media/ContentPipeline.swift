@@ -1,5 +1,3 @@
-import Foundation
-
 public class ContentPipeline {
   var fontLoaders = Array<AssetFontLoader.Type>()
   var imageLoaders = Array<AssetImageLoader.Type>()

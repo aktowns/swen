@@ -1,5 +1,3 @@
-import Foundation
-
 public enum AssetLoaderError : ErrorType {
   case InitialisationError(message: String)
   case OpenError(message: String)

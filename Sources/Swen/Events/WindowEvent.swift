@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_WINDOWEVENT */
@@ -12,12 +11,12 @@ import CSDL
 // Sint32 data2;       /**< event dependent data */
 
 public class WindowEvent : CommonEvent {
-  private var windowMem: SDL_WindowEvent { return self.handle.memory.window }
+  private var windowEvent: SDL_WindowEvent { return self.handle.window }
 
-  public var windowId: UInt32 { return windowMem.windowID }
-  public var event: UInt8 { return windowMem.event }
-  public var data1: Int32 { return windowMem.data1 }
-  public var data2: Int32 { return windowMem.data2 }
+  public var windowId: UInt32 { return windowEvent.windowID }
+  public var event: UInt8 { return windowEvent.event }
+  public var data1: Int32 { return windowEvent.data1 }
+  public var data2: Int32 { return windowEvent.data2 }
 
   override public var description : String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), windowId:\(windowId), " +

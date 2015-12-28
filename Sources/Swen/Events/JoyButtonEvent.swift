@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_JOYBUTTONDOWN or ::SDL_JOYBUTTONUP */
@@ -10,11 +9,11 @@ import CSDL
 // Uint8 padding2;
 
 public class JoyButtonEvent : CommonEvent {
-  private var jbuttonMem: SDL_JoyButtonEvent { return self.handle.memory.jbutton }
+  private var jbuttonEvent: SDL_JoyButtonEvent { return self.handle.jbutton }
 
-  public var which: SDL_JoystickID { return jbuttonMem.which }
-  public var button: UInt8 { return jbuttonMem.button }
-  public var state: UInt8 { return jbuttonMem.state }
+  public var which: SDL_JoystickID { return jbuttonEvent.which }
+  public var button: UInt8 { return jbuttonEvent.button }
+  public var state: UInt8 { return jbuttonEvent.state }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +

@@ -5,8 +5,6 @@
  *   Methods for dealing with points
  */
 
-import Foundation
-
 public struct Point<a: ArithmeticType> : Comparable, CustomStringConvertible {
   /// The x coordinate of this Point.
   var x: a

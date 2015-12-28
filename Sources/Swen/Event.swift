@@ -1,34 +1,24 @@
-import Foundation
 import CSDL
-import Glibc
-
-typealias RawEvent = UnsafeMutablePointer<SDL_Event>
 
 public class Event {
-  // public class func peepEvent
-  // public class func hasEvent
-  // public class func hasEvents
-  // public class func flushEvent
-  // public class func flushEvents
+  public class func poll(f: (BaseEvent) -> Void) {
+    var e: SDL_Event = SDL_Event()
 
-  public class func poll(f: (BaseEvent) -> Void) -> Void {
-    let e: RawEvent = RawEvent.alloc(1)
-
-    while SDL_PollEvent(e) != 0 {
+    while SDL_PollEvent(&e) != 0 {
       f(Event.coerce(e))
     }
   }
 
-  public class func wait(f: (BaseEvent) -> Void) -> Void {
-    let e: RawEvent = RawEvent.alloc(1)
+  public class func wait(f: (BaseEvent) -> Void) {
+    var e: SDL_Event = SDL_Event()
 
-    while SDL_WaitEvent(e) != 0 {
+    while SDL_WaitEvent(&e) != 0 {
       f(Event.coerce(e))
     }
   }
 
-  private class func coerce(e: RawEvent) -> BaseEvent {
-    let type = SDL_EventType(e.memory.type)
+  private class func coerce(e: SDL_Event) -> BaseEvent {
+    let type = SDL_EventType(e.type)
 
     switch type {
     case SDL_AUDIODEVICEADDED,
@@ -59,7 +49,6 @@ public class Event {
     case SDL_USEREVENT:                 return UserEvent(handle: e)
     case SDL_WINDOWEVENT:               return WindowEvent(handle: e)
     default:                            return BaseEvent(handle: e)
-
     }
   }
 }

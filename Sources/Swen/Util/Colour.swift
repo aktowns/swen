@@ -1,5 +1,3 @@
-import Foundation
-
 public struct Colour {
   var r: UInt8
   var g: UInt8

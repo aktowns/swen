@@ -5,8 +5,6 @@
  *   Methods for dealing with 2d vectors
  */
 
-import Foundation
-
 public struct Vector<a: ArithmeticType> : Comparable {
   /// The x coordinate of this Vector.
   var x: a

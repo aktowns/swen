@@ -5,8 +5,6 @@
  *   Methods for dealing with rects
  */
 
-import Foundation
-
 public struct Rect<a: ArithmeticType> : Comparable {
   /// The x coordinate of the top-left corner of this Rectangle.
   var x: a

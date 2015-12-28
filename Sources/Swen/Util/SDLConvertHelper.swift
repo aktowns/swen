@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 extension SDL_Rect {

@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_SYSWMEVENT */
@@ -12,9 +11,9 @@ import CSDL
 // } x11;
 
 public class SysWMEvent : CommonEvent {
-  private var syswmMem: SDL_SysWMEvent { return self.handle.memory.syswm }
+  private var syswmEvent: SDL_SysWMEvent { return self.handle.syswm }
 
-  public var msg: UnsafeMutablePointer<SDL_SysWMmsg> { return syswmMem.msg }
+  public var msg: UnsafeMutablePointer<SDL_SysWMmsg> { return syswmEvent.msg }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), msg:\(msg))"

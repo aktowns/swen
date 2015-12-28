@@ -1,5 +1,3 @@
-import CSDL
-
 public enum SDLError : ErrorType {
   case InitialisationError(message: String)
   case MixerOpenError(message: String)

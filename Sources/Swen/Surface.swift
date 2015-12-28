@@ -7,11 +7,14 @@ public class Surface {
 
   init(handle: RawSurface) throws {
     if handle == nil {
-      print("Surface.Init: Bad Handle")
-      throw SDLError.BadHandleError(message: "Surface.init")
+      throw SDLError.BadHandleError(message: "Surface.init(handle:) given a null handle")
     }
 
     self.handle = handle
+  }
+
+  deinit {
+    SDL_FreeSurface(self.handle)
   }
 
   public var format: UnsafeMutablePointer<SDL_PixelFormat> {

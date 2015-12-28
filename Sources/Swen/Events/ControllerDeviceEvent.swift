@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_CONTROLLERDEVICEADDED, ::SDL_CONTROLLERDEVICEREMOVED, or
@@ -8,9 +7,9 @@ import CSDL
 //                          the REMOVED or REMAPPED event */
 
 public class ControllerDeviceEvent : CommonEvent {
-  private var cdeviceMem: SDL_ControllerDeviceEvent { return self.handle.memory.cdevice }
+  private var cdeviceEvent: SDL_ControllerDeviceEvent { return self.handle.cdevice }
 
-  public var which: Int32 { return cdeviceMem.which }
+  public var which: Int32 { return cdeviceEvent.which }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which))"

@@ -1,5 +1,3 @@
-import Foundation
-
 extension Optional {
   public func join(opt: Wrapped?) -> Wrapped? {
     return try! self.flatMap { $0 }

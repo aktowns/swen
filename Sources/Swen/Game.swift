@@ -1,6 +1,4 @@
-import Foundation
 import CSDL
-import Glibc
 
 public class Game {
   let window: Window

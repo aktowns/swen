@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_AUDIODEVICEADDED, or ::SDL_AUDIODEVICEREMOVED */
@@ -11,10 +10,10 @@ import CSDL
 // Uint8 padding3;
 
 public class AudioDeviceEvent : CommonEvent {
-  private var adeviceMem: SDL_AudioDeviceEvent { return self.handle.memory.adevice }
+  private var adeviceEvent: SDL_AudioDeviceEvent { return self.handle.adevice }
 
-  public var which: UInt32 { return adeviceMem.which }
-  public var iscapture: UInt8 { return adeviceMem.iscapture }
+  public var which: UInt32 { return adeviceEvent.which }
+  public var iscapture: UInt8 { return adeviceEvent.iscapture }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), which:\(which) " +

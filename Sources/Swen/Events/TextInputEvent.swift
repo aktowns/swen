@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;                              /**< ::SDL_TEXTINPUT */
@@ -7,12 +6,12 @@ import CSDL
 // char text[SDL_TEXTINPUTEVENT_TEXT_SIZE];  /**< The input text */
 
 public class TextInputEvent : CommonEvent {
-  private var textMem: SDL_TextInputEvent { return self.handle.memory.text }
+  private var textEvent: SDL_TextInputEvent { return self.handle.text }
 
-  public var windowId: UInt32 { return textMem.windowID }
+  public var windowId: UInt32 { return textEvent.windowID }
   public var text: String? {
     // for some reason fixed width arrays are converted to tuples..
-    let mirror: Array<Int8> = Mirror(reflecting: textMem.text).children.map{$0.value as! Int8}
+    let mirror: Array<Int8> = Mirror(reflecting: textEvent.text).children.map{$0.value as! Int8}
     return String.fromCString(UnsafePointer(mirror))
   }
 

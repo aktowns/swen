@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_JOYHATMOTION */
@@ -16,11 +15,11 @@ import CSDL
 // Uint8 padding2;
 
 public class JoyHatEvent : CommonEvent {
-  private var jhatMem: SDL_JoyHatEvent { return self.handle.memory.jhat }
+  private var jhatEvent: SDL_JoyHatEvent { return self.handle.jhat }
 
-  public var which: SDL_JoystickID { return jhatMem.which }
-  public var hat: UInt8 { return jhatMem.hat }
-  public var value: UInt8 { return jhatMem.value }
+  public var which: SDL_JoystickID { return jhatEvent.which }
+  public var hat: UInt8 { return jhatEvent.hat }
+  public var value: UInt8 { return jhatEvent.value }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +

@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_MOUSEWHEEL */
@@ -11,12 +10,12 @@ import CSDL
 //                          values in X and Y will be opposite. Multiply by -1 to change them back */
 
 public class MouseWheelEvent : CommonEvent {
-  private var wheelMem: SDL_MouseWheelEvent { return self.handle.memory.wheel }
+  private var wheelEvent: SDL_MouseWheelEvent { return self.handle.wheel }
 
-  public var windowId: UInt32 { return wheelMem.windowID }
-  public var which: UInt32 { return wheelMem.which }
-  public var direction: UInt32 { return wheelMem.direction }
-  public var position: Point<Int32> { return Point(x: wheelMem.x, y: wheelMem.y) }
+  public var windowId: UInt32 { return wheelEvent.windowID }
+  public var which: UInt32 { return wheelEvent.which }
+  public var direction: UInt32 { return wheelEvent.direction }
+  public var position: Point<Int32> { return Point(x: wheelEvent.x, y: wheelEvent.y) }
 
   override public var description : String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), windowId:\(windowId), " +

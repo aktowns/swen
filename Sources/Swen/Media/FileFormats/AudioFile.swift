@@ -1,5 +1,3 @@
-import Foundation
-
 public class AudioFile {
   let path: String
 

@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_CONTROLLERAXISMOTION */
@@ -12,11 +11,11 @@ import CSDL
 // Uint16 padding4;
 
 public class ControllerAxisEvent : CommonEvent {
-  private var caxisMem: SDL_ControllerAxisEvent { return self.handle.memory.caxis }
+  private var caxisEvent: SDL_ControllerAxisEvent { return self.handle.caxis }
 
-  public var which: SDL_JoystickID { return caxisMem.which }
-  public var axis: UInt8 { return caxisMem.axis }
-  public var value: Int16 { return caxisMem.value }
+  public var which: SDL_JoystickID { return caxisEvent.which }
+  public var axis: UInt8 { return caxisEvent.axis }
+  public var value: Int16 { return caxisEvent.value }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +

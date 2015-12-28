@@ -1,5 +1,3 @@
-import Foundation
-
 // Smaller cut of IntegerArithmeticType for floating point numbers aswell
 public protocol ArithmeticType : Comparable {
   /// Add `lhs` and `rhs`, returning a result

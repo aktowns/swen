@@ -5,8 +5,6 @@
  *   Methods for dealing with sizes
  */
 
-import Foundation
-
 public struct Size<a: ArithmeticType> : Comparable, CustomStringConvertible {
   /// The with.
   var w: a

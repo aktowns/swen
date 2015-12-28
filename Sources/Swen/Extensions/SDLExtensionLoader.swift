@@ -1,5 +1,3 @@
-import Foundation
-
 public class SDLExtensionLoader {
   typealias extensionConstructor = () -> SDLExtension
   static var extensions: [extensionConstructor] = [

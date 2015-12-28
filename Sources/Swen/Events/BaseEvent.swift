@@ -1,15 +1,14 @@
-import Foundation
 import CSDL
 
 public class BaseEvent : CustomStringConvertible {
-  let handle: RawEvent
+  let handle: SDL_Event
 
-  init(handle: RawEvent) {
+  init(handle: SDL_Event) {
     self.handle = handle
   }
 
   var type: SDL_EventType {
-    return SDL_EventType(self.handle.memory.type)
+    return SDL_EventType(handle.type)
   }
 
   public var description : String {

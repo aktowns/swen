@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_JOYBALLMOTION */
@@ -12,11 +11,11 @@ import CSDL
 // Sint16 yrel;        /**< The relative motion in the Y direction */
 
 public class JoyBallEvent : CommonEvent {
-  private var jballMem: SDL_JoyBallEvent { return self.handle.memory.jball }
+  private var jballEvent: SDL_JoyBallEvent { return self.handle.jball }
 
-  public var which: SDL_JoystickID { return jballMem.which }
-  public var ball: UInt8 { return jballMem.ball }
-  public var motion: Point<Int16> { return Point<Int16>(x: jballMem.xrel, y: jballMem.yrel) }
+  public var which: SDL_JoystickID { return jballEvent.which }
+  public var ball: UInt8 { return jballEvent.ball }
+  public var motion: Point<Int16> { return Point<Int16>(x: jballEvent.xrel, y: jballEvent.yrel) }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +

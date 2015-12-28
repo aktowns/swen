@@ -1,5 +1,3 @@
-import Foundation
-import CSDL
 
 do {
   let game = try Game()

@@ -1,4 +1,3 @@
-import Foundation
 import CSDL
 
 // Uint32 type;        /**< ::SDL_MOUSEBUTTONDOWN or ::SDL_MOUSEBUTTONUP */
@@ -13,14 +12,14 @@ import CSDL
 // Sint32 y;           /**< Y coordinate, relative to window */
 
 public class MouseButtonEvent : CommonEvent {
-  private var buttonMem: SDL_MouseButtonEvent { return self.handle.memory.button }
+  private var buttonEvent: SDL_MouseButtonEvent { return self.handle.button }
 
-  public var windowId: UInt32 { return buttonMem.windowID }
-  public var which: UInt32 { return buttonMem.which }
-  public var button: UInt8 { return buttonMem.button }
-  public var state: UInt8 { return buttonMem.state }
-  public var clicks: UInt8 { return buttonMem.clicks }
-  public var position: Point<Int32> { return Point(x: buttonMem.x, y: buttonMem.y) }
+  public var windowId: UInt32 { return buttonEvent.windowID }
+  public var which: UInt32 { return buttonEvent.which }
+  public var button: UInt8 { return buttonEvent.button }
+  public var state: UInt8 { return buttonEvent.state }
+  public var clicks: UInt8 { return buttonEvent.clicks }
+  public var position: Point<Int32> { return Point(x: buttonEvent.x, y: buttonEvent.y) }
 
   override public var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), windowId:\(windowId), " +
