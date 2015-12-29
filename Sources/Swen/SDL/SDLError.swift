@@ -10,7 +10,7 @@ public enum SDLError : ErrorType {
   case FailedUpdatePropertyError(message: String)
   case UnknownError(message: String)
 
-  var description: String {
+  public var description: String {
     switch self {
     case .InitialisationError(let msg): return "Initialization Failed: \(msg)"
     case .MixerOpenError(let msg): return "Failed to open audio device: \(msg)"

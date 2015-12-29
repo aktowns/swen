@@ -3,17 +3,17 @@ public class ContentPipeline {
   var imageLoaders = Array<AssetImageLoader.Type>()
   var audioLoaders = Array<AssetAudioLoader.Type>()
 
-  init() {
+  public init() {
     fontLoaders.append(FontLoader)
     imageLoaders.append(ImageLoader)
     audioLoaders.append(AudioLoader)
   }
 
-  func get<Unhandled>(fromPath path: String) -> Unhandled? {
+  public func get<Unhandled>(fromPath path: String) -> Unhandled? {
     return Optional.None
   }
 
-  func get(fromPath path: String) -> FontFile? {
+  public func get(fromPath path: String) -> FontFile? {
     let loader: AssetFontLoader.Type? = fontLoaders.findFirst {
       loader in loader.canHandle(path)
     }
@@ -21,7 +21,7 @@ public class ContentPipeline {
     return loaderInst?.load()
   }
 
-  func get(fromPath path: String) -> ImageFile? {
+  public func get(fromPath path: String) -> ImageFile? {
     let loader: AssetImageLoader.Type? = imageLoaders.findFirst {
       loader in loader.canHandle(path)
     }
@@ -29,7 +29,7 @@ public class ContentPipeline {
     return loaderInst?.load()
   }
 
-  func get(fromPath path: String) -> AudioFile? {
+  public func get(fromPath path: String) -> AudioFile? {
     let loader: AssetAudioLoader.Type? = audioLoaders.findFirst {
       loader in loader.canHandle(path)
     }

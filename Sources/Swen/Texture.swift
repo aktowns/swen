@@ -1,39 +1,33 @@
 import CSDL
 
 public class Texture {
-  typealias RawTexture = COpaquePointer
+  public typealias RawTexture = COpaquePointer
 
   let handle: RawTexture
   private let renderer: Renderer
 
-  /// Create a texture for a rendering context.
-  init(withRenderer renderer: Renderer, format: UInt32, access: Int32, andSize size: Size<Int32>) throws {
-    self.handle = SDL_CreateTexture(renderer.handle, format, access, size.w, size.h)
-    self.renderer = renderer
-
-    if self.handle == nil {
-      throw SDLError.MediaLoadError(message: SDL.getErrorMessage())
-    }
-  }
-
-  /// Create a texture from an existing surface.
-  init(fromSurface surface: Surface, withRenderer renderer: Renderer) throws {
-    self.handle = SDL_CreateTextureFromSurface(renderer.handle, surface.handle)
-    self.renderer = renderer
-
-    if self.handle == nil {
-      throw SDLError.MediaLoadError(message: SDL.getErrorMessage())
-    }
-  }
-
   /// Create a texture from a raw handle
-  init(fromHandle handle: RawTexture, andRenderer renderer: Renderer) throws {
+  public init(fromHandle handle: RawTexture, andRenderer renderer: Renderer) throws {
     self.handle = handle
     self.renderer = renderer
 
     if self.handle == nil {
       throw SDLError.BadHandleError(message: "Texture.init(fromHandle:andRenderer:) given a null handle")
     }
+  }
+
+  /// Create a texture for a rendering context.
+  public convenience init(withRenderer renderer: Renderer, format: UInt32, access: Int32, andSize size: Size<Int32>) throws {
+    let ptr = SDL_CreateTexture(renderer.handle, format, access, size.w, size.h)
+
+    try self.init(fromHandle: ptr, andRenderer: renderer)
+  }
+
+  /// Create a texture from an existing surface.
+  public convenience init(fromSurface surface: Surface, withRenderer renderer: Renderer) throws {
+    let ptr = SDL_CreateTextureFromSurface(renderer.handle, surface.handle)
+
+    try self.init(fromHandle: ptr, andRenderer: renderer)
   }
 
   deinit {
@@ -56,7 +50,7 @@ public class Texture {
     self.renderer.copy(texture: self,  sourceRect: clip, destinationRect: destRect)
   }
 
-  var colourMod: Colour {
+  public var colourMod: Colour {
     get {
       var r: UInt8 = 0, g: UInt8 = 0, b: UInt8 = 0
 
@@ -71,7 +65,7 @@ public class Texture {
     }
   }
 
-  var blendMode: SDL_BlendMode {
+  public var blendMode: SDL_BlendMode {
     set {
       let res = SDL_SetTextureBlendMode(self.handle, newValue)
       assert(res == 0, "SDL_SetTextureBlendMode failed")
@@ -85,7 +79,7 @@ public class Texture {
     }
   }
 
-  var alpha: UInt8 {
+  public var alpha: UInt8 {
     set {
       let res = SDL_SetTextureAlphaMod(self.handle, newValue)
       assert(res == 0, "SDL_SetTextureAlphaMod failed")
@@ -100,7 +94,7 @@ public class Texture {
     }
   }
 
-  var size: Size<Int32> {
+  public var size: Size<Int32> {
     get {
       var w: Int32 = 0, h: Int32 = 0
 

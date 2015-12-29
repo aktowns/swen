@@ -1,4 +1,5 @@
-import CSDL
+import Swen
+import Glibc
 
 public class Game {
   let window: Window
@@ -51,9 +52,6 @@ public class Game {
     hud1.render(atPoint: Point(x: windowSize.w - (hud1.size.w + 10), y: bottomScreen))
     hudJewel.render(atPoint: Point(x: windowSize.w - (hud1.size.w + hudJewel.size.w), y: bottomScreen))
 
-    let mus = Mix_LoadMUS("assets/music/Retro Comedy.ogg")
-    Mix_PlayMusic(mus, -1)
-
     window.renderer.present()
   }
 
@@ -61,4 +59,29 @@ public class Game {
     SDL.quitSDL()
     exit(-1)
   }
+}
+
+do {
+  let game = try Game()
+  try game.loadMedia()
+
+  while true {
+    Event.wait { event in
+      switch event {
+      case is QuitEvent: game.close()
+//      case let kbd    as KeyboardEvent: print(kbd)
+//      case let win    as WindowEvent: print(win)
+//      case let wm     as SysWMEvent: print(wm)
+//      case let mouse  as MouseMotionEvent: print(mouse)
+//      case let mouse  as MouseButtonEvent: print(mouse)
+//      case let joy    as JoyDeviceEvent: print(joy)
+//      default: print(event)
+      default: Void()
+      }
+    }
+  }
+} catch let error as SDLError {
+  print(error.description)
+} catch {
+  print("Unexpected error")
 }

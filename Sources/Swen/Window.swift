@@ -28,12 +28,12 @@ let WindowPosUndefined = SDL_WINDOWPOS_UNDEFINED_MASK|0
 let WindowPosCentered  = SDL_WINDOWPOS_CENTERED_MASK|0
 
 public class Window {
-  typealias RawWindow = COpaquePointer
+  public typealias RawWindow = COpaquePointer
 
   let handle: RawWindow
-  let renderer: Renderer
+  public let renderer: Renderer
 
-  init(handle: RawWindow) throws {
+  public init(handle: RawWindow) throws {
     if handle == nil {
       throw SDLError.BadHandleError(message: "Window.init handed a null pointer.")
     }
@@ -42,7 +42,7 @@ public class Window {
     self.renderer = try Renderer(window: handle)
   }
 
-  convenience init(withTitle title: String,
+  public convenience init(withTitle title: String,
                    position: Point<Int32>,
                    size: Size<Int32>,
                    andFlags flags: WindowFlags) throws {
@@ -55,14 +55,14 @@ public class Window {
     try self.init(handle: window)
   }
 
-  convenience init(withTitle title: String, position: Point<Int32>, andSize size: Size<Int32>) throws {
+  public convenience init(withTitle title: String, position: Point<Int32>, andSize size: Size<Int32>) throws {
     try self.init(withTitle: title,
                   position: position,
                   size: size,
                   andFlags: [WindowFlags.Shown, WindowFlags.AllowHighDPI])
   }
 
-  convenience init(withTitle title: String,
+  public convenience init(withTitle title: String,
                    andSize size: Size<Int32>) throws {
     try self.init(withTitle: title,
                   position: Point(x: WindowPosUndefined, y: WindowPosUndefined),

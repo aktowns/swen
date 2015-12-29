@@ -7,16 +7,21 @@
 
 public struct Point<a: ArithmeticType> : Comparable, CustomStringConvertible {
   /// The x coordinate of this Point.
-  var x: a
+  public var x: a
   /// The y coordinate of this Point.
-  var y: a
+  public var y: a
+
+  public init(x: a, y: a) {
+    self.x = x
+    self.y = y
+  }
 
   /// Returns a Point with coordinates 0, 0.
-  static func zero() -> Point<a> {
+  public static func zero() -> Point<a> {
     return Point(x: 0 as! a, y: 0 as! a)
   }
 
-  func toVector() -> Vector<a> {
+  public func toVector() -> Vector<a> {
     return Vector(x: self.x, y: self.y)
   }
 

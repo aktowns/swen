@@ -7,20 +7,25 @@
 
 public struct Size<a: ArithmeticType> : Comparable, CustomStringConvertible {
   /// The with.
-  var w: a
+  public var w: a
   /// The height.
-  var h: a
+  public var h: a
+
+  public init(w: a, h: a) {
+    self.w = w
+    self.h = h
+  }
 
   /// Returns an empty Size
-  static func zero() -> Size<a> {
+  public static func zero() -> Size<a> {
     return Size(w: 0 as! a, h: 0 as! a)
   }
 
-  func toVector() -> Vector<a> {
+  public func toVector() -> Vector<a> {
     return Vector(x: self.w, y: self.h)
   }
 
-  func toPoint() -> Point<a> {
+  public func toPoint() -> Point<a> {
     return Point(x: self.w, y: self.h)
   }
 
