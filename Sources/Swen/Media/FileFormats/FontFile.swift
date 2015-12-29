@@ -1,13 +1,28 @@
 import CSDL
 
 public class FontFile {
+  let renderer: Renderer?
   let path: String
 
-  init(fromPath path: String) {
+  init(fromPath path: String, andRenderer renderer: Renderer?) {
     self.path = path
+    self.renderer = renderer
   }
 
   // MARK: - exporters
+  public func asTexture(withText text: String,
+                        size: Int32,
+                        andColour colour: Colour) throws -> Texture {
+
+    guard let render = renderer else {
+      fatalError("FontFile.asTexture(withText:size:andColour) called without a renderer specified, maybe try " +
+          "FontFile.asTexture(withText:size:colour:andRenderer:) or specify a renderer when intialising the " +
+          "content pipeline")
+    }
+
+    return try asTexture(withText: text, size: size, colour: colour, andRenderer: render)
+  }
+
   public func asTexture(withText text: String,
                         size: Int32,
                         colour: Colour,

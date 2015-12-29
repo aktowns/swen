@@ -12,11 +12,15 @@ public protocol AssetBaseLoader {
   func unload() -> Void
 }
 
-public protocol AssetFontLoader : AssetBaseLoader {
+public protocol AssetRenderableBaseLoader : AssetBaseLoader {
+  init(withPath _: String, andRenderer: Renderer?)
+}
+
+public protocol AssetFontLoader : AssetRenderableBaseLoader {
   func load() -> FontFile
 }
 
-protocol AssetImageLoader : AssetBaseLoader {
+protocol AssetImageLoader : AssetRenderableBaseLoader {
   func load() -> ImageFile
 }
 

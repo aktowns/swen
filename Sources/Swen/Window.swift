@@ -78,4 +78,18 @@ public class Window {
     let res = SDL_UpdateWindowSurface(handle)
     assert(res == 0, "SDL_UpdateWindowSurface failed")
   }
+
+  public var size: Size<Int32> {
+    get {
+      var w: Int32 = 0
+      var h: Int32 = 0
+
+      SDL_GetWindowSize(self.handle, &w, &h)
+
+      return Size<Int32>(w: w, h: h)
+    }
+    set {
+      SDL_SetWindowSize(self.handle, newValue.w, newValue.h)
+    }
+  }
 }

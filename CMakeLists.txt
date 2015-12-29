@@ -2,9 +2,8 @@ cmake_minimum_required(VERSION 3.4)
 project(Swen)
 
 set(SOURCE_FILES
-        Sources/Swen/main.swift
+        Sources/SwenDemo/main.swift
         Sources/Swen/Texture.swift
-        Sources/Swen/Font.swift
         Sources/Swen/Media/FileFormats/AudioFile.swift
         Sources/Swen/Media/FileFormats/FontFile.swift
         Sources/Swen/Media/FileFormats/ImageFile.swift
@@ -43,7 +42,8 @@ set(SOURCE_FILES
         Sources/Swen/Extensions/SDLExtensionMixer.swift
         Sources/Swen/Extensions/SDLExtensionNet.swift
         Sources/Swen/Extensions/SDLExtensionTTF.swift
-        Sources/Swen/Game.swift
+        Sources/Swen/GameBase.swift
+        Sources/Swen/GameLoop.swift
         Sources/Swen/Network/Socket.swift
         Sources/Swen/Network/TCPSocket.swift
         Sources/Swen/Network/UDPSocket.swift
