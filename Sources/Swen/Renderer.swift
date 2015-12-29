@@ -30,28 +30,36 @@ public struct RenderFlags : OptionSetType {
 }
 
 public class Renderer {
-  typealias RawRenderer = COpaquePointer
+  public typealias RawRenderer = COpaquePointer
 
   let handle: RawRenderer
 
-  init(window: Window.RawWindow, index: Int32, flags: RenderFlags) throws {
-    self.handle = SDL_CreateRenderer(window, index, flags.rawValue)
+  public init(fromHandle handle: RawRenderer) {
+    assert(handle != nil, "Renderer.init(fromHandle:) given a null handle")
 
-    if self.handle == nil {
-      throw SDLError.RendererCreationError(message: SDL.getErrorMessage())
-    }
-  }
-
-  convenience init(window: Window.RawWindow) throws {
-    try self.init(window: window, index: -1, flags: RenderFlags.Accelerated)
-  }
-
-  init(fromHandle handle: RawRenderer) throws {
     self.handle = handle
+  }
 
-    if self.handle == nil {
-      throw SDLError.RendererCreationError(message: SDL.getErrorMessage())
+  public convenience init(forWindowHandle window: Window.RawWindow, index: Int32, andFlags flags: RenderFlags) throws {
+    let ptr = SDL_CreateRenderer(window, index, flags.rawValue)
+
+    if ptr == nil {
+      throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
     }
+
+    self.init(fromHandle: ptr)
+  }
+
+  public convenience init(forWindow window: Window, index: Int32, andFlags flags: RenderFlags) throws {
+    try self.init(forWindowHandle: window.handle, index: index, andFlags: flags)
+  }
+
+  public convenience init(forWindowHandle window: Window.RawWindow) throws {
+    try self.init(forWindowHandle: window, index: -1, andFlags: RenderFlags.Accelerated)
+  }
+
+  public convenience init(forWindow window: Window) throws {
+    try self.init(forWindowHandle: window.handle)
   }
 
   deinit {

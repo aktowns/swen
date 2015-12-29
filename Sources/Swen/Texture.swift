@@ -7,47 +7,56 @@ public class Texture {
   private let renderer: Renderer
 
   /// Create a texture from a raw handle
-  public init(fromHandle handle: RawTexture, andRenderer renderer: Renderer) throws {
+  public init(fromHandle handle: RawTexture, andRenderer renderer: Renderer) {
+    assert(handle != nil, "Texture.init(fromHandle:andRenderer) given a null handle")
+
     self.handle = handle
     self.renderer = renderer
-
-    if self.handle == nil {
-      throw SDLError.BadHandleError(message: "Texture.init(fromHandle:andRenderer:) given a null handle")
-    }
   }
 
   /// Create a texture for a rendering context.
-  public convenience init(withRenderer renderer: Renderer, format: UInt32, access: Int32, andSize size: Size<Int32>) throws {
+  public convenience init(withRenderer renderer: Renderer,
+                          format: UInt32,
+                          access: Int32,
+                          andSize size: Size<Int32>) throws {
     let ptr = SDL_CreateTexture(renderer.handle, format, access, size.w, size.h)
 
-    try self.init(fromHandle: ptr, andRenderer: renderer)
+    if ptr == nil {
+      throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
+    }
+
+    self.init(fromHandle: ptr, andRenderer: renderer)
   }
 
   /// Create a texture from an existing surface.
   public convenience init(fromSurface surface: Surface, withRenderer renderer: Renderer) throws {
     let ptr = SDL_CreateTextureFromSurface(renderer.handle, surface.handle)
 
-    try self.init(fromHandle: ptr, andRenderer: renderer)
+    if ptr == nil {
+      throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
+    }
+
+    self.init(fromHandle: ptr, andRenderer: renderer)
   }
 
   deinit {
-    SDL_DestroyTexture(self.handle)
+    SDL_DestroyTexture(handle)
   }
 
   public func render() {
-    self.renderer.copy(texture: self)
+    renderer.copy(texture: self)
   }
 
   public func render(atPoint point: Point<Int32>) {
     let destRect = Rect(x: point.x, y: point.y, sizeX: self.size.w, sizeY: self.size.h)
 
-    self.renderer.copy(texture: self, sourceRect: nil, destinationRect: destRect)
+    renderer.copy(texture: self, sourceRect: nil, destinationRect: destRect)
   }
 
   public func render(atPoint point: Point<Int32>, clip: Rect<Int32>) {
     let destRect = Rect(x: point.x, y: point.y, sizeX: self.size.w, sizeY: self.size.h)
 
-    self.renderer.copy(texture: self,  sourceRect: clip, destinationRect: destRect)
+    renderer.copy(texture: self,  sourceRect: clip, destinationRect: destRect)
   }
 
   public var colourMod: Colour {

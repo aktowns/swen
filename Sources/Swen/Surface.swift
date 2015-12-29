@@ -1,14 +1,12 @@
 import CSDL
 
 public class Surface {
-  typealias RawSurface = UnsafeMutablePointer<SDL_Surface>
+  public typealias RawSurface = UnsafeMutablePointer<SDL_Surface>
 
   let handle: RawSurface
 
-  init(handle: RawSurface) throws {
-    if handle == nil {
-      throw SDLError.BadHandleError(message: "Surface.init(handle:) given a null handle")
-    }
+  public init(fromHandle handle: RawSurface) {
+    assert(handle != nil, "Surface.init(fromHandle:) given a null handle")
 
     self.handle = handle
   }
@@ -62,10 +60,10 @@ public class Surface {
       throw SDLError.ConvertSurfaceError(message: SDL.getErrorMessage())
     }
 
-    return try Surface(handle: surf)
+    return Surface(fromHandle: surf)
   }
 
-  var colourKey: UInt32 {
+  public var colourKey: UInt32 {
     get {
       var key: UInt32 = 0
 

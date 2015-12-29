@@ -23,20 +23,20 @@ public class ImageFile {
     let texPtr = IMG_LoadTexture(renderer.handle, self.path)
 
     if texPtr == nil {
-      throw SDLError.MediaLoadError(message: SDL.getErrorMessage())
+      throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
     }
 
-    return try Texture(fromHandle: texPtr, andRenderer: renderer)
+    return Texture(fromHandle: texPtr, andRenderer: renderer)
   }
 
   public func asSurface() throws -> Surface {
     let img = IMG_Load(path)
 
     if img == nil {
-      throw SDLError.MediaLoadError(message: SDL.getErrorMessage())
+      throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
     }
 
-    return try Surface(handle: img)
+    return Surface(fromHandle: img)
   }
 
 }

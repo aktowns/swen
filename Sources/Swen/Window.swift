@@ -34,12 +34,10 @@ public class Window {
   public let renderer: Renderer
 
   public init(handle: RawWindow) throws {
-    if handle == nil {
-      throw SDLError.BadHandleError(message: "Window.init handed a null pointer.")
-    }
+    assert(handle != nil, "Window.init handed a null pointer.")
 
     self.handle = handle
-    self.renderer = try Renderer(window: handle)
+    self.renderer = try Renderer(forWindowHandle: handle)
   }
 
   public convenience init(withTitle title: String,
@@ -69,9 +67,9 @@ public class Window {
                   andSize: size)
   }
 
-  public var surface: Surface? {
+  public var surface: Surface {
     let windowSurface = SDL_GetWindowSurface(handle)
-    return try? Surface(handle: windowSurface)
+    return Surface(fromHandle: windowSurface)
   }
 
   public func updateSurface() {

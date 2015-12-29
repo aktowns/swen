@@ -35,7 +35,7 @@ public class FontFile {
     let ptr = try getPointer(withSize: size)
 
     let surface = TTF_RenderText_Solid(ptr, text, SDL_Color.fromColour(colour))
-    return try Surface(handle: surface)
+    return Surface(fromHandle: surface)
   }
 
   // MARK: - private
@@ -43,7 +43,7 @@ public class FontFile {
     let font = TTF_OpenFont(self.path, size)
 
     if font == nil {
-      throw SDLError.MediaLoadError(message: SDL.getErrorMessage())
+      throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
     }
 
     return font
