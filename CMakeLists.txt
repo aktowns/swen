@@ -63,6 +63,7 @@ set(SOURCE_FILES
         Sources/Swen/Input/Keyboard.swift
         Sources/Swen/Input/KeyCode.swift
         Sources/Swen/Input/KeyMod.swift
+        Sources/Swen/Input/Mouse.swift
         Sources/Swen/Util/Point.swift
         Sources/Swen/Util/Rect.swift
         Sources/Swen/Input/ScanCode.swift

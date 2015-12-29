@@ -1,7 +1,7 @@
 //
-//   QuitEvent.swift created on 27/12/15
+//   Mouse.swift created on 29/12/15
 //   Swen project
-//
+//   
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,6 @@
 //   limitations under the License.
 //
 
-// Uint32 type;        /**< ::SDL_QUIT */
-// Uint32 timestamp;
+public class Mouse {
 
-public class QuitEvent : CommonEvent {
-  public override var description : String {
-    return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp))"
-  }
 }
