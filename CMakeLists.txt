@@ -9,6 +9,7 @@ set(SOURCE_FILES
         Sources/Swen/Media/FileFormats/AudioFile.swift
         Sources/Swen/Media/FileFormats/FontFile.swift
         Sources/Swen/Media/FileFormats/ImageFile.swift
+        Sources/Swen/Media/FileFormats/TextureAtlasFile.swift
         Sources/Swen/Media/Loaders/AudioLoader.swift
         Sources/Swen/Media/Loaders/FontLoader.swift
         Sources/Swen/Media/Loaders/ImageLoader.swift
@@ -60,6 +61,7 @@ set(SOURCE_FILES
         Sources/Swen/Util/Arithmetic.swift
         Sources/Swen/Util/Colour.swift
         Sources/Swen/Util/IPAddress.swift
+        Sources/Swen/Util/XPathDocument.swift
         Sources/Swen/Input/Keyboard.swift
         Sources/Swen/Input/KeyCode.swift
         Sources/Swen/Input/KeyMod.swift

@@ -42,12 +42,7 @@ public class GameBase<Game: GameBaseDelegate> {
       Event.poll { event in
         switch event {
         case is QuitEvent: self.close()
-        case let kbd as KeyboardEvent:
-          if kbd.keyMod.Ctrl {
-            print("Is left ctrl!")
-          }
-          print(kbd.scanCode.name)
-          print(kbd)
+        case let kbd as KeyboardEvent: print(kbd)
         default: events.append(event)
         }
       }

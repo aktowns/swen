@@ -18,7 +18,7 @@
 //
 
 
-public struct Rect<a: ArithmeticType> : Comparable {
+public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
   /// The x coordinate of the top-left corner of this Rectangle.
   var x: a
   /// The y coordinate of the top-left corner of this Rectangle.
