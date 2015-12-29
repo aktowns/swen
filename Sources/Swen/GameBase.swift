@@ -18,12 +18,17 @@ public class GameBase<Game: GameBaseDelegate> {
   }
 
   public func start() {
+    var events: [BaseEvent] = []
     while true {
-      Event.poll {
-        event in
+      Event.poll { event in
         switch event {
         case is QuitEvent: self.close()
-        default: Void()
+        case let kbd as KeyboardEvent:
+          if kbd.keyMod.Ctrl {
+            print("Is left ctrl!")
+          }
+          print(kbd.keyScanCode)
+        default: events.append(event)
         }
       }
 

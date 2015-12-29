@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.4)
 project(Swen)
 
 set(SOURCE_FILES
+        Sources/SwenDemo/Game.swift
         Sources/SwenDemo/main.swift
+        Sources/SwenDemo/Player.swift
         Sources/Swen/Texture.swift
         Sources/Swen/Media/FileFormats/AudioFile.swift
         Sources/Swen/Media/FileFormats/FontFile.swift
@@ -60,6 +62,7 @@ set(SOURCE_FILES
         Sources/Swen/Util/IPAddress.swift
         Sources/Swen/Util/Point.swift
         Sources/Swen/Util/Rect.swift
+        Sources/Swen/Util/ScanCode.swift
         Sources/Swen/Util/SDLConvertHelper.swift
         Sources/Swen/Util/Size.swift
         Sources/Swen/Util/Vector.swift
