@@ -27,7 +27,7 @@ public class GameBase<Game: GameBaseDelegate> {
           if kbd.keyMod.Ctrl {
             print("Is left ctrl!")
           }
-          print(kbd.keyScanCode)
+          print(kbd)
         default: events.append(event)
         }
       }

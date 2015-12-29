@@ -60,9 +60,11 @@ set(SOURCE_FILES
         Sources/Swen/Util/Arithmetic.swift
         Sources/Swen/Util/Colour.swift
         Sources/Swen/Util/IPAddress.swift
+        Sources/Swen/Input/KeyCode.swift
+        Sources/Swen/Input/KeyMod.swift
         Sources/Swen/Util/Point.swift
         Sources/Swen/Util/Rect.swift
-        Sources/Swen/Util/ScanCode.swift
+        Sources/Swen/Input/ScanCode.swift
         Sources/Swen/Util/SDLConvertHelper.swift
         Sources/Swen/Util/Size.swift
         Sources/Swen/Util/Vector.swift
