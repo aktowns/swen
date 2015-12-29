@@ -60,6 +60,7 @@ set(SOURCE_FILES
         Sources/Swen/Util/Arithmetic.swift
         Sources/Swen/Util/Colour.swift
         Sources/Swen/Util/IPAddress.swift
+        Sources/Swen/Input/Keyboard.swift
         Sources/Swen/Input/KeyCode.swift
         Sources/Swen/Input/KeyMod.swift
         Sources/Swen/Util/Point.swift

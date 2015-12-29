@@ -1,3 +1,5 @@
+import CSDL
+
 public enum KeyCode : Int32 {
   case KeyCodeUnknown = 0
 
@@ -74,6 +76,18 @@ public enum KeyCode : Int32 {
   case KeyCodeX             = 120
   case KeyCodeY             = 121
   case KeyCodeZ             = 122
+
+  public init?(fromName name: String) {
+    self.init(rawValue: SDL_GetKeyFromName(name))
+  }
+
+  public init?(fromScanCode scancode: ScanCode) {
+    self.init(rawValue: SDL_GetKeyFromScancode(SDL_Scancode(scancode.rawValue)))
+  }
+
+  public var name: String? {
+    return String.fromCString(SDL_GetKeyName(SDL_Keycode(self.rawValue)))
+  }
 
   //SDLK_CAPSLOCK = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_CAPSLOCK),
   //SDLK_F1 = SDL_SCANCODE_TO_KEYCODE(SDL_SCANCODE_F1),

@@ -33,7 +33,7 @@ public class Window {
   let handle: RawWindow
   public let renderer: Renderer
 
-  public init(handle: RawWindow) throws {
+  public init(fromHandle handle: RawWindow) throws {
     assert(handle != nil, "Window.init handed a null pointer.")
 
     self.handle = handle
@@ -50,7 +50,7 @@ public class Window {
 
     assert(window != nil, "SDL_CreateWindow failed: \(SDL.getErrorMessage())")
 
-    try self.init(handle: window)
+    try self.init(fromHandle: window)
   }
 
   public convenience init(withTitle title: String, position: Point<Int32>, andSize size: Size<Int32>) throws {

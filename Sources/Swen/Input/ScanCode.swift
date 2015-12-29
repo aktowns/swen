@@ -1,3 +1,5 @@
+import CSDL
+
 public enum ScanCode: UInt32 {
   case ScanCodeUnknown = 0
   case ScanCodeA = 4
@@ -263,4 +265,16 @@ public enum ScanCode: UInt32 {
 
   case ScanCodeApp1 = 283
   case ScanCodeApp2
+
+  public init?(fromName name: String) {
+    self.init(rawValue: SDL_GetScancodeFromName(name).rawValue)
+  }
+
+  public init?(fromKeyCode keycode: KeyCode) {
+    self.init(rawValue: SDL_GetScancodeFromKey(SDL_Keycode(keycode.rawValue)).rawValue)
+  }
+
+  public var name: String? {
+    return String.fromCString(SDL_GetScancodeName(SDL_Scancode(self.rawValue)))
+  }
 }
