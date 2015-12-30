@@ -74,7 +74,7 @@ public class Renderer {
   }
 
   public convenience init(forWindowHandle window: Window.RawWindow) throws {
-    try self.init(forWindowHandle: window, index: -1, andFlags: RenderFlags.Accelerated)
+    try self.init(forWindowHandle: window, index: -1, andFlags: [RenderFlags.Accelerated, RenderFlags.PresentVSync])
   }
 
   public convenience init(forWindow window: Window) throws {
@@ -103,8 +103,7 @@ public class Renderer {
     assert(res == 0, "SDL_RenderCopy failed")
   }
 
-  public func copy(texture texture: Texture,
-                   destinationRect dstrect: Rect<Int32>) {
+  public func copy(texture texture: Texture, destinationRect dstrect: Rect<Int32>) {
     var dstSDLRect = SDL_Rect.fromRect(dstrect)
 
     let res = SDL_RenderCopy(self.handle, texture.handle, nil, &dstSDLRect)
@@ -136,6 +135,20 @@ public class Renderer {
     assert(res == 0, "SDL_RenderCopyEx failed")
   }
 
+  public func copy(texture texture: Texture, sourceRect srcrect: Rect<Double>) {
+    var srcSDLRect = SDL_Rect.fromRect(srcrect)
+
+    let res = SDL_RenderCopy(self.handle, texture.handle, &srcSDLRect, nil)
+    assert(res == 0, "SDL_RenderCopy failed")
+  }
+
+  public func copy(texture texture: Texture, destinationRect dstrect: Rect<Double>) {
+    var dstSDLRect = SDL_Rect.fromRect(dstrect)
+
+    let res = SDL_RenderCopy(self.handle, texture.handle, nil, &dstSDLRect)
+    assert(res == 0, "SDL_RenderCopy failed")
+  }
+
   public func present() {
     SDL_RenderPresent(self.handle)
   }
@@ -145,6 +158,11 @@ public class Renderer {
 
     let res = SDL_RenderFillRect(self.handle, &sdlRect)
     assert(res == 0, "SDL_RenderFillRect failed")
+  }
+
+  public func fillCircle(position: Point<Int16>, rad: Int16, colour: Colour) {
+    let res = filledCircleRGBA(self.handle, position.x, position.y, rad, colour.r, colour.g, colour.b, colour.a ?? 0)
+    assert(res == 0, "filledCircleColor failed")
   }
 
   public func draw(usingRect rect: Rect<Int32>) {

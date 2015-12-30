@@ -18,10 +18,24 @@
 //
 
 public struct Colour {
-  var r: UInt8
-  var g: UInt8
-  var b: UInt8
-  var a: UInt8?
+  public var r: UInt8
+  public var g: UInt8
+  public var b: UInt8
+  public var a: UInt8?
+
+  public init(r: UInt8, g: UInt8, b: UInt8, a: UInt8) {
+    self.r = r
+    self.g = g
+    self.b = b
+    self.a = a
+  }
+
+  public init(r: UInt8, g: UInt8, b: UInt8) {
+    self.r = r
+    self.g = g
+    self.b = b
+    self.a = nil
+  }
 
   public static var black: Colour {
     return Colour(r: 0x00, g: 0x00, b: 0x00, a: 0x00)

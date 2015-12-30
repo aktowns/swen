@@ -1,7 +1,7 @@
 //
-//   Vector.swift created on 28/12/15
-//   Swen project
-//
+//   ChipmunkConvertHelper.swift created on 30/12/15
+//   Swen project 
+//   
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,28 +17,24 @@
 //   limitations under the License.
 //
 
+import CChipmunk
 
-public struct Vector<a: ArithmeticType> : Comparable {
-  /// The x coordinate of this Vector.
-  public var x: a
-  /// The y coordinate of this Vector2.
-  public var y: a
-
-  public init(x: a, y: a) {
-    self.x = x
-    self.y = y
+extension cpVect {
+  static func fromVector(vect: Vector<Double>) -> cpVect {
+    return cpVect(x: vect.x, y: vect.y)
   }
 
-  public static var zero: Vector<a> {
-    return Vector(x: 0 as! a, y: 0 as! a)
+  func toVector() -> Vector<Double> {
+    return Vector(x: self.x, y: self.y)
   }
 }
 
-public func ==<a>(l: Vector<a>, r: Vector<a>) -> Bool {
-  return (l.x == r.x &&
-          l.y == r.y)
-}
-public func <<a>(l: Vector<a>, r: Vector<a>) -> Bool {
-  return (l.x < r.x &&
-          l.y < r.y)
+
+extension cpSpaceDebugColor {
+  static func fromColour(colour: Colour) -> cpSpaceDebugColor {
+    return cpSpaceDebugColor(r: Float(colour.r), g: Float(colour.g), b: Float(colour.b), a: Float(colour.a ?? 0))
+  }
+  func toColour() -> Colour {
+    return Colour(r: UInt8(self.r), g: UInt8(self.g), b: UInt8(self.b), a: UInt8(self.a))
+  }
 }

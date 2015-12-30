@@ -19,11 +19,25 @@
 
 import Swen
 
+public protocol PhysicsSpace {
+  var friction: Double { get set }
+}
+
+public protocol PhysicsBody {
+  var position: Vector<Double> { get set }
+  var velocity: Double { get set }
+}
+
 public class Player : GameLoop {
   private let pipeline: ContentPipeline
 
   var player: Texture
   var playerMap: [String: Rect<Int32>]
+  let walkingAnimation = ["alienBlue_walk1", "alienBlue_stand", "alienBlue_walk2"]
+  var animationStep: Int = 0
+  var playerVelocity: Int = 20
+  var position: Point<Int32> = Point(x: 120, y: 390)
+  var velocity: Point<Int32> = Point(x: 0, y: 0)
 
   public init(pipeline: ContentPipeline) throws {
     self.pipeline = pipeline
@@ -32,15 +46,52 @@ public class Player : GameLoop {
 
     self.player = try playerSpriteMap.imageFile.asTexture()
     self.playerMap = playerSpriteMap.mapping
-
-    print(playerMap["alienBlue_stand"])
   }
 
-  public func draw() {
-    player.render(atPoint: Point(x: 120, y: 390), clip: playerMap["alienBlue_stand"]!)
+  public func draw(game: Game) {
+    let animation: Rect<Int32>? = {
+      if velocity.y != 0 {
+        return playerMap["alienBlue_jump"]
+      } else {
+        return playerMap[walkingAnimation[self.animationStep]]
+      }
+    }()
+
+    player.render(atPoint: position, clip: animation!)
   }
 
-  public func loop() {
+  public func loop(game: Game) {
+    velocity.x = 0
 
+    for keyEvent in game.keyEvents {
+      switch keyEvent.scanCode {
+        case .ScanCodeRight: velocity.x += playerVelocity
+        case .ScanCodeLeft: velocity.x -= playerVelocity
+        case .ScanCodeSpace:
+          if velocity.y == 0 {
+            position.y -= 100
+            velocity.y += 100
+          }
+        default: Void()
+      }
+    }
+
+    position.x += velocity.x
+    // position.y += velocity.y
+
+    if velocity.y > 0 {
+      velocity.y -= 1
+      position.y += 1
+    } else if velocity.y < 0 {
+      velocity.y += 1
+      position.y -= 1
+    }
+
+    if velocity.x != 0 {
+      self.animationStep += 1
+      if (self.animationStep >= walkingAnimation.count) {
+        self.animationStep = 0
+      }
+    }
   }
 }

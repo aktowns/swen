@@ -1,5 +1,5 @@
 //
-//   AudioDeviceEvent.swift created on 27/12/15
+//   AudioDeviceEvent.swift created on 28/12/15
 //   Swen project
 //
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
@@ -66,7 +66,7 @@ public class Window {
 
     // Hmm could possibly just use SDL_CreateWindowAndRenderer
     let window = SDL_CreateWindow(title, position.x, position.y, size.w, size.h, flags.rawValue)
-
+    
     assert(window != nil, "SDL_CreateWindow failed: \(SDL.getErrorMessage())")
 
     try self.init(fromHandle: window)

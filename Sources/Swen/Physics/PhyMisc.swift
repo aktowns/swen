@@ -1,7 +1,7 @@
 //
-//   Vector.swift created on 28/12/15
-//   Swen project
-//
+//   PhyMisc.swift created on 30/12/15
+//   Swen project 
+//   
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,28 +17,10 @@
 //   limitations under the License.
 //
 
+import CChipmunk
 
-public struct Vector<a: ArithmeticType> : Comparable {
-  /// The x coordinate of this Vector.
-  public var x: a
-  /// The y coordinate of this Vector2.
-  public var y: a
-
-  public init(x: a, y: a) {
-    self.x = x
-    self.y = y
+public class PhyMisc {
+  public static func momentForCircle(m m: Double, r1: Double, r2: Double, offset: Vector<Double>) -> Double {
+    return cpMomentForCircle(m, r1, r2, cpVect.fromVector(offset))
   }
-
-  public static var zero: Vector<a> {
-    return Vector(x: 0 as! a, y: 0 as! a)
-  }
-}
-
-public func ==<a>(l: Vector<a>, r: Vector<a>) -> Bool {
-  return (l.x == r.x &&
-          l.y == r.y)
-}
-public func <<a>(l: Vector<a>, r: Vector<a>) -> Bool {
-  return (l.x < r.x &&
-          l.y < r.y)
 }

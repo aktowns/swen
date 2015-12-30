@@ -20,6 +20,6 @@
 import Foundation
 
 public protocol GameLoop {
-  func draw()
-  func loop()
+  func draw(game: Game)
+  func loop(game: Game)
 }

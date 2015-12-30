@@ -72,6 +72,12 @@ public class Texture {
     renderer.copy(texture: self, destinationRect: destRect)
   }
 
+  public func render(atPoint point: Point<Double>) {
+    let destRect = Rect(x: point.x, y: point.y, sizeX: Double(self.size.w), sizeY: Double(self.size.h))
+
+    renderer.copy(texture: self, destinationRect: destRect)
+  }
+
   public func render(atPoint point: Point<Int32>, clip: Rect<Int32>) {
     let destRect = Rect(x: point.x, y: point.y, sizeX: clip.sizeX, sizeY: clip.sizeY)
 
@@ -85,7 +91,7 @@ public class Texture {
       let res = SDL_GetTextureColorMod(self.handle, &r, &g, &b)
       assert(res == 0, "SDL_GetTextureColorMod failed")
 
-      return Colour(r: r, g: g, b: b, a: nil)
+      return Colour(r: r, g: g, b: b)
     }
     set {
       let res = SDL_SetTextureColorMod(self.handle, newValue.r, newValue.g, newValue.b)

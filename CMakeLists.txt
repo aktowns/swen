@@ -4,6 +4,8 @@ project(Swen)
 set(SOURCE_FILES
         Sources/SwenDemo/Game.swift
         Sources/SwenDemo/main.swift
+        Sources/SwenDemo/Enemy.swift
+        Sources/SwenDemo/Item.swift
         Sources/SwenDemo/Player.swift
         Sources/Swen/Texture.swift
         Sources/Swen/Media/FileFormats/AudioFile.swift
@@ -51,6 +53,11 @@ set(SOURCE_FILES
         Sources/Swen/Network/Socket.swift
         Sources/Swen/Network/TCPSocket.swift
         Sources/Swen/Network/UDPSocket.swift
+        Sources/Swen/Physics/PhyShape.swift
+        Sources/Swen/Physics/PhySpace.swift
+        Sources/Swen/Physics/PhyBody.swift
+        Sources/Swen/Physics/PhyMisc.swift
+        Sources/Swen/Physics/PhyDebug.swift
         Sources/Swen/Renderer.swift
         Sources/Swen/SDL/SDL.swift
         Sources/Swen/SDL/SDLError.swift
@@ -71,8 +78,13 @@ set(SOURCE_FILES
         Sources/Swen/Util/Rect.swift
         Sources/Swen/Input/ScanCode.swift
         Sources/Swen/Util/SDLConvertHelper.swift
+        Sources/Swen/Util/ChipmunkConvertHelper.swift
         Sources/Swen/Util/Size.swift
         Sources/Swen/Util/Vector.swift
+        Packages/CXML2-1.0.0/Package.swift
+        Packages/CXML2-1.0.0/module.modulemap
+        Packages/CSDL-1.0.0/Package.swift
+        Packages/CSDL-1.0.0/module.modulemap
         Package.swift)
 
 #set(PACKAGES

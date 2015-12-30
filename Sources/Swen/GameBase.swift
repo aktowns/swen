@@ -23,37 +23,61 @@ public protocol GameBaseDelegate : GameLoop {
   init(withWindow: Window, andPipeline: ContentPipeline)
 }
 
-public class GameBase<Game: GameBaseDelegate> {
+public struct Game {
+  public var fps: Float
+  public var frame: Int
+  public var keyEvents: [KeyboardEvent]
+}
+
+public class GameBase<GameDelegate: GameBaseDelegate> {
   public let pipeline: ContentPipeline
   public let window: Window
-  public let delegate: Game
+  public let delegate: GameDelegate
+  public let fpsTimer: Timer
 
-  public init(withTitle title: String, size: Size<Int32>, andDelegate delegate: Game.Type) throws {
+  public init(withTitle title: String, size: Size<Int32>, andDelegate delegate: GameDelegate.Type) throws {
     try SDL.initSDL()
 
     self.window = try Window(withTitle: title, andSize: size)
     self.pipeline = ContentPipeline(withRenderer: self.window.renderer)
     self.delegate = delegate.init(withWindow: window, andPipeline: pipeline)
+    self.fpsTimer = Timer()
   }
 
   public func start() {
+    fpsTimer.start()
+    var countedFrames: Int = 0
+    var keyEvents: [KeyboardEvent] = []
+
     var events: [BaseEvent] = []
-    while true {
+    var running = true
+
+    while running {
+      let averageFrames = Float(countedFrames) / (Float(fpsTimer.ticks()) / 1000.0)
+
       Event.poll { event in
         switch event {
-        case is QuitEvent: self.close()
-        case let kbd as KeyboardEvent: print(kbd)
+        case is QuitEvent: running = false
+        case let kbd as KeyboardEvent:
+          print("ticks: \(self.fpsTimer.ticks()), frames: \(countedFrames)")
+          keyEvents.append(kbd)
         default: events.append(event)
         }
       }
 
+      let game = Game(fps: averageFrames, frame: countedFrames, keyEvents: keyEvents)
+
+      window.renderer.drawColour = Colour.white
       window.renderer.clear()
-      delegate.draw()
-      delegate.loop()
+      delegate.draw(game)
+      delegate.loop(game)
       window.renderer.present()
 
-      SDL.delay(ms: 100)
+      countedFrames += 1
+      keyEvents = []
     }
+    fpsTimer.stop()
+    self.close()
   }
 
   public func close() -> Void {
