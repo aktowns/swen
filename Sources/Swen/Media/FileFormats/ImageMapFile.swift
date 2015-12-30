@@ -1,5 +1,5 @@
 //
-//   TextureAtlasFile.swift created on 29/12/15
+//   ImageMapFile.swift created on 30/12/15
 //   Swen project 
 //   
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
@@ -17,15 +17,7 @@
 //   limitations under the License.
 //
 
-/*
- * Support for Sparrow exported texture atlas files into groups of named textures
- */
-import CSDL
-
-public class TextureAtlasFile {
-  let xmlDoc: XPathDocument
-
-  public init(withPath path: String) {
-    self.xmlDoc = XPathDocument(withPath: path)
-  }
+public struct ImageMapFile {
+  public var imageFile: ImageFile
+  public var mapping: [String: Rect<Int32>]
 }

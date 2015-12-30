@@ -96,12 +96,28 @@ public class Renderer {
   }
 
   public func copy(texture texture: Texture,
-                   sourceRect srcrect: Rect<Int32>?,
-                   destinationRect dstrect: Rect<Int32>?) {
-    let srcSDLRect: SDL_Rect? = srcrect.map { SDL_Rect.fromRect($0) }
-    let dstSDLRect: SDL_Rect? = dstrect.map { SDL_Rect.fromRect($0) }
+                   sourceRect srcrect: Rect<Int32>) {
+    var srcSDLRect = SDL_Rect.fromRect(srcrect)
 
-    let res = SDL_RenderCopy(self.handle, texture.handle, srcSDLRect.toPointer(), dstSDLRect.toPointer())
+    let res = SDL_RenderCopy(self.handle, texture.handle, &srcSDLRect, nil)
+    assert(res == 0, "SDL_RenderCopy failed")
+  }
+
+  public func copy(texture texture: Texture,
+                   destinationRect dstrect: Rect<Int32>) {
+    var dstSDLRect = SDL_Rect.fromRect(dstrect)
+
+    let res = SDL_RenderCopy(self.handle, texture.handle, nil, &dstSDLRect)
+    assert(res == 0, "SDL_RenderCopy failed")
+  }
+
+  public func copy(texture texture: Texture,
+                   sourceRect srcrect: Rect<Int32>,
+                   destinationRect dstrect: Rect<Int32>) {
+    var srcSDLRect: SDL_Rect = SDL_Rect.fromRect(srcrect)
+    var dstSDLRect: SDL_Rect = SDL_Rect.fromRect(dstrect)
+
+    let res = SDL_RenderCopy(self.handle, texture.handle, &srcSDLRect, &dstSDLRect)
     assert(res == 0, "SDL_RenderCopy failed")
   }
 

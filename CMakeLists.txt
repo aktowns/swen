@@ -9,10 +9,11 @@ set(SOURCE_FILES
         Sources/Swen/Media/FileFormats/AudioFile.swift
         Sources/Swen/Media/FileFormats/FontFile.swift
         Sources/Swen/Media/FileFormats/ImageFile.swift
-        Sources/Swen/Media/FileFormats/TextureAtlasFile.swift
+        Sources/Swen/Media/FileFormats/ImageMapFile.swift
         Sources/Swen/Media/Loaders/AudioLoader.swift
         Sources/Swen/Media/Loaders/FontLoader.swift
         Sources/Swen/Media/Loaders/ImageLoader.swift
+        Sources/Swen/Media/Loaders/TextureAtlasLoader.swift
         Sources/Swen/Media/AssetLoader.swift
         Sources/Swen/Media/ContentPipeline.swift
         Sources/Swen/Events/AudioDeviceEvent.swift

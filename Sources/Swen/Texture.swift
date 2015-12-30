@@ -69,11 +69,11 @@ public class Texture {
   public func render(atPoint point: Point<Int32>) {
     let destRect = Rect(x: point.x, y: point.y, sizeX: self.size.w, sizeY: self.size.h)
 
-    renderer.copy(texture: self, sourceRect: nil, destinationRect: destRect)
+    renderer.copy(texture: self, destinationRect: destRect)
   }
 
   public func render(atPoint point: Point<Int32>, clip: Rect<Int32>) {
-    let destRect = Rect(x: point.x, y: point.y, sizeX: self.size.w, sizeY: self.size.h)
+    let destRect = Rect(x: point.x, y: point.y, sizeX: clip.sizeX, sizeY: clip.sizeY)
 
     renderer.copy(texture: self,  sourceRect: clip, destinationRect: destRect)
   }

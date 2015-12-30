@@ -23,16 +23,21 @@ public class Player : GameLoop {
   private let pipeline: ContentPipeline
 
   var player: Texture
+  var playerMap: [String: Rect<Int32>]
 
   public init(pipeline: ContentPipeline) throws {
     self.pipeline = pipeline
 
-    let playerStandingFile: ImageFile = pipeline.get(fromPath: "assets/sprites/player/alienBlue_stand.png")!
-    self.player = try playerStandingFile.asTexture()
+    let playerSpriteMap: ImageMapFile = pipeline.get(fromPath: "assets/sprites/spritesheet_players.xml")!
+
+    self.player = try playerSpriteMap.imageFile.asTexture()
+    self.playerMap = playerSpriteMap.mapping
+
+    print(playerMap["alienBlue_stand"])
   }
 
   public func draw() {
-    player.render(atPoint: Point(x: 120, y: 390))
+    player.render(atPoint: Point(x: 120, y: 390), clip: playerMap["alienBlue_stand"]!)
   }
 
   public func loop() {

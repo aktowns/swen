@@ -18,11 +18,12 @@
 //
 
 public class ContentPipeline {
-  private let renderer: Renderer?
+  public let renderer: Renderer?
 
   var fontLoaders = Array<AssetFontLoader.Type>()
   var imageLoaders = Array<AssetImageLoader.Type>()
   var audioLoaders = Array<AssetAudioLoader.Type>()
+  var imageMapLoaders = Array<AssetImageMapLoader.Type>()
 
   public init() {
     self.renderer = nil
@@ -37,11 +38,19 @@ public class ContentPipeline {
   }
 
   public func get<Unhandled>(fromPath path: String) -> Unhandled? {
+    print("ContentPipeline.get(fromPath:) unable to handle: \(path)")
     return Optional.None
   }
 
   public func get(fromPath path: String) -> FontFile? {
     let loader: AssetFontLoader.Type? = fontLoaders.findFirst { $0.canHandle(path) }
+    let loaderInst = loader?.init(withPath: path, andRenderer: renderer)
+
+    return loaderInst?.load()
+  }
+
+  public func get(fromPath path: String) -> ImageMapFile? {
+    let loader: AssetImageMapLoader.Type? = imageMapLoaders.findFirst { $0.canHandle(path) }
     let loaderInst = loader?.init(withPath: path, andRenderer: renderer)
 
     return loaderInst?.load()
@@ -62,6 +71,7 @@ public class ContentPipeline {
   private func defaultLoaders() {
     fontLoaders.append(FontLoader)
     imageLoaders.append(ImageLoader)
+    imageMapLoaders.append(TextureAtlasLoader)
     audioLoaders.append(AudioLoader)
   }
 }

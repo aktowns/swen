@@ -46,3 +46,7 @@ protocol AssetImageLoader : AssetRenderableBaseLoader {
 protocol AssetAudioLoader : AssetBaseLoader {
   func load() -> AudioFile
 }
+
+protocol AssetImageMapLoader : AssetRenderableBaseLoader {
+  func load() -> ImageMapFile
+}
