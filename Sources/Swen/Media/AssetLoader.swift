@@ -23,6 +23,10 @@ public enum AssetLoaderError : ErrorType {
   case ConfigKeyNotFound(message: String)
 }
 
+public protocol FileType {
+
+}
+
 public protocol AssetBaseLoader {
   init(withPath _: String)
 

@@ -17,7 +17,7 @@
 //   limitations under the License.
 //
 
-public class AudioFile {
+public class AudioFile : FileType {
   let path: String
 
   init(fromPath path: String) {

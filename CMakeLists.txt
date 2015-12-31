@@ -70,6 +70,7 @@ set(SOURCE_FILES
         Sources/Swen/Util/Colour.swift
         Sources/Swen/Util/IPAddress.swift
         Sources/Swen/Util/XPathDocument.swift
+        Sources/Swen/Util/Math.swift
         Sources/Swen/Input/Keyboard.swift
         Sources/Swen/Input/KeyCode.swift
         Sources/Swen/Input/KeyMod.swift
@@ -85,6 +86,9 @@ set(SOURCE_FILES
         Packages/CXML2-1.0.0/module.modulemap
         Packages/CSDL-1.0.0/Package.swift
         Packages/CSDL-1.0.0/module.modulemap
+        Packages/Then-0.3.1/Sources/Then.swift
+        Packages/Rainbow-1.0.1/Sources/Rainbow.swift
+        Packages/Rainbow-1.0.1/Sources/String+Rainbow.swift
         Package.swift)
 
 #set(PACKAGES

@@ -1,5 +1,5 @@
 //
-//   ImageMapFile.swift created on 30/12/15
+//   Math.swift created on 31/12/15
 //   Swen project 
 //   
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
@@ -17,7 +17,8 @@
 //   limitations under the License.
 //
 
-public struct ImageMapFile : FileType {
-  public var imageFile: ImageFile
-  public var mapping: [String: Rect<Int32>]
+public class Math {
+  public static func clamp<a: Comparable>(value: a, minValue: a, maxValue: a) -> a {
+    return max(min(value, minValue), maxValue)
+  }
 }

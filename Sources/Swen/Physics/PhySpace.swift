@@ -65,6 +65,18 @@ public class PhySpace {
     cpSpaceDebugDraw(self.handle, &config)
   }
 
+  public func reindexShapes(forBody body: PhyBody) {
+    cpSpaceReindexShapesForBody(self.handle, body.handle)
+  }
+
+  public func reindexShape(shape: PhyShape) {
+    cpSpaceReindexShape(self.handle, shape.handle)
+  }
+
+  public func reindexStatic() {
+    cpSpaceReindexStatic(self.handle)
+  }
+
   public var gravity: Vector<Double> {
     get {
       return cpSpaceGetGravity(self.handle).toVector()

@@ -29,7 +29,6 @@ extension cpVect {
   }
 }
 
-
 extension cpSpaceDebugColor {
   static func fromColour(colour: Colour) -> cpSpaceDebugColor {
     return cpSpaceDebugColor(r: Float(colour.r), g: Float(colour.g), b: Float(colour.b), a: Float(colour.a ?? 0))

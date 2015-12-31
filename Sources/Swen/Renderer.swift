@@ -160,11 +160,6 @@ public class Renderer {
     assert(res == 0, "SDL_RenderFillRect failed")
   }
 
-  public func fillCircle(position: Point<Int16>, rad: Int16, colour: Colour) {
-    let res = filledCircleRGBA(self.handle, position.x, position.y, rad, colour.r, colour.g, colour.b, colour.a ?? 0)
-    assert(res == 0, "filledCircleColor failed")
-  }
-
   public func draw(usingRect rect: Rect<Int32>) {
     var sdlRect: SDL_Rect = SDL_Rect.fromRect(rect)
 
@@ -240,5 +235,38 @@ public class Renderer {
     set {
       SDL_RenderSetLogicalSize(self.handle, newValue.w, newValue.h)
     }
+  }
+
+
+  /*
+   * SDL_gfx
+   */
+  public func fillCircle(position: Point<Int16>, rad: Int16, colour: Colour) {
+    let res = filledCircleRGBA(self.handle, position.x, position.y, rad, colour.r, colour.g, colour.b, colour.a ?? 255)
+
+    assert(res == 0, "filledCircleColor failed")
+  }
+
+  public func drawPolygon(vx vx: Array<Int16>, vy: Array<Int16>, colour: Colour) {
+    assert(vx.count == vy.count, "vx, vy lengths differ")
+
+    let res = polygonRGBA(self.handle, vx, vy, Int32(vx.count), colour.r, colour.g, colour.b, colour.a ?? 255)
+
+    assert(res == 0, "polygonRGBA failed")
+  }
+
+  public func drawThickLine(point1 point1: Point<Int16>, point2: Point<Int16>, width: UInt8, colour: Colour) {
+
+    let x1 = max(point1.x, 0)
+    let y1 = max(point1.y, 0)
+    let x2 = max(point2.x, 0)
+    let y2 = max(point2.y, 0)
+    let w  = max(width, 2)
+
+    // print("drawThickLine: point1:\(x1),\(y1) point2:\(x2),\(y2) width:\(w) colour:\(colour)")
+
+    let res = thickLineRGBA(self.handle, x1, y1, x2, y2, w, colour.r, colour.g, colour.b, colour.a ?? 120)
+
+    assert(res == 0, "thickLineRGBA failed")
   }
 }

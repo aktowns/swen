@@ -18,6 +18,8 @@
 //
 
 import Swen
+import Then
+import Glibc
 
 public class PhysicsDebugger : PhyDebugDrawDelegate {
   let renderer : Renderer
@@ -27,12 +29,14 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
   }
 
   public func drawSegment(a a: Vector<Double>, b: Vector<Double>, color: Colour) {
+    print("drawSegment: a:\(a) b:\(b)")
+
     renderer.draw(startingFrom: Point<Int32>(x: Int32(a.x), y: Int32(a.y)),
         endingAt: Point(x: Int32(b.x), y: Int32(b.y)))
   }
 
   public func drawDot(size size: Double, pos: Vector<Double>, color: Colour) {
-
+    renderer.fillCircle(Point(x: Int16(floor(pos.x)), y: Int16(floor(pos.y))), rad: Int16(size), colour: color)
   }
 
   public func drawCircle(pos pos: Vector<Double>,
@@ -40,9 +44,9 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
                          radius: Double,
                          outlineColor: Colour,
                          fillColor: Colour) {
-    print("x: \(Int16(pos.x)) y: \(Int16(pos.y))")
 
-    renderer.fillCircle(Point(x: Int16(pos.x / 2), y: Int16(-pos.y / 2)), rad: Int16(radius * 5), colour: fillColor)
+    print(pos)
+    renderer.fillCircle(Point(x: Int16(pos.x), y: Int16(pos.y)), rad: Int16(radius), colour: fillColor)
   }
 
   public func drawColour(shape shape: COpaquePointer) -> Colour {
@@ -54,15 +58,21 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
                              radius: Double,
                              outlineColor: Colour,
                              fillColor: Colour) {
+    // print("drawFatSegment: a:\(a) b:\(b) radius: \(radius)")
 
+    renderer.drawThickLine(point1: Point<Int16>(x: Int16(a.x), y: Int16(a.y)),
+        point2: Point<Int16>(x: Int16(b.x), y: Int16(b.y)), width: UInt8(radius), colour: fillColor)
   }
 
   public func drawPolygon(count count: Int32,
-                          //verts: UnsafePointer<cpVect>,
+                          verts: Array<Vector<Double>>,
                           radius: Double,
                           outlineColor: Colour,
                           fillColor: Colour) {
+    let vx = verts.map { Int16($0.x) }
+    let vy = verts.map { Int16($0.y) }
 
+    renderer.drawPolygon(vx: vx, vy: vy, colour: fillColor)
   }
 }
 
@@ -141,26 +151,31 @@ public class SwenDemo : GameBaseDelegate {
     let debugDraw = PhysicsDebugger(withRenderer: pipeline.renderer!)
 
     self.phydebug = PhyDebug(delegate: debugDraw)
-    space.gravity = Vector(x: 0, y: -100)
+    space.gravity = Vector(x: 0, y: 1)
+
     let ground: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
-        a: Vector(x: -10, y: 5), b: Vector(x: 40, y: -5), radius: 0)
+        a: Vector(x: 0, y: Double(window.size.h - 200)),
+        b: Vector(x: Double(window.size.w), y: Double(window.size.h - 180)),
+        radius: 10)
     ground.friction = 1
-    ground.elasticity = 0.5
+    //ground.elasticity = 0.5
     space.addShape(ground)
 
-    let radius: Double = 5
+    let radius: Double = 25
     let mass: Double = 1
 
     let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector<Double>(x: 0, y: 0))
 
     let ballBody = space.addBody(PhyBody(mass: mass, moment: moment))
-    ballBody.position = Vector(x: 0, y: 15)
+    ballBody.position = Vector(x: 200, y: 0)
 
     let ballShape = space.addShape(PhyShape(circleShapeFrom: ballBody,
         radius: radius, offset: Vector<Double>(x:0, y:0)))
     ballShape.friction = 0.7
-    ballShape.elasticity = 10.0
 
+    space.reindexShapes(forBody: ballBody)
+    space.reindexStatic()
+    // ballShape.elasticity = 0.5
 
 //    for time in Double(0).stride(to: Double(20), by: timeStep) {
 //      //let pos = ballBody.position
@@ -184,13 +199,14 @@ public class SwenDemo : GameBaseDelegate {
     hud1.render(atPoint: Point(x: window.size.w - (hud1.size.w + 10), y: window.size.h - hud1.size.h))
     hudJewel.render(atPoint: Point(x: window.size.w - (hud1.size.w + hudJewel.size.w), y: window.size.h - hudJewel.size.h))
 
+    space.debugDraw(phydebug)
+
     enemy.draw(game)
     item1.draw(game)
     item2.draw(game)
     item3.draw(game)
     player.draw(game)
 
-    space.debugDraw(phydebug)
   }
 
   // Game logic
@@ -209,7 +225,7 @@ public class SwenDemo : GameBaseDelegate {
     item3.loop(game)
     player.loop(game)
 
-    if physicsStep < 0.5 {
+    if physicsStep < 2.0 {
       space.step(physicsStep)
       print(physicsStep)
       physicsStep += timeStep

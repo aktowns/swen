@@ -62,7 +62,7 @@ public protocol PhyDebugDrawDelegate {
                       fillColor: Colour)
 
   func drawPolygon(count count: Int32,
-                   // verts: UnsafePointer<cpVect>, -- ugh not dealing with this right now
+                   verts: Array<Vector<Double>>,
                    radius: Double,
                    outlineColor: Colour,
                    fillColor: Colour)
@@ -83,7 +83,7 @@ public final class PhyDebug: AnyObject {
   }
 
   public func generateStruct() -> cpSpaceDebugDrawOptions {
-    var debugOpts = cpSpaceDebugDrawOptions()
+    var debugOpts: cpSpaceDebugDrawOptions = cpSpaceDebugDrawOptions()
 
     /* Trampolines from c back into swift world */
     let drawSegment: cpSpaceDebugDrawSegmentImpl = {
@@ -92,8 +92,8 @@ public final class PhyDebug: AnyObject {
        color: cpSpaceDebugColor,
        data: cpDataPointer) -> Void in
 
-      let r: PhyDebug = Unmanaged<PhyDebug>.fromOpaque(COpaquePointer(data)).takeUnretainedValue()
-      r.drawSegmentTrampoline(a: a, b: b, color: color)
+      let klass = unsafeBitCast(data, PhyDebug.self)
+      klass.drawSegmentTrampoline(a: a, b: b, color: color)
     }
 
     let drawCircle: cpSpaceDebugDrawCircleImpl = {
@@ -104,10 +104,9 @@ public final class PhyDebug: AnyObject {
        fillColor: cpSpaceDebugColor,
        data: cpDataPointer) in
 
-      // let r: PhyDebug = Unmanaged<PhyDebug>.fromOpaque(COpaquePointer(data)).takeUnretainedValue()
-      // r.drawCircleTrampoline(pos: pos, angle: angle, radius: radius, outlineColor: outlineColor, fillColor: fillColor)
       let klass = unsafeBitCast(data, PhyDebug.self)
-      klass.drawCircleTrampoline(pos: pos, angle: angle, radius: radius, outlineColor: outlineColor, fillColor: fillColor)
+      klass.drawCircleTrampoline(pos: pos, angle: angle, radius: radius, outlineColor: outlineColor,
+          fillColor: fillColor)
     }
 
     let drawPolygon: cpSpaceDebugDrawPolygonImpl = {
@@ -118,9 +117,6 @@ public final class PhyDebug: AnyObject {
        fillColor: cpSpaceDebugColor,
        data: cpDataPointer) in
 
-//      let r: PhyDebug = Unmanaged<PhyDebug>.fromOpaque(COpaquePointer(data)).takeUnretainedValue()
-//      r.drawPolygonTrampoline(count: count, verts: verts, radius: radius, outlineColor: outlineColor,
-//          fillColor: fillColor)
       let klass = unsafeBitCast(data, PhyDebug.self)
       klass.drawPolygonTrampoline(count: count, verts: verts, radius: radius, outlineColor: outlineColor,
           fillColor: fillColor)
@@ -134,8 +130,8 @@ public final class PhyDebug: AnyObject {
        fillColor: cpSpaceDebugColor,
        data: cpDataPointer) in
 
-      let r: PhyDebug = Unmanaged<PhyDebug>.fromOpaque(COpaquePointer(data)).takeUnretainedValue()
-      r.drawFatSegmentTrampoline(a: a, b: b, radius: radius, outlineColor: outlineColor, fillColor: fillColor)
+      let klass = unsafeBitCast(data, PhyDebug.self)
+      klass.drawFatSegmentTrampoline(a: a, b: b, radius: radius, outlineColor: outlineColor, fillColor: fillColor)
     }
 
     let drawDot: cpSpaceDebugDrawDotImpl = {
@@ -144,8 +140,8 @@ public final class PhyDebug: AnyObject {
        color: cpSpaceDebugColor,
        data: cpDataPointer) in
 
-      let r: PhyDebug = Unmanaged<PhyDebug>.fromOpaque(COpaquePointer(data)).takeUnretainedValue()
-      r.drawDotTrampoline(size: size, pos: pos, color: color)
+      let klass = unsafeBitCast(data, PhyDebug.self)
+      klass.drawDotTrampoline(size: size, pos: pos, color: color)
     }
 
     let drawColour: cpSpaceDebugDrawColorForShapeImpl = {
@@ -193,8 +189,16 @@ public final class PhyDebug: AnyObject {
                                      radius: Double,
                                      outlineColor: cpSpaceDebugColor,
                                      fillColor: cpSpaceDebugColor) {
+
+    var vectors: Array<Vector<Double>> = Array<Vector<Double>>()
+
+    for i in Range(start: 0, end: Int(count)) {
+      let vect: UnsafePointer<cpVect> = verts.advancedBy(i)
+      vectors.append(vect.memory.toVector())
+    }
+
     delegate.drawPolygon(count: count,
-        //verts: verts,
+        verts: vectors,
         radius: radius,
         outlineColor: outlineColor.toColour(),
         fillColor: fillColor.toColour())
