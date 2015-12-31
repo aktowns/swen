@@ -37,8 +37,8 @@ public class Texture {
   public convenience init(withRenderer renderer: Renderer,
                           format: UInt32,
                           access: Int32,
-                          andSize size: Size<Int32>) throws {
-    let ptr = SDL_CreateTexture(renderer.handle, format, access, size.w, size.h)
+                          andSize size: Size) throws {
+    let ptr = SDL_CreateTexture(renderer.handle, format, access, Int32(size.sizeX), Int32(size.sizeY))
 
     if ptr == nil {
       throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
@@ -66,22 +66,16 @@ public class Texture {
     renderer.copy(texture: self)
   }
 
-  public func render(atPoint point: Point<Int32>) {
-    let destRect = Rect(x: point.x, y: point.y, sizeX: self.size.w, sizeY: self.size.h)
+  public func render(atPoint point: Vector) {
+    let destRect = Rect(x: point.x, y: point.y, sizeX: self.size.sizeX, sizeY: self.size.sizeY)
 
     renderer.copy(texture: self, destinationRect: destRect)
   }
 
-  public func render(atPoint point: Point<Double>) {
-    let destRect = Rect(x: point.x, y: point.y, sizeX: Double(self.size.w), sizeY: Double(self.size.h))
-
-    renderer.copy(texture: self, destinationRect: destRect)
-  }
-
-  public func render(atPoint point: Point<Int32>, clip: Rect<Int32>) {
+  public func render(atPoint point: Vector, clip: Rect) {
     let destRect = Rect(x: point.x, y: point.y, sizeX: clip.sizeX, sizeY: clip.sizeY)
 
-    renderer.copy(texture: self,  sourceRect: clip, destinationRect: destRect)
+    renderer.copy(texture: self, sourceRect: clip, destinationRect: destRect)
   }
 
   public var colourMod: Colour {
@@ -128,14 +122,14 @@ public class Texture {
     }
   }
 
-  public var size: Size<Int32> {
+  public var size: Size {
     get {
       var w: Int32 = 0, h: Int32 = 0
 
       let res = SDL_QueryTexture(self.handle, nil, nil, &w, &h)
       assert(res == 0, "SDL_QueryTexture failed")
 
-      return Size(w: w, h: h)
+      return Size(sizeX: w, sizeY: h)
     }
   }
 

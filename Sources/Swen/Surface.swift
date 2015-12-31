@@ -30,6 +30,24 @@ public class Surface {
     self.handle = handle
   }
 
+  /*
+  SDL_Surface* SDL_CreateRGBSurface(Uint32 flags,
+                                  int    width,
+                                  int    height,
+                                  int    depth,
+                                  Uint32 Rmask,
+                                  Uint32 Gmask,
+                                  Uint32 Bmask,
+                                  Uint32 Amask)
+  */
+
+  public convenience init(size: Size) {
+    let ptr = SDL_CreateRGBSurface(0, Int32(size.sizeX), Int32(size.sizeY),
+        32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff)
+
+    self.init(fromHandle: ptr)
+  }
+
   deinit {
     SDL_FreeSurface(self.handle)
   }
@@ -38,19 +56,19 @@ public class Surface {
     return self.handle.memory.format
   }
 
-  public var size: Size<Int32> {
-    return Size(w: self.handle.memory.w, h: self.handle.memory.h)
+  public var size: Size {
+    return Size(sizeX: self.handle.memory.w, sizeY: self.handle.memory.h)
   }
 
   public var pitch: Int32 {
     return self.handle.memory.pitch
   }
 
-  public func blit(source src: Surface, sourceRect srcrect: Rect<Int32>?) {
+  public func blit(source src: Surface, sourceRect srcrect: Rect?) {
     blit(source: src, sourceRect: srcrect, destRect: nil)
   }
 
-  public func blit(source src: Surface, sourceRect srcrect: Rect<Int32>?, destRect dstrect: Rect<Int32>?) {
+  public func blit(source src: Surface, sourceRect srcrect: Rect?, destRect dstrect: Rect?) {
     var srcRectptr = UnsafeMutablePointer<SDL_Rect>.alloc(1)
     var dstRectptr = UnsafeMutablePointer<SDL_Rect>.alloc(1)
 
@@ -80,6 +98,12 @@ public class Surface {
     }
 
     return Surface(fromHandle: surf)
+  }
+
+  public func rotozoom(angle angle: Double, zoom: Double, smooth: Bool) -> Surface {
+    let ptr = rotozoomSurface(self.handle, angle, zoom, smooth ? 1 : 0)
+
+    return Surface(fromHandle: ptr)
   }
 
   public var colourKey: UInt32 {

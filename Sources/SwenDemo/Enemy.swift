@@ -23,11 +23,11 @@ public class Enemy : GameLoop {
   private let pipeline: ContentPipeline
 
   var enemy: Texture
-  var enemyMap: [String: Rect<Int32>]
+  var enemyMap: [String: Rect]
   let walkingAnimation = ["bee", "bee_move", "bee_dead"]
   var animationStep: Int = 0
 
-  var position: Point<Int32> = Point(x: 820, y: 290)
+  var position: Vector = Vector(x: 820.0, y: 290.0)
 
   public init(pipeline: ContentPipeline) throws {
     self.pipeline = pipeline
@@ -36,8 +36,6 @@ public class Enemy : GameLoop {
 
     self.enemy = try enemySpriteMap.imageFile.asTexture()
     self.enemyMap = enemySpriteMap.mapping
-
-
   }
 
   public func draw(game: Game) {

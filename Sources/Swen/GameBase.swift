@@ -20,7 +20,7 @@
 import Glibc
 
 public protocol GameBaseDelegate : GameLoop {
-  init(withWindow: Window, andPipeline: ContentPipeline)
+  init(withWindow: Window, pipeline: ContentPipeline, andSpace: PhySpace)
 }
 
 public struct Game {
@@ -34,13 +34,15 @@ public class GameBase<GameDelegate: GameBaseDelegate> {
   public let window: Window
   public let delegate: GameDelegate
   public let fpsTimer: Timer
+  public let space: PhySpace
 
-  public init(withTitle title: String, size: Size<Int32>, andDelegate delegate: GameDelegate.Type) throws {
+  public init(withTitle title: String, size: Size, andDelegate delegate: GameDelegate.Type) throws {
     try SDL.initSDL()
 
     self.window = try Window(withTitle: title, andSize: size)
     self.pipeline = ContentPipeline(withRenderer: self.window.renderer)
-    self.delegate = delegate.init(withWindow: window, andPipeline: pipeline)
+    self.space = PhySpace()
+    self.delegate = delegate.init(withWindow: window, pipeline: pipeline, andSpace: space)
     self.fpsTimer = Timer()
   }
 

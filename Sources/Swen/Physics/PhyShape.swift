@@ -28,14 +28,20 @@ public class PhyShape {
     assert(handle != nil, "PhyShape.init(fromHandle:) handed a null handle")
   }
 
-  public convenience init(segmentedShapeFrom body: PhyBody, a: Vector<Double>, b: Vector<Double>, radius: Double) {
+  public convenience init(segmentedShapeFrom body: PhyBody, a: Vector, b: Vector, radius: Double) {
     let ptr = cpSegmentShapeNew(body.handle, cpVect.fromVector(a), cpVect.fromVector(b), radius)
 
     self.init(fromHandle: ptr)
   }
 
-  public convenience init(circleShapeFrom body: PhyBody, radius: Double, offset: Vector<Double>) {
+  public convenience init(circleShapeFrom body: PhyBody, radius: Double, offset: Vector) {
     let ptr = cpCircleShapeNew(body.handle, radius, cpVect.fromVector(offset))
+
+    self.init(fromHandle: ptr)
+  }
+
+  public convenience init(boxShapeFrom body: PhyBody, width: Double, height: Double, radius: Double) {
+    let ptr = cpBoxShapeNew(body.handle, width, height, radius)
 
     self.init(fromHandle: ptr)
   }

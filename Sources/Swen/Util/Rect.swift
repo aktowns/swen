@@ -18,34 +18,34 @@
 //
 
 
-public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
+public struct Rect : Comparable, CustomStringConvertible {
   /// The x coordinate of the top-left corner of this Rectangle.
-  var x: a
+  public var x: Double
   /// The y coordinate of the top-left corner of this Rectangle.
-  var y: a
+  public var y: Double
   /// The width of this Rectangle.
-  var sizeX: a
+  public var sizeX: Double
   /// The height of this Rectangle.
-  var sizeY: a
+  public var sizeY: Double
 
-  static func empty() -> Rect<a> {
-    return Rect(x: 0 as! a, y: 0 as! a, sizeX: 0 as! a, sizeY: 0 as! a)
+  public static func empty() -> Rect {
+    return Rect(x: 0, y: 0, sizeX: 0, sizeY: 0)
   }
 
-  var isEmpty: Bool { return (self.sizeX == (0 as! a)) && (self.sizeY == (0 as! a)) }
+  public var isEmpty: Bool { return (self.sizeX == 0) && (self.sizeY == 0) }
 
   /// Returns the x coordinate of the left edge of this Rectangle.
-  var left: a { return self.x }
+  public var left: Double { return self.x }
   /// Returns the x coordinate of the right edge of this Rectangle.
-  var right: a { return self.x + self.sizeX }
+  public var right: Double { return self.x + self.sizeX }
   /// Returns the y coordinate of the top edge of this Rectangle.
-  var top: a { return self.y }
+  public var top: Double { return self.y }
   /// Returns the y coordinate of the bottom edge of this Rectangle.
-  var bottom: a { return self.y + self.sizeY }
+  public var bottom: Double { return self.y + self.sizeY }
 
   /// The top-left coordinates of this Rectangle.
-  var location: Point<a> {
-    get { return Point(x: self.x, y: self.y) }
+  public var location: Vector {
+    get { return Vector(x: self.x, y: self.y) }
     set {
       self.x = newValue.x
       self.y = newValue.y
@@ -53,62 +53,56 @@ public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
   }
 
   /// The width-height coordinates of this Rectangle.
-  var size: Point<a> {
-    get { return Point(x: sizeX, y: sizeY) }
+  public var size: Size {
+    get { return Size(sizeX: sizeX, sizeY: sizeY) }
     set {
-      self.sizeX = newValue.x
-      self.sizeY = newValue.y
+      self.sizeX = newValue.sizeX
+      self.sizeY = newValue.sizeY
     }
   }
 
   /// A Point located in the center of this Rectangle.
-  var center: Point<a> {
-    return Point(x: (self.x + (self.sizeX / (2 as! a))),
-                 y: (self.y + (self.sizeY / (2 as! a))))
+  public var center: Vector {
+    return Vector(x: (self.x + (self.sizeX / 2)),
+                  y: (self.y + (self.sizeY / 2)))
   }
 
   /// Gets whether or not the provided coordinates lie within the bounds of this Rectangle.
-  public func contains(x: a, y: a) -> Bool {
+  public func contains(x: Double, y: Double) -> Bool {
     return ((self.x <= x) && (x < (self.x + self.sizeX)) &&
             (self.y <= y) && (y < (self.y + self.sizeY)))
   }
 
-  /// Gets whether or not the provided Point lies within the bounds of this Rectangle.
-  public func contains(point: Point<a>) -> Bool {
-    return ((self.x <= point.x) && (point.x < (self.x + self.sizeX)) &&
-            (self.y <= point.y) && (point.y < (self.y + self.sizeY)))
-  }
-
   /// Gets whether or not the provided Vector lies within the bounds of this Rectangle.
-  public func contains(vector: Vector<a>) -> Bool {
+  public func contains(vector: Vector) -> Bool {
     return ((self.x <= vector.x) && (vector.x < (self.x + self.sizeX)) &&
             (self.y <= vector.y) && (vector.y < (self.y + self.sizeY)))
   }
 
   /// Gets whether or not the provided Rectangle lies within the bounds of this Rectangle.
-  public func contains(rect: Rect<a>) -> Bool {
+  public func contains(rect: Rect) -> Bool {
     return ((self.x <= rect.x) && ((rect.x + rect.sizeX) <= (self.x + self.sizeX)) &&
             (self.y <= rect.y) && ((rect.y + rect.sizeY) <= (self.y + self.sizeY)))
   }
 
   /// Adjusts the edges of this Rectangle by specified horizontal and vertical amounts.
-  public func inflate(infX: a, infY: a) -> Rect<a> {
+  public func inflate(infX: Double, infY: Double) -> Rect {
     return Rect(x: (self.x - infX),
                 y: (self.y - infY),
-                sizeX: (self.sizeX - (infX * (2 as! a))),
-                sizeY: (self.sizeY - (infX * (2 as! a))))
+                sizeX: (self.sizeX - (infX * 2)),
+                sizeY: (self.sizeY - (infX * 2)))
   }
 
   /// Adjusts the edges of this Rectangle by specified horizontal and vertical amounts. modifies current rect
-  public mutating func inflateInPlace(infX: a, infY: a) {
+  public mutating func inflateInPlace(infX: Double, infY: Double) {
     self.x -= infX
     self.y -= infY
-    self.sizeX += infX * (2 as! a)
-    self.sizeY += infY * (2 as! a)
+    self.sizeX += infX * 2
+    self.sizeY += infY * 2
   }
 
   /// Gets whether or not the other Rectangle intersects with this rectangle.
-  public func intersects(rect: Rect<a>) -> Bool {
+  public func intersects(rect: Rect) -> Bool {
     return ((rect.left < right) &&
             (left < rect.right) &&
             (rect.top < bottom) &&
@@ -116,7 +110,7 @@ public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
   }
 
   /// Creates a new Rectangle that contains overlapping region of two other rectangles.
-  public static func intersect(rect1: Rect<a>, rect2: Rect<a>) -> Rect<a> {
+  public static func intersect(rect1: Rect, rect2: Rect) -> Rect {
     if rect1.intersects(rect2) {
       let rightSide = min(rect1.right, rect2.right)
       let leftSide = max(rect1.x, rect2.x)
@@ -130,7 +124,7 @@ public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
   }
 
   /// Changes the Location of this Rectangle.
-  public func offset(offsetX: a, offsetY: a) -> Rect<a> {
+  public func offset(offsetX: Double, offsetY: Double) -> Rect {
     return Rect(x: self.x - offsetX,
                 y: self.y - offsetY,
                 sizeX: self.sizeX,
@@ -138,15 +132,7 @@ public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
   }
 
   /// Changes the Location of this Rectangle.
-  public func offset(point: Point<a>) -> Rect<a> {
-    return Rect(x: self.x - point.x,
-                y: self.y - point.y,
-                sizeX: self.sizeX,
-                sizeY: self.sizeY)
-  }
-
-  /// Changes the Location of this Rectangle.
-  public func offset(vec: Vector<a>) -> Rect<a> {
+  public func offset(vec: Vector) -> Rect {
     return Rect(x: self.x - vec.x,
                 y: self.y - vec.y,
                 sizeX: self.sizeX,
@@ -154,25 +140,19 @@ public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
   }
 
   /// Changes the Location of this Rectangle. Modifies the rect in place
-  public mutating func offsetInPlace(offsetX: a, offsetY: a) {
+  public mutating func offsetInPlace(offsetX: Double, offsetY: Double) {
     self.x += offsetX
     self.y += offsetY
   }
 
   /// Changes the Location of this Rectangle. Modifies the rect in place
-  public mutating func offsetInPlace(point: Point<a>) {
-    self.x += point.x
-    self.y += point.y
-  }
-
-  /// Changes the Location of this Rectangle. Modifies the rect in place
-  public mutating func offsetInPlace(vec: Vector<a>) {
+  public mutating func offsetInPlace(vec: Vector) {
     self.x += vec.x
     self.y += vec.y
   }
 
   /// Creates a new Rectangle that completely contains two other rectangles.
-  public static func union(rect1: Rect<a>, rect2: Rect<a>) -> Rect<a> {
+  public static func union(rect1: Rect, rect2: Rect) -> Rect {
     let x = min(rect1.x, rect2.x)
     let y = min(rect1.y, rect2.y)
     let sizeX = max(rect1.right, rect2.right) - x
@@ -186,11 +166,11 @@ public struct Rect<a: ArithmeticType> : Comparable, CustomStringConvertible {
   }
 }
 
-public func ==<a>(l: Rect<a>, r: Rect<a>) -> Bool {
+public func ==(l: Rect, r: Rect) -> Bool {
   return (l.x == r.x && l.sizeX == r.sizeX &&
           l.y == r.y && l.sizeY == r.sizeY)
 }
-public func <<a>(l: Rect<a>, r: Rect<a>) -> Bool {
+public func <(l: Rect, r: Rect) -> Bool {
   return (l.x < r.x && l.sizeX == r.sizeX &&
           l.y < r.y && l.sizeY == r.sizeY)
 }

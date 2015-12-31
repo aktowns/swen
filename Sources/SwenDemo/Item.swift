@@ -23,13 +23,13 @@ public class Item : GameLoop {
   private let pipeline: ContentPipeline
 
   var items: Texture
-  var itemsMap: [String: Rect<Int32>]
+  var itemsMap: [String: Rect]
   let walkingAnimation = ["coinBronze", "coinSilver", "coinGold"]
   var animationStep: Int = 0
 
-  var position: Point<Int32> = Point(x: 920, y: 370)
+  var position: Vector = Vector(x: 920.0, y: 370.0)
 
-  public init(pipeline: ContentPipeline, position: Point<Int32>) throws {
+  public init(pipeline: ContentPipeline, position: Vector) throws {
     self.pipeline = pipeline
 
     let itemsSpriteMap: ImageMapFile = pipeline.get(fromPath: "assets/sprites/spritesheet_items.xml")!

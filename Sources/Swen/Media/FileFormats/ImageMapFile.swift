@@ -19,5 +19,5 @@
 
 public struct ImageMapFile : FileType {
   public var imageFile: ImageFile
-  public var mapping: [String: Rect<Int32>]
+  public var mapping: [String: Rect]
 }

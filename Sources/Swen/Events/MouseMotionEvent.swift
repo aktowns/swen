@@ -35,8 +35,8 @@ public class MouseMotionEvent : CommonEvent {
   public var windowId: UInt32 { return motionEvent.windowID }
   public var which: UInt32 { return motionEvent.which }
   public var state: UInt32 { return motionEvent.state }
-  public var position: Point<Int32> { return Point(x: motionEvent.x, y: motionEvent.y) }
-  public var relativePosition: Point<Int32> { return Point(x: motionEvent.xrel, y: motionEvent.yrel) }
+  public var position: Vector { return Vector(x: motionEvent.x, y: motionEvent.y) }
+  public var relativePosition: Vector { return Vector(x: motionEvent.xrel, y: motionEvent.yrel) }
 
   override public var description : String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), windowId:\(windowId), " +

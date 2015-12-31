@@ -17,28 +17,57 @@
 //   limitations under the License.
 //
 
-
-public struct Vector<a: ArithmeticType> : Comparable {
+public struct Vector : Comparable {
   /// The x coordinate of this Vector.
-  public var x: a
+  public var x: Double
   /// The y coordinate of this Vector2.
-  public var y: a
+  public var y: Double
 
-  public init(x: a, y: a) {
+  public init(x: Double, y: Double) {
     self.x = x
     self.y = y
   }
 
-  public static var zero: Vector<a> {
-    return Vector(x: 0 as! a, y: 0 as! a)
+  public init(x: Int16, y: Int16) {
+    self.x = Double(x)
+    self.y = Double(y)
+  }
+
+  public init(x: Int32, y: Int32) {
+    self.x = Double(x)
+    self.y = Double(y)
+  }
+
+  public static var zero: Vector {
+    return Vector(x: 0.0, y: 0.0)
   }
 }
 
-public func ==<a>(l: Vector<a>, r: Vector<a>) -> Bool {
+public func ==(l: Vector, r: Vector) -> Bool {
   return (l.x == r.x &&
           l.y == r.y)
 }
-public func <<a>(l: Vector<a>, r: Vector<a>) -> Bool {
+public func <(l: Vector, r: Vector) -> Bool {
   return (l.x < r.x &&
           l.y < r.y)
+}
+
+public func +(l: Vector, r: Vector) -> Vector {
+  return Vector(x: l.x + r.x,
+      y: l.y + r.y)
+}
+
+public func -(l: Vector, r: Vector) -> Vector {
+  return Vector(x: l.x - r.x,
+      y: l.y - r.y)
+}
+
+public func *(l: Vector, r: Vector) -> Vector {
+  return Vector(x: l.x * r.x,
+      y: l.y * r.y)
+}
+
+public func /(l: Vector, r: Vector) -> Vector {
+  return Vector(x: l.x / r.x,
+      y: l.y / r.y)
 }

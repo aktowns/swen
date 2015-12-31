@@ -38,7 +38,7 @@ public class MouseButtonEvent : CommonEvent {
   public var button: UInt8 { return buttonEvent.button }
   public var state: UInt8 { return buttonEvent.state }
   public var clicks: UInt8 { return buttonEvent.clicks }
-  public var position: Point<Int32> { return Point(x: buttonEvent.x, y: buttonEvent.y) }
+  public var position: Vector { return Vector(x: buttonEvent.x, y: buttonEvent.y) }
 
   override public var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), windowId:\(windowId), " +

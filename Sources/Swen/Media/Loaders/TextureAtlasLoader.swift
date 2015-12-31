@@ -67,10 +67,10 @@ public class TextureAtlasLoader : AssetImageMapLoader {
     return Optional.None
   }
 
-  private func createMapping(xmlDoc: XPathDocument) -> [String: Rect<Int32>] {
+  private func createMapping(xmlDoc: XPathDocument) -> [String: Rect] {
     let nodes = xmlDoc.search(withXPath: "/TextureAtlas/SubTexture")
 
-    var retDict = Dictionary<String, Rect<Int32>>()
+    var retDict = Dictionary<String, Rect>()
 
     for node in nodes {
       let name = node.getProp("name")!
@@ -79,7 +79,7 @@ public class TextureAtlasLoader : AssetImageMapLoader {
       let width = node.getProp("width")!
       let height = node.getProp("height")!
 
-      let rect = Rect<Int32>(x: Int32(x)!, y: Int32(y)!, sizeX: Int32(width)!, sizeY: Int32(height)!)
+      let rect = Rect(x: Double(x)!, y: Double(y)!, sizeX: Double(width)!, sizeY: Double(height)!)
 
       retDict[name] = rect
     }

@@ -20,21 +20,13 @@
 import CSDL
 
 extension SDL_Rect {
-  static func fromRect(rect: Rect<Int32>) -> SDL_Rect {
-    return SDL_Rect(x: rect.x, y: rect.y, w: rect.sizeX, h: rect.sizeY)
-  }
-
-  static func fromRect(rect: Rect<Double>) -> SDL_Rect {
+  static func fromRect(rect: Rect) -> SDL_Rect {
     return SDL_Rect(x: Int32(rect.x), y: Int32(rect.y), w: Int32(rect.sizeX), h: Int32(rect.sizeY))
   }
 }
 
 extension SDL_Point {
-  static func fromPoint(point: Point<Int32>) -> SDL_Point {
-    return SDL_Point(x: point.x, y: point.y)
-  }
-
-  static func fromPoint(point: Point<Double>) -> SDL_Point {
+  static func fromPoint(point: Vector) -> SDL_Point {
     return SDL_Point(x: Int32(point.x), y: Int32(point.y))
   }
 }

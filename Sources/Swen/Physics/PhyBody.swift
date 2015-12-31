@@ -34,7 +34,7 @@ public class PhyBody {
     self.init(fromHandle: ptr)
   }
 
-  public var position: Vector<Double> {
+  public var position: Vector {
     get {
       return cpBodyGetPosition(self.handle).toVector()
     }
@@ -43,7 +43,7 @@ public class PhyBody {
     }
   }
 
-  public var velocity: Vector<Double> {
+  public var velocity: Vector {
     get {
       return cpBodyGetVelocity(self.handle).toVector()
     }

@@ -58,6 +58,7 @@ set(SOURCE_FILES
         Sources/Swen/Physics/PhyBody.swift
         Sources/Swen/Physics/PhyMisc.swift
         Sources/Swen/Physics/PhyDebug.swift
+        Sources/Swen/Physics/PhyConstraint.swift
         Sources/Swen/Renderer.swift
         Sources/Swen/SDL/SDL.swift
         Sources/Swen/SDL/SDLError.swift
@@ -66,7 +67,6 @@ set(SOURCE_FILES
         Sources/Swen/Window.swift
         Sources/Swen/Util/Extensions/ArrayExtensions.swift
         Sources/Swen/Util/Extensions/OptionalExtensions.swift
-        Sources/Swen/Util/Arithmetic.swift
         Sources/Swen/Util/Colour.swift
         Sources/Swen/Util/IPAddress.swift
         Sources/Swen/Util/XPathDocument.swift
@@ -75,20 +75,12 @@ set(SOURCE_FILES
         Sources/Swen/Input/KeyCode.swift
         Sources/Swen/Input/KeyMod.swift
         Sources/Swen/Input/Mouse.swift
-        Sources/Swen/Util/Point.swift
         Sources/Swen/Util/Rect.swift
         Sources/Swen/Input/ScanCode.swift
         Sources/Swen/Util/SDLConvertHelper.swift
         Sources/Swen/Util/ChipmunkConvertHelper.swift
         Sources/Swen/Util/Size.swift
         Sources/Swen/Util/Vector.swift
-        Packages/CXML2-1.0.0/Package.swift
-        Packages/CXML2-1.0.0/module.modulemap
-        Packages/CSDL-1.0.0/Package.swift
-        Packages/CSDL-1.0.0/module.modulemap
-        Packages/Then-0.3.1/Sources/Then.swift
-        Packages/Rainbow-1.0.1/Sources/Rainbow.swift
-        Packages/Rainbow-1.0.1/Sources/String+Rainbow.swift
         Package.swift)
 
 #set(PACKAGES

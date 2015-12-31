@@ -60,19 +60,20 @@ public class Window {
   }
 
   public convenience init(withTitle title: String,
-                   position: Point<Int32>,
-                   size: Size<Int32>,
+                   position: Vector,
+                   size: Size,
                    andFlags flags: WindowFlags) throws {
 
     // Hmm could possibly just use SDL_CreateWindowAndRenderer
-    let window = SDL_CreateWindow(title, position.x, position.y, size.w, size.h, flags.rawValue)
+    let window = SDL_CreateWindow(title, Int32(position.x), Int32(position.y),
+        Int32(size.sizeX), Int32(size.sizeY), flags.rawValue)
     
     assert(window != nil, "SDL_CreateWindow failed: \(SDL.getErrorMessage())")
 
     try self.init(fromHandle: window)
   }
 
-  public convenience init(withTitle title: String, position: Point<Int32>, andSize size: Size<Int32>) throws {
+  public convenience init(withTitle title: String, position: Vector, andSize size: Size) throws {
     try self.init(withTitle: title,
                   position: position,
                   size: size,
@@ -80,9 +81,9 @@ public class Window {
   }
 
   public convenience init(withTitle title: String,
-                   andSize size: Size<Int32>) throws {
+                   andSize size: Size) throws {
     try self.init(withTitle: title,
-                  position: Point(x: WindowPosUndefined, y: WindowPosUndefined),
+                  position: Vector(x: WindowPosUndefined, y: WindowPosUndefined),
                   andSize: size)
   }
 
@@ -96,17 +97,17 @@ public class Window {
     assert(res == 0, "SDL_UpdateWindowSurface failed")
   }
 
-  public var size: Size<Int32> {
+  public var size: Size {
     get {
       var w: Int32 = 0
       var h: Int32 = 0
 
       SDL_GetWindowSize(self.handle, &w, &h)
 
-      return Size<Int32>(w: w, h: h)
+      return Size(sizeX: w, sizeY: h)
     }
     set {
-      SDL_SetWindowSize(self.handle, newValue.w, newValue.h)
+      SDL_SetWindowSize(self.handle, Int32(newValue.sizeX), Int32(newValue.sizeY))
     }
   }
 }

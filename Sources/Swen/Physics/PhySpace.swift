@@ -77,7 +77,7 @@ public class PhySpace {
     cpSpaceReindexStatic(self.handle)
   }
 
-  public var gravity: Vector<Double> {
+  public var gravity: Vector {
     get {
       return cpSpaceGetGravity(self.handle).toVector()
     }

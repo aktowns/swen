@@ -81,6 +81,12 @@ public class Renderer {
     try self.init(forWindowHandle: window.handle)
   }
 
+  public convenience init(forSurface surface: Surface) {
+    let ptr = SDL_CreateSoftwareRenderer(surface.handle)
+
+    self.init(fromHandle: ptr)
+  }
+
   deinit {
     SDL_DestroyRenderer(self.handle)
   }
@@ -96,14 +102,14 @@ public class Renderer {
   }
 
   public func copy(texture texture: Texture,
-                   sourceRect srcrect: Rect<Int32>) {
+                   sourceRect srcrect: Rect) {
     var srcSDLRect = SDL_Rect.fromRect(srcrect)
 
     let res = SDL_RenderCopy(self.handle, texture.handle, &srcSDLRect, nil)
     assert(res == 0, "SDL_RenderCopy failed")
   }
 
-  public func copy(texture texture: Texture, destinationRect dstrect: Rect<Int32>) {
+  public func copy(texture texture: Texture, destinationRect dstrect: Rect) {
     var dstSDLRect = SDL_Rect.fromRect(dstrect)
 
     let res = SDL_RenderCopy(self.handle, texture.handle, nil, &dstSDLRect)
@@ -111,8 +117,8 @@ public class Renderer {
   }
 
   public func copy(texture texture: Texture,
-                   sourceRect srcrect: Rect<Int32>,
-                   destinationRect dstrect: Rect<Int32>) {
+                   sourceRect srcrect: Rect,
+                   destinationRect dstrect: Rect) {
     var srcSDLRect: SDL_Rect = SDL_Rect.fromRect(srcrect)
     var dstSDLRect: SDL_Rect = SDL_Rect.fromRect(dstrect)
 
@@ -121,10 +127,10 @@ public class Renderer {
   }
 
   public func copy(texture texture: Texture,
-                   sourceRect srcrect: Rect<Int32>?,
-                   destinationRect dstrect: Rect<Int32>?,
+                   sourceRect srcrect: Rect?,
+                   destinationRect dstrect: Rect?,
                    angle: Double,
-                   center: Point<Int32>,
+                   center: Vector,
                    flip: RenderFlip) throws {
     let srcSDLRect: SDL_Rect? = srcrect.map { SDL_Rect.fromRect($0) }
     let dstSDLRect: SDL_Rect? = dstrect.map { SDL_Rect.fromRect($0) }
@@ -135,49 +141,36 @@ public class Renderer {
     assert(res == 0, "SDL_RenderCopyEx failed")
   }
 
-  public func copy(texture texture: Texture, sourceRect srcrect: Rect<Double>) {
-    var srcSDLRect = SDL_Rect.fromRect(srcrect)
-
-    let res = SDL_RenderCopy(self.handle, texture.handle, &srcSDLRect, nil)
-    assert(res == 0, "SDL_RenderCopy failed")
-  }
-
-  public func copy(texture texture: Texture, destinationRect dstrect: Rect<Double>) {
-    var dstSDLRect = SDL_Rect.fromRect(dstrect)
-
-    let res = SDL_RenderCopy(self.handle, texture.handle, nil, &dstSDLRect)
-    assert(res == 0, "SDL_RenderCopy failed")
-  }
-
   public func present() {
     SDL_RenderPresent(self.handle)
   }
 
-  public func fill(usingRect rect: Rect<Int32>) {
+  public func fill(usingRect rect: Rect) {
     var sdlRect: SDL_Rect = SDL_Rect.fromRect(rect)
 
     let res = SDL_RenderFillRect(self.handle, &sdlRect)
     assert(res == 0, "SDL_RenderFillRect failed")
   }
 
-  public func draw(usingRect rect: Rect<Int32>) {
+  public func draw(usingRect rect: Rect) {
     var sdlRect: SDL_Rect = SDL_Rect.fromRect(rect)
 
     let res = SDL_RenderDrawRect(self.handle, &sdlRect)
     assert(res == 0, "SDL_RenderDrawRect failed")
   }
 
-  public func draw(startingFrom startPoint: Point<Int32>, endingAt endPoint: Point<Int32>) {
-    let res = SDL_RenderDrawLine(self.handle, startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+  public func draw(startingFrom startPoint: Vector, endingAt endPoint: Vector) {
+    let res = SDL_RenderDrawLine(self.handle, Int32(startPoint.x), Int32(startPoint.y),
+        Int32(endPoint.x), Int32(endPoint.y))
     assert(res == 0, "SDL_RenderDrawLine failed")
   }
 
-  public func draw(point point: Point<Int32>) {
-    let res = SDL_RenderDrawPoint(self.handle, point.x, point.y)
+  public func draw(point point: Vector) {
+    let res = SDL_RenderDrawPoint(self.handle, Int32(point.x), Int32(point.y))
     assert(res == 0, "SDL_RenderDrawPoint failed")
   }
 
-  var blendMode: SDL_BlendMode {
+  public var blendMode: SDL_BlendMode {
     set {
       let res = SDL_SetRenderDrawBlendMode(self.handle, newValue)
       assert(res == 0, "SDL_SetRenderDrawBlendMode failed")
@@ -192,7 +185,7 @@ public class Renderer {
     }
   }
 
-  var drawColour: Colour {
+  public var drawColour: Colour {
     get {
       var r: UInt8 = 0, g: UInt8 = 0, b: UInt8 = 0, a: UInt8 = 0
 
@@ -207,42 +200,42 @@ public class Renderer {
     }
   }
 
-  var scale: Size<Float> {
+  public var scale: Size {
     get {
       var w: Float = 0.00, h: Float = 0.00
 
       SDL_RenderGetScale(self.handle, &w, &h)
 
-      return Size(w: w, h: h)
+      return Size(sizeX: Double(w), sizeY: Double(h))
     }
     set {
-      SDL_RenderSetScale(self.handle, newValue.w, newValue.h)
+      SDL_RenderSetScale(self.handle, Float(newValue.sizeX), Float(newValue.sizeY))
     }
   }
 
-  var clipEnabled : Bool {
+  public var clipEnabled : Bool {
     return SDL_RenderIsClipEnabled(self.handle) == SDL_TRUE
   }
 
-  var logicalSize: Size<Int32> {
+  public var logicalSize: Size {
     get {
       var w: Int32 = 0, h: Int32 = 0
 
       SDL_RenderGetLogicalSize(self.handle, &w, &h)
 
-      return Size(w: w, h: h)
+      return Size(sizeX: w, sizeY: h)
     }
     set {
-      SDL_RenderSetLogicalSize(self.handle, newValue.w, newValue.h)
+      SDL_RenderSetLogicalSize(self.handle, Int32(newValue.sizeX), Int32(newValue.sizeY))
     }
   }
-
 
   /*
    * SDL_gfx
    */
-  public func fillCircle(position: Point<Int16>, rad: Int16, colour: Colour) {
-    let res = filledCircleRGBA(self.handle, position.x, position.y, rad, colour.r, colour.g, colour.b, colour.a ?? 255)
+  public func fillCircle(position: Vector, rad: Int16, colour: Colour) {
+    let res = filledCircleRGBA(self.handle, Int16(position.x), Int16(position.y), rad,
+        colour.r, colour.g, colour.b, colour.a ?? 255)
 
     assert(res == 0, "filledCircleColor failed")
   }
@@ -255,18 +248,41 @@ public class Renderer {
     assert(res == 0, "polygonRGBA failed")
   }
 
-  public func drawThickLine(point1 point1: Point<Int16>, point2: Point<Int16>, width: UInt8, colour: Colour) {
+  public func fillThickLine(point1 point1: Vector, point2: Vector, width: UInt8, colour: Colour) {
 
-    let x1 = max(point1.x, 0)
-    let y1 = max(point1.y, 0)
-    let x2 = max(point2.x, 0)
-    let y2 = max(point2.y, 0)
-    let w  = max(width, 2)
-
-    // print("drawThickLine: point1:\(x1),\(y1) point2:\(x2),\(y2) width:\(w) colour:\(colour)")
+    let x1 = Int16(max(point1.x, 0))
+    let y1 = Int16(max(point1.y, 0))
+    let x2 = Int16(max(point2.x, 0))
+    let y2 = Int16(max(point2.y, 0))
+    let w  = max(width, 1)
 
     let res = thickLineRGBA(self.handle, x1, y1, x2, y2, w, colour.r, colour.g, colour.b, colour.a ?? 120)
 
     assert(res == 0, "thickLineRGBA failed")
+  }
+
+  public func drawRoundedRectangle(point1 point1: Vector, point2: Vector, radius: Int16, colour: Colour) {
+    let x1  = Int16(max(point1.x, 0))
+    let y1  = Int16(max(point1.y, 0))
+    let x2  = Int16(max(point2.x, 0))
+    let y2  = Int16(max(point2.y, 0))
+    let rad = max(radius, 0)
+
+    let res = roundedRectangleRGBA(self.handle, x1, y1, x2, y2, rad, colour.r, colour.g, colour.b, colour.a ?? 120)
+
+    assert(res == 0, "roundedRectangleRGBA failed")
+  }
+
+  public func fillRoundedRectangle(point1 point1: Vector, point2: Vector, radius: Int16, colour: Colour) {
+    let x1  = Int16(max(point1.x, 0))
+    let y1  = Int16(max(point1.y, 0))
+    let x2  = Int16(max(point2.x, 0))
+    let y2  = Int16(max(point2.y, 0))
+
+    let rad = max(radius, 0)
+
+    let res = roundedBoxRGBA(self.handle, x1, y1, x2, y2, rad, colour.r, colour.g, colour.b, colour.a ?? 120)
+
+    assert(res == 0, "roundedBoxRGBA failed")
   }
 }

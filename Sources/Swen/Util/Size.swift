@@ -18,55 +18,61 @@
 //
 
 
-public struct Size<a: ArithmeticType> : Comparable, CustomStringConvertible {
+public struct Size : Comparable, CustomStringConvertible {
   /// The with.
-  public var w: a
+  public var sizeX: Double
   /// The height.
-  public var h: a
+  public var sizeY: Double
 
-  public init(w: a, h: a) {
-    self.w = w
-    self.h = h
+  public init(sizeX: Double, sizeY: Double) {
+    self.sizeX = sizeX
+    self.sizeY = sizeY
+  }
+
+  public init(sizeX: Int32, sizeY: Int32) {
+    self.sizeX = Double(sizeX)
+    self.sizeY = Double(sizeY)
+  }
+
+  public init(sizeX: Int16, sizeY: Int16) {
+    self.sizeX = Double(sizeX)
+    self.sizeY = Double(sizeY)
   }
 
   /// Returns an empty Size
-  public static func zero() -> Size<a> {
-    return Size(w: 0 as! a, h: 0 as! a)
+  public static var zero: Size {
+    return Size(sizeX: 0.0, sizeY: 0.0)
   }
 
-  public func toVector() -> Vector<a> {
-    return Vector(x: self.w, y: self.h)
-  }
-
-  public func toPoint() -> Point<a> {
-    return Point(x: self.w, y: self.h)
+  public func toVector() -> Vector {
+    return Vector(x: self.sizeX, y: self.sizeY)
   }
 
   public var description : String {
-    return "\(self.dynamicType)(w:\(w), h:\(h))"
+    return "\(self.dynamicType)(sizeX:\(sizeX), sizeY:\(sizeY))"
   }
 }
 
-public func ==<a>(l: Size<a>, r: Size<a>) -> Bool {
-  return (l.w == r.w && l.h == r.h)
+public func ==(l: Size, r: Size) -> Bool {
+  return (l.sizeX == r.sizeX && l.sizeY == r.sizeY)
 }
 
-public func <<a>(l: Size<a>, r: Size<a>) -> Bool {
-  return (l.w < r.w && l.h < r.h)
+public func <(l: Size, r: Size) -> Bool {
+  return (l.sizeX < r.sizeX && l.sizeY < r.sizeY)
 }
 
-public func +<a>(l: Size<a>, r: Size<a>) -> Size<a> {
-  return Size(w: l.w + r.w, h: l.h + r.h)
+public func +(l: Size, r: Size) -> Size {
+  return Size(sizeX: l.sizeX + r.sizeX, sizeY: l.sizeY + r.sizeY)
 }
 
-public func -<a>(l: Size<a>, r: Size<a>) -> Size<a> {
-  return Size(w: l.w - r.w, h: l.h - r.h)
+public func -(l: Size, r: Size) -> Size {
+  return Size(sizeX: l.sizeX - r.sizeX, sizeY: l.sizeY - r.sizeY)
 }
 
-public func *<a>(l: Size<a>, r: Size<a>) -> Size<a> {
-  return Size(w: l.w * r.w, h: l.h * r.h)
+public func *(l: Size, r: Size) -> Size {
+  return Size(sizeX: l.sizeX * r.sizeX, sizeY: l.sizeY * r.sizeY)
 }
 
-public func /<a>(l: Size<a>, r: Size<a>) -> Size<a> {
-  return Size(w: l.w / r.w, h: l.h / r.h)
+public func /(l: Size, r: Size) -> Size {
+  return Size(sizeX: l.sizeX / r.sizeX, sizeY: l.sizeY / r.sizeY)
 }

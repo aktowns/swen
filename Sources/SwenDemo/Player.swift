@@ -24,74 +24,80 @@ public protocol PhysicsSpace {
 }
 
 public protocol PhysicsBody {
-  var position: Vector<Double> { get set }
-  var velocity: Double { get set }
+  var position: Vector { get set }
+  var size: Size { get set }
+  // var velocity: Double { get set }
 }
 
-public class Player : GameLoop {
+public class Player : GameLoop, PhysicsBody {
   private let pipeline: ContentPipeline
 
   var player: Texture
-  var playerMap: [String: Rect<Int32>]
+  var playerMap: [String: Rect]
   let walkingAnimation = ["alienBlue_walk1", "alienBlue_stand", "alienBlue_walk2"]
   var animationStep: Int = 0
   var playerVelocity: Int = 20
-  var position: Point<Int32> = Point(x: 120, y: 390)
-  var velocity: Point<Int32> = Point(x: 0, y: 0)
+  public var position: Vector = Vector(x: 320.0, y: 340.0)
+  public var size: Size = Size.zero
+  // var velocity: Point<Int3> = Point(x: 0, y: 0)
 
-  public init(pipeline: ContentPipeline) throws {
+  public init(pipeline: ContentPipeline, space: PhySpace) throws {
     self.pipeline = pipeline
 
     let playerSpriteMap: ImageMapFile = pipeline.get(fromPath: "assets/sprites/spritesheet_players.xml")!
 
     self.player = try playerSpriteMap.imageFile.asTexture()
     self.playerMap = playerSpriteMap.mapping
+
+    let anim = playerMap[walkingAnimation[animationStep]]!
+    self.size = anim.size
   }
 
   public func draw(game: Game) {
-    let animation: Rect<Int32>? = {
-      if velocity.y != 0 {
-        return playerMap["alienBlue_jump"]
-      } else {
-        return playerMap[walkingAnimation[self.animationStep]]
-      }
-    }()
+//    let animation: Rect<Int32>? = {
+//      if velocity.y != 0 {
+//        return playerMap["alienBlue_jump"]
+//      } else {
+//        return playerMap[walkingAnimation[self.animationStep]]
+//      }
+//    }()
 
+    let animation = playerMap[walkingAnimation[self.animationStep]]
     player.render(atPoint: position, clip: animation!)
   }
 
   public func loop(game: Game) {
-    velocity.x = 0
+   // velocity.x = 0
 
-    for keyEvent in game.keyEvents {
-      switch keyEvent.scanCode {
-        case .ScanCodeRight: velocity.x += playerVelocity
-        case .ScanCodeLeft: velocity.x -= playerVelocity
-        case .ScanCodeSpace:
-          if velocity.y == 0 {
-            position.y -= 100
-            velocity.y += 100
-          }
-        default: Void()
-      }
-    }
+//    for keyEvent in game.keyEvents {
+//      switch keyEvent.scanCode {
+//        case .ScanCodeRight: velocity.x += playerVelocity
+//        case .ScanCodeLeft: velocity.x -= playerVelocity
+//        case .ScanCodeSpace:
+//          if velocity.y == 0 {
+//            position.y -= 100
+//            velocity.y += 100
+//          }
+//        default: Void()
+//      }
+//    }
 
-    position.x += velocity.x
+//    position.x += velocity.x
     // position.y += velocity.y
 
-    if velocity.y > 0 {
-      velocity.y -= 1
-      position.y += 1
-    } else if velocity.y < 0 {
-      velocity.y += 1
-      position.y -= 1
-    }
+//    if velocity.y > 0 {
+//      velocity.y -= 1
+//      position.y += 1
+//    } else if velocity.y < 0 {
+//      velocity.y += 1
+//      position.y -= 1
+//    }
 
-    if velocity.x != 0 {
+   // if velocity.x != 0 {
       self.animationStep += 1
       if (self.animationStep >= walkingAnimation.count) {
         self.animationStep = 0
       }
     }
-  }
+  //}
 }

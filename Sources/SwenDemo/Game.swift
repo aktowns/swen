@@ -18,63 +18,7 @@
 //
 
 import Swen
-import Then
 import Glibc
-
-public class PhysicsDebugger : PhyDebugDrawDelegate {
-  let renderer : Renderer
-
-  init(withRenderer: Renderer) {
-    self.renderer = withRenderer
-  }
-
-  public func drawSegment(a a: Vector<Double>, b: Vector<Double>, color: Colour) {
-    print("drawSegment: a:\(a) b:\(b)")
-
-    renderer.draw(startingFrom: Point<Int32>(x: Int32(a.x), y: Int32(a.y)),
-        endingAt: Point(x: Int32(b.x), y: Int32(b.y)))
-  }
-
-  public func drawDot(size size: Double, pos: Vector<Double>, color: Colour) {
-    renderer.fillCircle(Point(x: Int16(floor(pos.x)), y: Int16(floor(pos.y))), rad: Int16(size), colour: color)
-  }
-
-  public func drawCircle(pos pos: Vector<Double>,
-                         angle: Double,
-                         radius: Double,
-                         outlineColor: Colour,
-                         fillColor: Colour) {
-
-    print(pos)
-    renderer.fillCircle(Point(x: Int16(pos.x), y: Int16(pos.y)), rad: Int16(radius), colour: fillColor)
-  }
-
-  public func drawColour(shape shape: COpaquePointer) -> Colour {
-    return Colour(r: 255, g: 0, b: 0, a:120)
-  }
-
-  public func drawFatSegment(a a: Vector<Double>,
-                             b: Vector<Double>,
-                             radius: Double,
-                             outlineColor: Colour,
-                             fillColor: Colour) {
-    // print("drawFatSegment: a:\(a) b:\(b) radius: \(radius)")
-
-    renderer.drawThickLine(point1: Point<Int16>(x: Int16(a.x), y: Int16(a.y)),
-        point2: Point<Int16>(x: Int16(b.x), y: Int16(b.y)), width: UInt8(radius), colour: fillColor)
-  }
-
-  public func drawPolygon(count count: Int32,
-                          verts: Array<Vector<Double>>,
-                          radius: Double,
-                          outlineColor: Colour,
-                          fillColor: Colour) {
-    let vx = verts.map { Int16($0.x) }
-    let vy = verts.map { Int16($0.y) }
-
-    renderer.drawPolygon(vx: vx, vy: vy, colour: fillColor)
-  }
-}
 
 public class SwenDemo : GameBaseDelegate {
   let window: Window
@@ -92,7 +36,7 @@ public class SwenDemo : GameBaseDelegate {
   var hudHeart: Texture
   var hudJewel: Texture
 
-  var hudSpriteMapping: [String: Rect<Int32>]
+  var hudSpriteMapping: [String: Rect]
   var hudSpriteTexture: Texture
 
   var player: Player
@@ -103,13 +47,14 @@ public class SwenDemo : GameBaseDelegate {
 
   var space: PhySpace
   var phydebug: PhyDebug
-  let timeStep = 1.0/60.0
+  let timeStep = 1.0/100.0
   var physicsStep: Double = 0
 
   // Setup
-  public required init(withWindow window: Window, andPipeline pipeline: ContentPipeline) {
+  public required init(withWindow window: Window, pipeline: ContentPipeline, andSpace space: PhySpace) {
     self.window = window
     self.pipeline = pipeline
+    self.space = space
 
     do {
       let backdropFile: ImageFile = pipeline.get(fromPath: "assets/backgrounds/blue_grass.png")!
@@ -135,69 +80,80 @@ public class SwenDemo : GameBaseDelegate {
       self.hudHeart = try hudHeartFile.asTexture()
       self.hudJewel = try hudJewelFile.asTexture()
 
-      self.player = try Player(pipeline: pipeline)
+      self.player = try Player(pipeline: pipeline, space: space)
       self.enemy = try Enemy(pipeline: pipeline)
-      self.item1 = try Item(pipeline: pipeline, position: Point(x: 920, y: 370))
-      self.item2 = try Item(pipeline: pipeline, position: Point(x: 1020, y: 370))
-      self.item3 = try Item(pipeline: pipeline, position: Point(x: 1120, y: 370))
+      self.item1 = try Item(pipeline: pipeline, position: Vector(x: 920.0, y: 370.0))
+      self.item2 = try Item(pipeline: pipeline, position: Vector(x: 1020.0, y: 370.0))
+      self.item3 = try Item(pipeline: pipeline, position: Vector(x: 1120.0, y: 370.0))
     } catch let error as SDLError {
       fatalError("Failed to create a window: \(error.description)")
     } catch {
       fatalError("Unexpected error occured")
     }
 
-    self.space = PhySpace()
-
     let debugDraw = PhysicsDebugger(withRenderer: pipeline.renderer!)
 
     self.phydebug = PhyDebug(delegate: debugDraw)
-    space.gravity = Vector(x: 0, y: 1)
+    space.gravity = Vector(x: 0.0, y: 0.5)
 
     let ground: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
-        a: Vector(x: 0, y: Double(window.size.h - 200)),
-        b: Vector(x: Double(window.size.w), y: Double(window.size.h - 180)),
-        radius: 10)
+        a: Vector(x: -20, y: window.size.sizeY - 430),
+        b: Vector(x: window.size.sizeX + 20, y: window.size.sizeY - 430),
+        radius: 20)
     ground.friction = 1
-    //ground.elasticity = 0.5
+    ground.elasticity = 1
     space.addShape(ground)
 
-    let radius: Double = 25
+    let rwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+        a: Vector(x: window.size.sizeX - 20, y: -20.0),
+        b: Vector(x: window.size.sizeX - 20, y: window.size.sizeY + 20),
+        radius: 20.0)
+    rwall.friction = 1
+    rwall.elasticity = 0.7
+    space.addShape(rwall)
+
+    let playerMass: Double = 1
+
+    let playerMoment = PhyMisc.momentForBox(m: playerMass,
+        width: player.size.sizeX, height: player.size.sizeY)
+
+    let playerBody = space.addBody(PhyBody(mass: playerMass, moment: playerMoment))
+    playerBody.position = player.position
+
+    let playerShape = space.addShape(PhyShape(boxShapeFrom: playerBody,
+        width: player.size.sizeX, height: player.size.sizeY, radius: 10))
+    playerShape.friction = 1
+    playerShape.elasticity = 0
+
+    let radius: Double = 20
     let mass: Double = 1
 
-    let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector<Double>(x: 0, y: 0))
+    let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector.zero)
 
     let ballBody = space.addBody(PhyBody(mass: mass, moment: moment))
-    ballBody.position = Vector(x: 200, y: 0)
+    ballBody.position = Vector(x: 200.0, y: 0.0)
+    ballBody.velocity = Vector.zero
 
     let ballShape = space.addShape(PhyShape(circleShapeFrom: ballBody,
-        radius: radius, offset: Vector<Double>(x:0, y:0)))
-    ballShape.friction = 0.7
-
-    space.reindexShapes(forBody: ballBody)
-    space.reindexStatic()
-    // ballShape.elasticity = 0.5
-
-//    for time in Double(0).stride(to: Double(20), by: timeStep) {
-//      //let pos = ballBody.position
-//      //let vel = ballBody.velocity
-//
-//      //print("time is \(time), ballBody is at \(pos). its velocity is \(vel)")
-//      space.step(time)
-//    }
+        radius: radius, offset: Vector.zero))
+    ballShape.friction = 1
+    ballShape.elasticity = 0.3
   }
 
   // Rendering
   public func draw(game: Game) {
     backdrop.render()
 
-    titleText.render(atPoint: Point(x: (window.size.w - titleText.size.w) / 2, y: 25))
-    statusText.render(atPoint: Point<Int32>(x: 10, y: 10))
+    titleText.render(atPoint: Vector(x: (window.size.sizeX - titleText.size.sizeX) / 2, y: 25))
+    statusText.render(atPoint: Vector(x: 10.0, y: 10.0))
 
-    hudHeart.render(atPoint: Point(x: 10, y: window.size.h - hudHeart.size.h))
-    hud3.render(atPoint: Point(x: hudHeart.size.w, y: window.size.h - hud3.size.h))
+    hudHeart.render(atPoint: Vector(x: 10, y: window.size.sizeY - hudHeart.size.sizeY))
+    hud3.render(atPoint: Vector(x: hudHeart.size.sizeX, y: window.size.sizeY - hud3.size.sizeY))
 
-    hud1.render(atPoint: Point(x: window.size.w - (hud1.size.w + 10), y: window.size.h - hud1.size.h))
-    hudJewel.render(atPoint: Point(x: window.size.w - (hud1.size.w + hudJewel.size.w), y: window.size.h - hudJewel.size.h))
+    hud1.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + 10),
+        y: window.size.sizeY - hud1.size.sizeY))
+    hudJewel.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + hudJewel.size.sizeX),
+        y: window.size.sizeY - hudJewel.size.sizeY))
 
     space.debugDraw(phydebug)
 
@@ -225,10 +181,6 @@ public class SwenDemo : GameBaseDelegate {
     item3.loop(game)
     player.loop(game)
 
-    if physicsStep < 2.0 {
-      space.step(physicsStep)
-      print(physicsStep)
-      physicsStep += timeStep
-    }
+    space.step(Double(game.frame) / 100)
   }
 }

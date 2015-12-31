@@ -20,7 +20,20 @@
 import CChipmunk
 
 public class PhyMisc {
-  public static func momentForCircle(m m: Double, r1: Double, r2: Double, offset: Vector<Double>) -> Double {
+  public static func momentForCircle(m m: Double, r1: Double, r2: Double, offset: Vector) -> Double {
     return cpMomentForCircle(m, r1, r2, cpVect.fromVector(offset))
   }
+
+  public static func momentForSegment(m m: Double, a: Vector, b: Vector, radius: Double) -> Double {
+    return cpMomentForSegment(m, cpVect.fromVector(a), cpVect.fromVector(b), radius)
+  }
+
+  public static func momentForBox(m m: Double, width: Double, height: Double) -> Double {
+    return cpMomentForBox(m, width, height)
+  }
+
+  public static var versionString: String {
+    return String.fromCString(cpVersionString)!
+  }
+
 }
