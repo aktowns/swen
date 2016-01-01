@@ -18,10 +18,12 @@
 //
 
 public struct Colour {
+  static let DEFAULT_ALPHA: UInt8 = 120
+
   public var r: UInt8
   public var g: UInt8
   public var b: UInt8
-  public var a: UInt8?
+  public var a: UInt8
 
   public init(r: UInt8, g: UInt8, b: UInt8, a: UInt8) {
     self.r = r
@@ -31,17 +33,73 @@ public struct Colour {
   }
 
   public init(r: UInt8, g: UInt8, b: UInt8) {
-    self.r = r
-    self.g = g
-    self.b = b
-    self.a = nil
+    self.init(r: r, g: g, b: b, a: Colour.DEFAULT_ALPHA)
+  }
+
+  public init(hex: UInt32) {
+    self.init(r: UInt8(hex >> 24 & 255),
+              g: UInt8(hex >> 16 & 255),
+              b: UInt8(hex >> 8 & 255),
+              a: UInt8(hex & 255))
+  }
+
+  public init(rgba: (UInt8, UInt8, UInt8, UInt8)) {
+    self.init(r: rgba.0, g: rgba.1, b: rgba.2, a: rgba.3)
+  }
+
+  public init(rgb: (UInt8, UInt8, UInt8)) {
+    self.init(r: rgb.0, g: rgb.1, b: rgb.2, a: Colour.DEFAULT_ALPHA)
+  }
+
+  public func alpha(a: UInt8) -> Colour {
+    return Colour(rgba: (self.r, self.g, self.b, a))
+  }
+
+  public var hex: UInt32 {
+    return (UInt32(self.r) << 24 | UInt32(self.g) << 16 | UInt32(self.b) << 8 | UInt32(self.a))
   }
 
   public static var black: Colour {
-    return Colour(r: 0x00, g: 0x00, b: 0x00, a: 0x00)
+    return Colour(hex: 0x00000000)
   }
 
   public static var white: Colour {
-    return Colour(r: 0xFF, g: 0xFF, b: 0xFF, a: 0x00)
+    return Colour(hex: 0xFFFFFF00)
+  }
+
+  public static var red: Colour {
+    return Colour(hex: 0xFF000000)
+  }
+
+  public static var green: Colour {
+    return Colour(hex: 0x00FF0000)
+  }
+
+  public static var blue: Colour {
+    return Colour(hex: 0x0000FF00)
+  }
+
+  public static var lightRed: Colour {
+    return Colour(hex: 0xff999900)
+  }
+
+  public static var lightGreen: Colour {
+    return Colour(hex: 0xccffcc00)
+  }
+
+  public static var lightBlue: Colour {
+    return Colour(hex: 0x66ccff00)
+  }
+
+  public static var yellow: Colour {
+    return Colour(hex: 0xFFFF0000)
+  }
+
+  public static var orange: Colour {
+    return Colour(hex: 0xff990000)
+  }
+
+  public static var purple: Colour {
+    return Colour(hex: 0x66006600)
   }
 }

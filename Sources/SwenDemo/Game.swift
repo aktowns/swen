@@ -97,47 +97,48 @@ public class SwenDemo : GameBaseDelegate {
     space.gravity = Vector(x: 0.0, y: 0.5)
 
     let ground: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
-        a: Vector(x: -20, y: window.size.sizeY - 430),
-        b: Vector(x: window.size.sizeX + 20, y: window.size.sizeY - 430),
-        radius: 20)
+        a: Vector(x: 0.0, y: 100.0),
+        b: Vector(x: window.size.sizeX, y: 400.0),
+        radius: 0)
+    print("phyShape: \(ground.handle)")
     ground.friction = 1
     ground.elasticity = 1
     space.addShape(ground)
 
-    let rwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
-        a: Vector(x: window.size.sizeX - 20, y: -20.0),
-        b: Vector(x: window.size.sizeX - 20, y: window.size.sizeY + 20),
-        radius: 20.0)
-    rwall.friction = 1
-    rwall.elasticity = 0.7
-    space.addShape(rwall)
+//    let rwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+//        a: Vector(x: window.size.sizeX - 20, y: -20.0),
+//        b: Vector(x: window.size.sizeX, y: window.size.sizeY + 20),
+//        radius: 20.0)
+//    rwall.friction = 1
+//    rwall.elasticity = 0.7
+//    space.addShape(rwall)
 
-    let playerMass: Double = 1
+//    let playerMass: Double = 1
+//
+//    let playerMoment = PhyMisc.momentForBox(m: playerMass,
+//        width: player.size.sizeX, height: player.size.sizeY)
+//
+//    let playerBody = space.addBody(PhyBody(mass: playerMass, moment: playerMoment))
+//    playerBody.position = player.position
+//
+//    let playerShape = space.addShape(PhyShape(boxShapeFrom: playerBody,
+//        width: player.size.sizeX, height: player.size.sizeY, radius: 10))
+//    playerShape.friction = 1
+//    playerShape.elasticity = 0
 
-    let playerMoment = PhyMisc.momentForBox(m: playerMass,
-        width: player.size.sizeX, height: player.size.sizeY)
+//    let radius: Double = 20
+//    let mass: Double = 1
 
-    let playerBody = space.addBody(PhyBody(mass: playerMass, moment: playerMoment))
-    playerBody.position = player.position
+//    let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector.zero)
 
-    let playerShape = space.addShape(PhyShape(boxShapeFrom: playerBody,
-        width: player.size.sizeX, height: player.size.sizeY, radius: 10))
-    playerShape.friction = 1
-    playerShape.elasticity = 0
-
-    let radius: Double = 20
-    let mass: Double = 1
-
-    let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector.zero)
-
-    let ballBody = space.addBody(PhyBody(mass: mass, moment: moment))
-    ballBody.position = Vector(x: 200.0, y: 0.0)
-    ballBody.velocity = Vector.zero
-
-    let ballShape = space.addShape(PhyShape(circleShapeFrom: ballBody,
-        radius: radius, offset: Vector.zero))
-    ballShape.friction = 1
-    ballShape.elasticity = 0.3
+//    let ballBody = space.addBody(PhyBody(mass: mass, moment: moment))
+//    ballBody.position = Vector(x: 200.0, y: 0.0)
+//    ballBody.velocity = Vector.zero
+//
+//    let ballShape = space.addShape(PhyShape(circleShapeFrom: ballBody,
+//        radius: radius, offset: Vector.zero))
+//    ballShape.friction = 1
+//    ballShape.elasticity = 0.3
   }
 
   // Rendering
@@ -155,14 +156,13 @@ public class SwenDemo : GameBaseDelegate {
     hudJewel.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + hudJewel.size.sizeX),
         y: window.size.sizeY - hudJewel.size.sizeY))
 
-    space.debugDraw(phydebug)
-
     enemy.draw(game)
     item1.draw(game)
     item2.draw(game)
     item3.draw(game)
     player.draw(game)
 
+    space.debugDraw(phydebug)
   }
 
   // Game logic
@@ -180,7 +180,5 @@ public class SwenDemo : GameBaseDelegate {
     item2.loop(game)
     item3.loop(game)
     player.loop(game)
-
-    space.step(Double(game.frame) / 100)
   }
 }

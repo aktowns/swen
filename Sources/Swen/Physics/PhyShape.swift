@@ -20,7 +20,7 @@
 import CChipmunk
 
 public class PhyShape {
-  let handle: COpaquePointer
+  public let handle: COpaquePointer
 
   public init(fromHandle handle: COpaquePointer) {
     self.handle = handle

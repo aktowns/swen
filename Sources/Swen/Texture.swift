@@ -38,7 +38,7 @@ public class Texture {
                           format: UInt32,
                           access: Int32,
                           andSize size: Size) throws {
-    let ptr = SDL_CreateTexture(renderer.handle, format, access, Int32(size.sizeX), Int32(size.sizeY))
+    let ptr = SDL_CreateTexture(renderer.handle, format, access, size.sizeX.int32, size.sizeY.int32)
 
     if ptr == nil {
       throw SDLError.UnexpectedNullPointer(message: SDL.getErrorMessage())
@@ -85,7 +85,7 @@ public class Texture {
       let res = SDL_GetTextureColorMod(self.handle, &r, &g, &b)
       assert(res == 0, "SDL_GetTextureColorMod failed")
 
-      return Colour(r: r, g: g, b: b)
+      return Colour(rgb: (r, g, b))
     }
     set {
       let res = SDL_SetTextureColorMod(self.handle, newValue.r, newValue.g, newValue.b)

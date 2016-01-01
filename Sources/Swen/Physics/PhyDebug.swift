@@ -136,11 +136,11 @@ public final class PhyDebug: AnyObject {
       return colour
     }
 
-    debugOpts.shapeOutlineColor = cpSpaceDebugColor(r: 0, g: 255, b: 0, a: 255)
-    debugOpts.constraintColor = cpSpaceDebugColor(r: 0, g: 255, b: 0, a: 120)
-    debugOpts.collisionPointColor = cpSpaceDebugColor(r: 0, g: 0, b: 255, a: 120)
+    debugOpts.shapeOutlineColor = cpSpaceDebugColor.fromColour(Colour.orange.alpha(100))
+    debugOpts.constraintColor = cpSpaceDebugColor.fromColour(Colour.purple.alpha(100))
+    debugOpts.collisionPointColor = cpSpaceDebugColor.fromColour(Colour.yellow.alpha(100))
     debugOpts.colorForShape = drawColour
-    let flags: DebugDrawFlags = [DebugDrawFlags.Shapes, DebugDrawFlags.Constraints]
+    let flags: DebugDrawFlags = [DebugDrawFlags.Shapes, DebugDrawFlags.CollisionPoints, DebugDrawFlags.Constraints]
     debugOpts.flags = cpSpaceDebugDrawFlags(flags.rawValue)
     debugOpts.drawCircle = drawCircle
     debugOpts.drawSegment = drawSegment
@@ -218,14 +218,12 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
   }
 
   public func drawSegment(a a: Vector, b: Vector, color: Colour) {
-    print("drawSegment: a:\(a) b:\(b)")
-
-    renderer.draw(startingFrom: Vector(x: Int32(a.x), y: Int32(a.y)),
-        endingAt: Vector(x: Int32(b.x), y: Int32(b.y)))
+    renderer.drawColour = color
+    renderer.draw(startingFrom: a, endingAt: b)
   }
 
   public func drawDot(size size: Double, pos: Vector, color: Colour) {
-    renderer.fillCircle(Vector(x: Int16(floor(pos.x)), y: Int16(floor(pos.y))), rad: Int16(size), colour: color)
+    renderer.fillCircle(position: pos, rad: Int16(size), colour: color)
   }
 
   public func drawCircle(pos pos: Vector,
@@ -233,11 +231,11 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
                          radius: Double,
                          outlineColor: Colour,
                          fillColor: Colour) {
-    renderer.fillCircle(Vector(x: pos.x, y: pos.y), rad: Int16(radius), colour: fillColor)
+    renderer.fillCircle(position: pos, rad: Int16(radius), colour: fillColor)
   }
 
   public func drawColour(shape shape: COpaquePointer) -> Colour {
-    return Colour(r: 200, g: 0, b: 0, a:50)
+    return Colour.red.alpha(100)
   }
 
   public func drawFatSegment(a a: Vector,
@@ -245,14 +243,17 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
                              radius: Double,
                              outlineColor: Colour,
                              fillColor: Colour) {
-    //let outlinePoint1 = Point<Int16>(x: Int16(a.x), y: Int16(a.y))
-    //let outlinePoint2 = Point<Int16>(x: Int16(b.x), y: Int16(b.y))
-    let fillPoint1 = Vector(x: a.x - 1, y: a.y - 1)
-    let fillPoint2 = Vector(x: b.x - 1, y: b.y - 1)
 
     // Just drawing a line, rotating segments is too much effort.
-    renderer.fillThickLine(point1: fillPoint1, point2: fillPoint2, width: 10, colour: fillColor)
-    renderer.fillThickLine(point1: fillPoint2, point2: fillPoint1, width: 10, colour: outlineColor)
+    // print("\(a) -> \(b)")
+
+    renderer.drawColour = outlineColor
+    //renderer.draw(startingFrom: a, endingAt: b)
+    //renderer.drawColour = Colour.lightGreen
+    renderer.fill(usingRect: Rect(x: a.x, y: a.y, sizeX: b.x, sizeY: b.y))
+    // renderer.fillThickLine(point1: a, point2: b, width: 1, colour: fillColor)
+    //renderer.fillThickLine(point1: outlinePoint2, point2: outlinePoint1, width: 2, colour: outlineColor)
+    renderer.fillRoundedRectangle(point1: a, point2: a + b, radius: radius.int16, colour: fillColor)
   }
 
   public func drawPolygon(count count: Int32,
@@ -263,6 +264,7 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
     let vx = verts.map { Int16($0.x) }
     let vy = verts.map { Int16($0.y) }
 
-    renderer.drawPolygon(vx: vx, vy: vy, colour: fillColor)
+    renderer.fillPolygon(vx: vx, vy: vy, colour: fillColor)
+    renderer.drawPolygon(vx: vx, vy: vy, colour: outlineColor)
   }
 }

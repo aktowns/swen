@@ -160,13 +160,13 @@ public class Renderer {
   }
 
   public func draw(startingFrom startPoint: Vector, endingAt endPoint: Vector) {
-    let res = SDL_RenderDrawLine(self.handle, Int32(startPoint.x), Int32(startPoint.y),
-        Int32(endPoint.x), Int32(endPoint.y))
+    let res = SDL_RenderDrawLine(self.handle, startPoint.x.int32, startPoint.y.int32,
+        endPoint.x.int32, endPoint.y.int32)
     assert(res == 0, "SDL_RenderDrawLine failed")
   }
 
   public func draw(point point: Vector) {
-    let res = SDL_RenderDrawPoint(self.handle, Int32(point.x), Int32(point.y))
+    let res = SDL_RenderDrawPoint(self.handle, point.x.int32, point.y.int32)
     assert(res == 0, "SDL_RenderDrawPoint failed")
   }
 
@@ -192,10 +192,10 @@ public class Renderer {
       let res = SDL_GetRenderDrawColor(self.handle, &r, &g, &b, &a)
       assert(res == 0, "SDL_GetRenderDrawColor failed")
 
-      return Colour(r: r, g: g, b: b, a: a)
+      return Colour(rgba:(r,g,b,a))
     }
     set {
-      let res = SDL_SetRenderDrawColor(self.handle, newValue.r, newValue.g, newValue.b, newValue.a ?? 0)
+      let res = SDL_SetRenderDrawColor(self.handle, newValue.r, newValue.g, newValue.b, newValue.a)
       assert(res == 0, "SDL_SetRenderDrawColor failed")
     }
   }
@@ -226,16 +226,16 @@ public class Renderer {
       return Size(sizeX: w, sizeY: h)
     }
     set {
-      SDL_RenderSetLogicalSize(self.handle, Int32(newValue.sizeX), Int32(newValue.sizeY))
+      SDL_RenderSetLogicalSize(self.handle, newValue.sizeX.int32, newValue.sizeY.int32)
     }
   }
 
   /*
    * SDL_gfx
    */
-  public func fillCircle(position: Vector, rad: Int16, colour: Colour) {
-    let res = filledCircleRGBA(self.handle, Int16(position.x), Int16(position.y), rad,
-        colour.r, colour.g, colour.b, colour.a ?? 255)
+  public func fillCircle(position position: Vector, rad: Int16, colour: Colour) {
+    let res = filledCircleRGBA(self.handle, position.x.int16, position.y.int16, rad,
+        colour.r, colour.g, colour.b, colour.a)
 
     assert(res == 0, "filledCircleColor failed")
   }
@@ -243,45 +243,36 @@ public class Renderer {
   public func drawPolygon(vx vx: Array<Int16>, vy: Array<Int16>, colour: Colour) {
     assert(vx.count == vy.count, "vx, vy lengths differ")
 
-    let res = polygonRGBA(self.handle, vx, vy, Int32(vx.count), colour.r, colour.g, colour.b, colour.a ?? 255)
+    let res = polygonRGBA(self.handle, vx, vy, Int32(vx.count), colour.r, colour.g, colour.b, colour.a)
 
     assert(res == 0, "polygonRGBA failed")
   }
 
+  public func fillPolygon(vx vx: Array<Int16>, vy: Array<Int16>, colour: Colour) {
+    assert(vx.count == vy.count, "vx, vy lengths differ")
+
+    let res = filledPolygonRGBA(self.handle, vx, vy, Int32(vx.count), colour.r, colour.g, colour.b, colour.a)
+
+    assert(res == 0, "filledPolygonRGBA failed")
+  }
+
   public func fillThickLine(point1 point1: Vector, point2: Vector, width: UInt8, colour: Colour) {
-
-    let x1 = Int16(max(point1.x, 0))
-    let y1 = Int16(max(point1.y, 0))
-    let x2 = Int16(max(point2.x, 0))
-    let y2 = Int16(max(point2.y, 0))
-    let w  = max(width, 1)
-
-    let res = thickLineRGBA(self.handle, x1, y1, x2, y2, w, colour.r, colour.g, colour.b, colour.a ?? 120)
+    let res = thickLineRGBA(self.handle, point1.x.int16, point1.y.int16, point2.x.int16,
+        point2.y.int16, width, colour.r, colour.g, colour.b, colour.a)
 
     assert(res == 0, "thickLineRGBA failed")
   }
 
   public func drawRoundedRectangle(point1 point1: Vector, point2: Vector, radius: Int16, colour: Colour) {
-    let x1  = Int16(max(point1.x, 0))
-    let y1  = Int16(max(point1.y, 0))
-    let x2  = Int16(max(point2.x, 0))
-    let y2  = Int16(max(point2.y, 0))
-    let rad = max(radius, 0)
-
-    let res = roundedRectangleRGBA(self.handle, x1, y1, x2, y2, rad, colour.r, colour.g, colour.b, colour.a ?? 120)
+    let res = roundedRectangleRGBA(self.handle, point1.x.int16, point1.y.int16, point2.x.int16,
+        point2.y.int16, radius, colour.r, colour.g, colour.b, colour.a)
 
     assert(res == 0, "roundedRectangleRGBA failed")
   }
 
   public func fillRoundedRectangle(point1 point1: Vector, point2: Vector, radius: Int16, colour: Colour) {
-    let x1  = Int16(max(point1.x, 0))
-    let y1  = Int16(max(point1.y, 0))
-    let x2  = Int16(max(point2.x, 0))
-    let y2  = Int16(max(point2.y, 0))
-
-    let rad = max(radius, 0)
-
-    let res = roundedBoxRGBA(self.handle, x1, y1, x2, y2, rad, colour.r, colour.g, colour.b, colour.a ?? 120)
+    let res = roundedBoxRGBA(self.handle, point1.x.int16, point1.y.int16, point2.x.int16,
+        point2.y.int16, radius, colour.r, colour.g, colour.b, colour.a)
 
     assert(res == 0, "roundedBoxRGBA failed")
   }

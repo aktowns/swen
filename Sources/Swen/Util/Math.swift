@@ -17,8 +17,47 @@
 //   limitations under the License.
 //
 
+import Glibc
+
 public class Math {
   public static func clamp<a: Comparable>(value: a, minValue: a, maxValue: a) -> a {
     return max(min(value, minValue), maxValue)
+  }
+}
+
+public class NumericConversion {
+  public static func convertDoubleToInt16(value: Double) -> Int16 {
+    return Int16(Math.clamp(floor(value), minValue: Double(Int16.min),
+        maxValue: Double(Int16.max)))
+  }
+
+  public static func convertDoubleToInt32(value: Double) -> Int32 {
+    return Int32(Math.clamp(floor(value), minValue: Double(Int32.min),
+        maxValue: Double(Int32.max)))
+  }
+
+  public static func convertDoubleToUInt16(value: Double) -> UInt16 {
+    return UInt16(Math.clamp(floor(value), minValue: Double(UInt16.min),
+        maxValue: Double(UInt16.max)))
+  }
+
+  public static func convertDoubleToUInt32(value: Double) -> UInt32 {
+    return UInt32(Math.clamp(floor(value), minValue: Double(UInt32.min),
+        maxValue: Double(UInt32.max)))
+  }
+}
+
+extension Double {
+  public var int16: Int16 {
+    return NumericConversion.convertDoubleToInt16(self)
+  }
+  public var uint16: UInt16 {
+    return NumericConversion.convertDoubleToUInt16(self)
+  }
+  public var int32: Int32 {
+    return NumericConversion.convertDoubleToInt32(self)
+  }
+  public var uint32: UInt32 {
+    return NumericConversion.convertDoubleToUInt32(self)
   }
 }

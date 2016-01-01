@@ -30,20 +30,9 @@ public class Surface {
     self.handle = handle
   }
 
-  /*
-  SDL_Surface* SDL_CreateRGBSurface(Uint32 flags,
-                                  int    width,
-                                  int    height,
-                                  int    depth,
-                                  Uint32 Rmask,
-                                  Uint32 Gmask,
-                                  Uint32 Bmask,
-                                  Uint32 Amask)
-  */
-
   public convenience init(size: Size) {
     let ptr = SDL_CreateRGBSurface(0, Int32(size.sizeX), Int32(size.sizeY),
-        32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff)
+        32, Colour.red.hex, Colour.green.hex, Colour.blue.hex, 0x000000ff)
 
     self.init(fromHandle: ptr)
   }
