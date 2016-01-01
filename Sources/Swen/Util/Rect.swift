@@ -28,6 +28,13 @@ public struct Rect : Comparable, CustomStringConvertible {
   /// The height of this Rectangle.
   public var sizeY: Double
 
+  public init(x: Double, y: Double, sizeX: Double, sizeY: Double) {
+    self.x = x
+    self.y = y
+    self.sizeX = sizeX
+    self.sizeY = sizeY
+  }
+
   public static func empty() -> Rect {
     return Rect(x: 0, y: 0, sizeX: 0, sizeY: 0)
   }

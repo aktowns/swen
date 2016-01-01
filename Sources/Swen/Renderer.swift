@@ -240,6 +240,13 @@ public class Renderer {
     assert(res == 0, "filledCircleColor failed")
   }
 
+  public func drawCircle(position position: Vector, rad: Int16, colour: Colour) {
+    let res = circleRGBA(self.handle, position.x.int16, position.y.int16, rad,
+        colour.r, colour.g, colour.b, colour.a)
+
+    assert(res == 0, "circleRGBA failed")
+  }
+
   public func drawPolygon(vx vx: Array<Int16>, vy: Array<Int16>, colour: Colour) {
     assert(vx.count == vy.count, "vx, vy lengths differ")
 
@@ -275,5 +282,26 @@ public class Renderer {
         point2.y.int16, radius, colour.r, colour.g, colour.b, colour.a)
 
     assert(res == 0, "roundedBoxRGBA failed")
+  }
+
+  public func drawTrigon(point1 point1: Vector, point2: Vector, point3: Vector, colour: Colour) {
+    let res = trigonRGBA(self.handle, point1.x.int16, point1.y.int16, point2.x.int16, point2.y.int16,
+        point3.x.int16, point3.y.int16, colour.r, colour.g, colour.b, colour.a)
+
+    assert(res == 0, "trigonRGBA failed")
+  }
+
+  public func drawAATrigon(point1 point1: Vector, point2: Vector, point3: Vector, colour: Colour) {
+    let res = aatrigonRGBA(self.handle, point1.x.int16, point1.y.int16, point2.x.int16, point2.y.int16,
+        point3.x.int16, point3.y.int16, colour.r, colour.g, colour.b, colour.a)
+
+    assert(res == 0, "aatrigonRGBA failed")
+  }
+
+  public func fillTrigon(point1 point1: Vector, point2: Vector, point3: Vector, colour: Colour) {
+    let res = filledTrigonRGBA(self.handle, point1.x.int16, point1.y.int16, point2.x.int16, point2.y.int16,
+        point3.x.int16, point3.y.int16, colour.r, colour.g, colour.b, colour.a)
+
+    assert(res == 0, "filledTrigonRGBA failed")
   }
 }

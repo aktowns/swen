@@ -20,6 +20,9 @@
 import CChipmunk
 
 public class PhyMisc {
+  static let cpTrue = UInt8(CChipmunk.cpTrue)
+  static let cpFalse = UInt8(CChipmunk.cpFalse)
+
   public static func momentForCircle(m m: Double, r1: Double, r2: Double, offset: Vector) -> Double {
     return cpMomentForCircle(m, r1, r2, cpVect.fromVector(offset))
   }

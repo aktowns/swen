@@ -60,46 +60,46 @@ public struct Colour {
   }
 
   public static var black: Colour {
-    return Colour(hex: 0x00000000)
+    return Colour(hex: 0x000000FF)
   }
 
   public static var white: Colour {
-    return Colour(hex: 0xFFFFFF00)
+    return Colour(hex: 0xFFFFFFFF)
   }
 
   public static var red: Colour {
-    return Colour(hex: 0xFF000000)
+    return Colour(hex: 0xFF0000FF)
   }
 
   public static var green: Colour {
-    return Colour(hex: 0x00FF0000)
+    return Colour(hex: 0x00FF00FF)
   }
 
   public static var blue: Colour {
-    return Colour(hex: 0x0000FF00)
+    return Colour(hex: 0x0000FFFF)
   }
 
   public static var lightRed: Colour {
-    return Colour(hex: 0xff999900)
+    return Colour(hex: 0xff9999FF)
   }
 
   public static var lightGreen: Colour {
-    return Colour(hex: 0xccffcc00)
+    return Colour(hex: 0xccffccFF)
   }
 
   public static var lightBlue: Colour {
-    return Colour(hex: 0x66ccff00)
+    return Colour(hex: 0x66ccffFF)
   }
 
   public static var yellow: Colour {
-    return Colour(hex: 0xFFFF0000)
+    return Colour(hex: 0xFFFF00FF)
   }
 
   public static var orange: Colour {
-    return Colour(hex: 0xff990000)
+    return Colour(hex: 0xff9900FF)
   }
 
   public static var purple: Colour {
-    return Colour(hex: 0x66006600)
+    return Colour(hex: 0x660066FF)
   }
 }

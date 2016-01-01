@@ -139,6 +139,10 @@ public func +(l: Vector, r: Vector) -> Vector {
   return Vector(x: l.x + r.x, y: l.y + r.y)
 }
 
+public func += (inout l: Vector, r: Vector) {
+  l = l + r
+}
+
 /// Subtract two vectors.
 public func -(l: Vector, r: Vector) -> Vector {
   return Vector(x: l.x - r.x, y: l.y - r.y)

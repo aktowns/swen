@@ -50,6 +50,22 @@ public class SwenDemo : GameBaseDelegate {
   let timeStep = 1.0/100.0
   var physicsStep: Double = 0
 
+  static let PLAYER_VELOCITY = 500.0
+
+  static let PLAYER_GROUND_ACCEL_TIME = 0.1
+  static let PLAYER_GROUND_ACCEL = (PLAYER_VELOCITY/PLAYER_GROUND_ACCEL_TIME)
+
+  static let PLAYER_AIR_ACCEL_TIME = 0.25
+  static let PLAYER_AIR_ACCEL = (PLAYER_VELOCITY/PLAYER_AIR_ACCEL_TIME)
+
+  static let JUMP_HEIGHT = 100.0
+  static let JUMP_BOOST_HEIGHT = 55.0
+  static let FALL_VELOCITY = 900.0
+  static let GRAVITY = 500.0
+
+  var playerBody: PhyBody
+  var playerShape: PhyShape
+
   // Setup
   public required init(withWindow window: Window, pipeline: ContentPipeline, andSpace space: PhySpace) {
     self.window = window
@@ -94,16 +110,35 @@ public class SwenDemo : GameBaseDelegate {
     let debugDraw = PhysicsDebugger(withRenderer: pipeline.renderer!)
 
     self.phydebug = PhyDebug(delegate: debugDraw)
-    space.gravity = Vector(x: 0.0, y: 0.5)
+    space.gravity = Vector(x: 0.0, y: SwenDemo.GRAVITY)
+    space.iterations = 40
 
     let ground: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
-        a: Vector(x: 0.0, y: 100.0),
-        b: Vector(x: window.size.sizeX, y: 400.0),
-        radius: 0)
-    print("phyShape: \(ground.handle)")
-    ground.friction = 1
-    ground.elasticity = 1
+        a: Vector(x: 0.0, y: 900.0),
+        b: Vector(x: window.size.sizeX, y: 900.0),
+        radius: 50.0)
+
+    ground.friction = 1.0
+    ground.elasticity = 1.0
     space.addShape(ground)
+
+    let rwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+        a: Vector(x: window.size.sizeX, y: 0),
+        b: Vector(x: window.size.sizeX, y: window.size.sizeY),
+        radius: 50.0)
+
+    rwall.friction = 1.0
+    rwall.elasticity = 1.0
+    space.addShape(rwall)
+
+    let lwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+        a: Vector(x: 0.0, y: 0),
+        b: Vector(x: 0.0, y: window.size.sizeY),
+        radius: 50.0)
+
+    lwall.friction = 1.0
+    lwall.elasticity = 1.0
+    space.addShape(lwall)
 
 //    let rwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
 //        a: Vector(x: window.size.sizeX - 20, y: -20.0),
@@ -112,6 +147,38 @@ public class SwenDemo : GameBaseDelegate {
 //    rwall.friction = 1
 //    rwall.elasticity = 0.7
 //    space.addShape(rwall)
+
+    let body = space.addBody(PhyBody(mass: 20.0, moment: Double.infinity))
+    body.position = player.position
+    let shape = space.addShape(PhyShape(boxShapeFrom: body,
+        box: PhyBoundingBox(l: -15.0, b: -27.5, r: 15.0, t: 27.5), radius: 10.0))
+    shape.elasticity = 0.0
+    shape.friction = 0.0
+    shape.collisionType = 1
+
+    self.playerBody = body
+    self.playerShape = shape
+
+    for i: Int32 in Range(start: 0, end: 6) {
+      for j in Range(start: 0, end: 4) {
+        let body = space.addBody(PhyBody(mass: 1.0, moment: Double.infinity))
+        body.position = Vector(x: 600 + j * 120, y: 200 + i * 120)
+
+        let shape = space.addShape(PhyShape(boxShapeFrom: body, width: 50, height: 50, radius: 0.0))
+        shape.elasticity = 0.7
+        shape.friction = 0.7
+      }
+    }
+
+//    for(int i=0; i<6; i++){
+//      for(int j=0; j<3; j++){
+//        body = cpSpaceAddBody(space, cpBodyNew(4.0f, INFINITY));
+//        body->p = cpv(100 + j*60, -200 + i*60);
+//
+//        shape = cpSpaceAddShape(space, cpBoxShapeNew(body, 50, 50, 0.0));
+//        shape->e = 0.0f; shape->u = 0.7f;
+//      }
+//    }
 
 //    let playerMass: Double = 1
 //
@@ -126,11 +193,12 @@ public class SwenDemo : GameBaseDelegate {
 //    playerShape.friction = 1
 //    playerShape.elasticity = 0
 
+//
 //    let radius: Double = 20
 //    let mass: Double = 1
-
+//
 //    let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector.zero)
-
+//
 //    let ballBody = space.addBody(PhyBody(mass: mass, moment: moment))
 //    ballBody.position = Vector(x: 200.0, y: 0.0)
 //    ballBody.velocity = Vector.zero
@@ -138,7 +206,7 @@ public class SwenDemo : GameBaseDelegate {
 //    let ballShape = space.addShape(PhyShape(circleShapeFrom: ballBody,
 //        radius: radius, offset: Vector.zero))
 //    ballShape.friction = 1
-//    ballShape.elasticity = 0.3
+//    ballShape.elasticity = 0.6
   }
 
   // Rendering
@@ -148,19 +216,19 @@ public class SwenDemo : GameBaseDelegate {
     titleText.render(atPoint: Vector(x: (window.size.sizeX - titleText.size.sizeX) / 2, y: 25))
     statusText.render(atPoint: Vector(x: 10.0, y: 10.0))
 
-    hudHeart.render(atPoint: Vector(x: 10, y: window.size.sizeY - hudHeart.size.sizeY))
-    hud3.render(atPoint: Vector(x: hudHeart.size.sizeX, y: window.size.sizeY - hud3.size.sizeY))
-
-    hud1.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + 10),
-        y: window.size.sizeY - hud1.size.sizeY))
-    hudJewel.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + hudJewel.size.sizeX),
-        y: window.size.sizeY - hudJewel.size.sizeY))
-
-    enemy.draw(game)
-    item1.draw(game)
-    item2.draw(game)
-    item3.draw(game)
-    player.draw(game)
+//    hudHeart.render(atPoint: Vector(x: 10, y: window.size.sizeY - hudHeart.size.sizeY))
+//    hud3.render(atPoint: Vector(x: hudHeart.size.sizeX, y: window.size.sizeY - hud3.size.sizeY))
+//
+//    hud1.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + 10),
+//        y: window.size.sizeY - hud1.size.sizeY))
+//    hudJewel.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + hudJewel.size.sizeX),
+//        y: window.size.sizeY - hudJewel.size.sizeY))
+//
+//    enemy.draw(game)
+//    item1.draw(game)
+//    item2.draw(game)
+//    item3.draw(game)
+//    player.draw(game)
 
     space.debugDraw(phydebug)
   }
@@ -172,13 +240,23 @@ public class SwenDemo : GameBaseDelegate {
     }
 
     for keyEvent in game.keyEvents {
+      switch keyEvent.scanCode {
+        case .ScanCodeSpace:
+          let jumpV = Math.sqrt(2.0 * SwenDemo.JUMP_HEIGHT * SwenDemo.GRAVITY)
+          playerBody.velocity += Vector(x: 0.0, y: -jumpV)
+        case .ScanCodeLeft:
+          playerBody.velocity += Vector(x: -60.0, y: 0)
+        case .ScanCodeRight:
+          playerBody.velocity += Vector(x: 60.0, y: 0)
+        default: Void()
+      }
       print(keyEvent)
     }
 
-    enemy.loop(game)
-    item1.loop(game)
-    item2.loop(game)
-    item3.loop(game)
-    player.loop(game)
+//    enemy.loop(game)
+//    item1.loop(game)
+//    item2.loop(game)
+//    item3.loop(game)
+//    player.loop(game)
   }
 }

@@ -46,6 +46,12 @@ public class PhyShape {
     self.init(fromHandle: ptr)
   }
 
+  public convenience init(boxShapeFrom body: PhyBody, box: PhyBoundingBox, radius: Double) {
+    let ptr = cpBoxShapeNew2(body.handle, box.handle, radius)
+
+    self.init(fromHandle: ptr)
+  }
+
 //  deinit {
 //    cpShapeFree(self.handle)
 //  }
@@ -66,6 +72,29 @@ public class PhyShape {
     set {
       cpShapeSetElasticity(self.handle, newValue)
     }
+  }
+
+  public var collisionType: UInt {
+    get {
+      return cpShapeGetCollisionType(self.handle)
+    }
+    set {
+      cpShapeSetCollisionType(self.handle, newValue)
+    }
+  }
+
+  public var tag: String? {
+    get {
+      let ptr = unsafeBitCast(cpShapeGetUserData(self.handle), String.self)
+
+      return String.fromCString(ptr)
+    }
+    set {
+      var str = newValue
+
+      cpShapeSetUserData(self.handle, &str)
+    }
+
   }
 
 }

@@ -131,14 +131,15 @@ public final class PhyDebug: AnyObject {
     let drawColour: cpSpaceDebugDrawColorForShapeImpl = {
       (shape: COpaquePointer,
        data: cpDataPointer) in
+
       let klass = unsafeBitCast(data, PhyDebug.self)
       let colour = klass.drawColourTrampoline(shape)
       return colour
     }
 
-    debugOpts.shapeOutlineColor = cpSpaceDebugColor.fromColour(Colour.orange.alpha(100))
-    debugOpts.constraintColor = cpSpaceDebugColor.fromColour(Colour.purple.alpha(100))
-    debugOpts.collisionPointColor = cpSpaceDebugColor.fromColour(Colour.yellow.alpha(100))
+    debugOpts.shapeOutlineColor = cpSpaceDebugColor.fromColour(Colour.green)
+    debugOpts.constraintColor = cpSpaceDebugColor.fromColour(Colour.green)
+    debugOpts.collisionPointColor = cpSpaceDebugColor.fromColour(Colour.green)
     debugOpts.colorForShape = drawColour
     let flags: DebugDrawFlags = [DebugDrawFlags.Shapes, DebugDrawFlags.CollisionPoints, DebugDrawFlags.Constraints]
     debugOpts.flags = cpSpaceDebugDrawFlags(flags.rawValue)
@@ -223,7 +224,7 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
   }
 
   public func drawDot(size size: Double, pos: Vector, color: Colour) {
-    renderer.fillCircle(position: pos, rad: Int16(size), colour: color)
+    renderer.fillCircle(position: pos, rad: size.int16, colour: color)
   }
 
   public func drawCircle(pos pos: Vector,
@@ -231,7 +232,9 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
                          radius: Double,
                          outlineColor: Colour,
                          fillColor: Colour) {
-    renderer.fillCircle(position: pos, rad: Int16(radius), colour: fillColor)
+    renderer.fillCircle(position: pos, rad: radius.int16, colour: fillColor)
+    renderer.drawCircle(position: pos, rad: radius.int16, colour: outlineColor)
+
   }
 
   public func drawColour(shape shape: COpaquePointer) -> Colour {
@@ -244,16 +247,66 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
                              outlineColor: Colour,
                              fillColor: Colour) {
 
+    let n = (b - a).rperp.normalize
+    let t = n.rperp
+
+    var r = radius + 1.0
+    if r <= 1.0 {
+      r = 1.0
+    }
+
+    let nw = n.mult(r)
+    let tw = t.mult(r)
+
+    let v0 = b - (nw + tw)
+    let v1 = b + (nw - tw)
+    let v2 = b - nw
+    let v3 = b + nw
+    let v4 = a - nw
+    let v5 = a + nw
+    let v6 = a - (nw - tw)
+    let v7 = a + (nw + tw)
+
+    renderer.fillTrigon(point1: v0, point2: v1, point3: v2, colour: fillColor)
+    renderer.fillTrigon(point1: v3, point2: v1, point3: v2, colour: fillColor)
+    renderer.fillTrigon(point1: v3, point2: v4, point3: v2, colour: fillColor)
+    renderer.fillTrigon(point1: v3, point2: v4, point3: v5, colour: fillColor)
+    renderer.fillTrigon(point1: v6, point2: v4, point3: v5, colour: fillColor)
+    renderer.fillTrigon(point1: v6, point2: v7, point3: v5, colour: fillColor)
+
+    renderer.drawAATrigon(point1: v0, point2: v1, point3: v2, colour: outlineColor)
+    renderer.drawAATrigon(point1: v3, point2: v1, point3: v2, colour: outlineColor)
+    renderer.drawAATrigon(point1: v3, point2: v4, point3: v2, colour: outlineColor)
+    renderer.drawAATrigon(point1: v3, point2: v4, point3: v5, colour: outlineColor)
+    renderer.drawAATrigon(point1: v6, point2: v4, point3: v5, colour: outlineColor)
+    renderer.drawAATrigon(point1: v6, point2: v7, point3: v5, colour: outlineColor)
+
+    // renderer.fillThickLine(point1: v1, point2: v2, width: 6, colour: Colour.red)
+    // renderer.fillThickLine(point1: v2, point2: v3, width: 6, colour: Colour.red)
+    // renderer.fillThickLine(point1: v3, point2: v4, width: 6, colour: Colour.red)
+    // renderer.fillThickLine(point1: v4, point2: v5, width: 6, colour: Colour.red)
+    // renderer.fillThickLine(point1: v5, point2: v6, width: 6, colour: Colour.red)
+    // renderer.fillThickLine(point1: v6, point2: v7, width: 6, colour: Colour.red)
+    // renderer.fillThickLine(point1: v7, point2: v1, width: 6, colour: Colour.red)
+
+    // print(v0, v1, v2, v3, v4, v5, v6, v7)
+
     // Just drawing a line, rotating segments is too much effort.
     // print("\(a) -> \(b)")
 
-    renderer.drawColour = outlineColor
-    //renderer.draw(startingFrom: a, endingAt: b)
-    //renderer.drawColour = Colour.lightGreen
-    renderer.fill(usingRect: Rect(x: a.x, y: a.y, sizeX: b.x, sizeY: b.y))
-    // renderer.fillThickLine(point1: a, point2: b, width: 1, colour: fillColor)
-    //renderer.fillThickLine(point1: outlinePoint2, point2: outlinePoint1, width: 2, colour: outlineColor)
-    renderer.fillRoundedRectangle(point1: a, point2: a + b, radius: radius.int16, colour: fillColor)
+    // renderer.drawColour = outlineColor
+    // renderer.draw(startingFrom: a, endingAt: b)
+    // renderer.drawColour = Colour.lightGreen
+    // renderer.fill(usingRect: Rect(x: a.x, y: a.y, sizeX: b.x, sizeY: b.y))
+    // renderer.fillThickLine(point1: a, point2: b, width: 3, colour: fillColor)
+    // renderer.fillThickLine(point1: b, point2: a, width: 2, colour: outlineColor)
+    // print(fillColor)
+    // print(outlineColor)
+
+    // renderer.fillRoundedRectangle(point1: a, point2: a + b, radius: radius.int16, colour: fillColor)
+
+    // renderer.fillRoundedRectangle(point1: a, point2: b, radius: radius.int16, colour: fillColor)
+    // renderer.drawRoundedRectangle(point1: a, point2: b, radius: radius.int16, colour: outlineColor)
   }
 
   public func drawPolygon(count count: Int32,
@@ -261,8 +314,8 @@ public class PhysicsDebugger : PhyDebugDrawDelegate {
                           radius: Double,
                           outlineColor: Colour,
                           fillColor: Colour) {
-    let vx = verts.map { Int16($0.x) }
-    let vy = verts.map { Int16($0.y) }
+    let vx = verts.map { $0.x.int16 }
+    let vy = verts.map { $0.y.int16 }
 
     renderer.fillPolygon(vx: vx, vy: vy, colour: fillColor)
     renderer.drawPolygon(vx: vx, vy: vy, colour: outlineColor)

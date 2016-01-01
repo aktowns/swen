@@ -90,6 +90,9 @@ public class PhySpace {
     get {
       return cpSpaceGetIterations(self.handle)
     }
+    set {
+      cpSpaceSetIterations(self.handle, newValue)
+    }
   }
 
   public var staticBody: PhyBody {

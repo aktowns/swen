@@ -74,7 +74,8 @@ public class GameBase<GameDelegate: GameBaseDelegate> {
       delegate.draw(game)
       delegate.loop(game)
       window.renderer.present()
-      space.step(Double(countedFrames) / 100)
+
+      space.step(Double(countedFrames) / 20000)
 
       countedFrames += 1
       keyEvents = []
