@@ -107,11 +107,11 @@ public class SwenDemo : GameBaseDelegate {
       fatalError("Unexpected error occured")
     }
 
-    let debugDraw = PhysicsDebugger(withRenderer: pipeline.renderer!)
+    let debugDraw = PhyDebugSDL(withRenderer: pipeline.renderer!)
 
     self.phydebug = PhyDebug(delegate: debugDraw)
     space.gravity = Vector(x: 0.0, y: SwenDemo.GRAVITY)
-    space.iterations = 40
+    space.iterations = 10
 
     let ground: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
         a: Vector(x: 0.0, y: 900.0),
@@ -151,7 +151,7 @@ public class SwenDemo : GameBaseDelegate {
     let body = space.addBody(PhyBody(mass: 20.0, moment: Double.infinity))
     body.position = player.position
     let shape = space.addShape(PhyShape(boxShapeFrom: body,
-        box: PhyBoundingBox(l: -15.0, b: -27.5, r: 15.0, t: 27.5), radius: 10.0))
+        box: PhyBoundingBox(topLeft: Vector(x: -30.0, y: 50.0), bottomRight: Vector(x: 30.0, y: -50.0)), radius: 10.0))
     shape.elasticity = 0.0
     shape.friction = 0.0
     shape.collisionType = 1
@@ -162,23 +162,13 @@ public class SwenDemo : GameBaseDelegate {
     for i: Int32 in Range(start: 0, end: 6) {
       for j in Range(start: 0, end: 4) {
         let body = space.addBody(PhyBody(mass: 1.0, moment: Double.infinity))
-        body.position = Vector(x: 600 + j * 120, y: 200 + i * 120)
+        body.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
 
         let shape = space.addShape(PhyShape(boxShapeFrom: body, width: 50, height: 50, radius: 0.0))
         shape.elasticity = 0.7
         shape.friction = 0.7
       }
     }
-
-//    for(int i=0; i<6; i++){
-//      for(int j=0; j<3; j++){
-//        body = cpSpaceAddBody(space, cpBodyNew(4.0f, INFINITY));
-//        body->p = cpv(100 + j*60, -200 + i*60);
-//
-//        shape = cpSpaceAddShape(space, cpBoxShapeNew(body, 50, 50, 0.0));
-//        shape->e = 0.0f; shape->u = 0.7f;
-//      }
-//    }
 
 //    let playerMass: Double = 1
 //
@@ -207,6 +197,8 @@ public class SwenDemo : GameBaseDelegate {
 //        radius: radius, offset: Vector.zero))
 //    ballShape.friction = 1
 //    ballShape.elasticity = 0.6
+
+    
   }
 
   // Rendering

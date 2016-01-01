@@ -28,14 +28,12 @@ public struct Vector : Comparable {
     self.y = y
   }
 
-  public init(x: Int16, y: Int16) {
-    self.x = Double(x)
-    self.y = Double(y)
+  public static func fromInt16(x x: Int16, y: Int16) -> Vector {
+    return Vector(x: Double(x), y: Double(y))
   }
 
-  public init(x: Int32, y: Int32) {
-    self.x = Double(x)
-    self.y = Double(y)
+  public static func fromInt32(x x: Int32, y: Int32) -> Vector {
+    return Vector(x: Double(x), y: Double(y))
   }
 
   public static var zero: Vector {

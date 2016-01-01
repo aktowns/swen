@@ -34,7 +34,7 @@ public class MouseWheelEvent : CommonEvent {
   public var windowId: UInt32 { return wheelEvent.windowID }
   public var which: UInt32 { return wheelEvent.which }
   public var direction: UInt32 { return wheelEvent.direction }
-  public var position: Vector { return Vector(x: wheelEvent.x, y: wheelEvent.y) }
+  public var position: Vector { return Vector.fromInt32(x: wheelEvent.x, y: wheelEvent.y) }
 
   override public var description : String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), windowId:\(windowId), " +

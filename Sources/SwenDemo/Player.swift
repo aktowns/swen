@@ -25,8 +25,22 @@ public protocol PhysicsSpace {
 
 public protocol PhysicsBody {
   var position: Vector { get set }
+  var velocity: Vector { get set }
   var size: Size { get set }
-  // var velocity: Double { get set }
+}
+
+/*
+    let body = space.addBody(PhyBody(mass: 20.0, moment: Double.infinity))
+    body.position = player.position
+    let shape = space.addShape(PhyShape(boxShapeFrom: body,
+        box: PhyBoundingBox(l: -15.0, b: -27.5, r: 15.0, t: 27.5), radius: 10.0))
+    shape.elasticity = 0.0
+    shape.friction = 0.0
+    shape.collisionType = 1
+*/
+
+public struct DefaultBodyPhysics {
+
 }
 
 public class Player : GameLoop, PhysicsBody {
@@ -37,9 +51,11 @@ public class Player : GameLoop, PhysicsBody {
   let walkingAnimation = ["alienBlue_walk1", "alienBlue_stand", "alienBlue_walk2"]
   var animationStep: Int = 0
   var playerVelocity: Int = 20
+
   public var position: Vector = Vector(x: 320.0, y: 340.0)
+  public var velocity: Vector = Vector.zero
   public var size: Size = Size.zero
-  // var velocity: Point<Int3> = Point(x: 0, y: 0)
+
 
   public init(pipeline: ContentPipeline, space: PhySpace) throws {
     self.pipeline = pipeline

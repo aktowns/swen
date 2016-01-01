@@ -24,7 +24,7 @@ public protocol GameBaseDelegate : GameLoop {
 }
 
 public struct Game {
-  public var fps: Float
+  public let fps: Float
   public var frame: Int
   public var keyEvents: [KeyboardEvent]
 }
@@ -60,9 +60,7 @@ public class GameBase<GameDelegate: GameBaseDelegate> {
       Event.poll { event in
         switch event {
         case is QuitEvent: running = false
-        case let kbd as KeyboardEvent:
-          print("ticks: \(self.fpsTimer.ticks()), frames: \(countedFrames)")
-          keyEvents.append(kbd)
+        case let kbd as KeyboardEvent: keyEvents.append(kbd)
         default: events.append(event)
         }
       }

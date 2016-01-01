@@ -83,7 +83,7 @@ public class Window {
   public convenience init(withTitle title: String,
                    andSize size: Size) throws {
     try self.init(withTitle: title,
-                  position: Vector(x: WindowPosUndefined, y: WindowPosUndefined),
+                  position: Vector.fromInt32(x: WindowPosUndefined, y: WindowPosUndefined),
                   andSize: size)
   }
 

@@ -34,7 +34,7 @@ public class JoyBallEvent : CommonEvent {
 
   public var which: SDL_JoystickID { return jballEvent.which }
   public var ball: UInt8 { return jballEvent.ball }
-  public var motion: Vector { return Vector(x: jballEvent.xrel, y: jballEvent.yrel) }
+  public var motion: Vector { return Vector.fromInt16(x: jballEvent.xrel, y: jballEvent.yrel) }
 
   public override var description : String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +
