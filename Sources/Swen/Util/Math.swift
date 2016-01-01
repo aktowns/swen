@@ -20,29 +20,76 @@
 import Glibc
 
 public class Math {
+  public static let DBL_MIN = 2.22507385850720138309e-308
+  public static let DBL_MAX = 1.79769313486231570815e+308
+
   public static func clamp<a: Comparable>(value: a, minValue: a, maxValue: a) -> a {
     return max(min(value, maxValue), minValue)
+  }
+
+  public static func sqrt(x: Double) -> Double {
+    return Glibc.sqrt(x)
+  }
+
+  public static func sin(x: Double) -> Double {
+    return Glibc.sin(x)
+  }
+
+  public static func cos(x: Double) -> Double {
+    return Glibc.cos(x)
+  }
+
+  public static func acos(x: Double) -> Double {
+    return Glibc.acos(x)
+  }
+
+  public static func atan(x: Double) -> Double {
+    return Glibc.atan(x)
+  }
+
+  public static func atan2(x: Double, _ y: Double) -> Double {
+    return Glibc.atan2(x, y)
+  }
+
+  public static func fmod(x: Double, _ y: Double) -> Double {
+    return Glibc.fmod(x, y)
+  }
+
+  public static func exp(x: Double) -> Double {
+    return Glibc.exp(x)
+  }
+
+  public static func pow(x: Double, _ y: Double) -> Double {
+    return Glibc.pow(x, y)
+  }
+
+  public static func floor(x: Double) -> Double {
+    return Glibc.floor(x)
+  }
+
+  public static func ceil(x: Double) -> Double {
+    return Glibc.ceil(x)
   }
 }
 
 public class NumericConversion {
   public static func convertDoubleToInt16(value: Double) -> Int16 {
-    return Int16(Math.clamp(floor(value), minValue: Double(Int16.min),
+    return Int16(Math.clamp(Math.floor(value), minValue: Double(Int16.min),
         maxValue: Double(Int16.max)))
   }
 
   public static func convertDoubleToInt32(value: Double) -> Int32 {
-    return Int32(Math.clamp(floor(value), minValue: Double(Int32.min),
+    return Int32(Math.clamp(Math.floor(value), minValue: Double(Int32.min),
         maxValue: Double(Int32.max)))
   }
 
   public static func convertDoubleToUInt16(value: Double) -> UInt16 {
-    return UInt16(Math.clamp(floor(value), minValue: Double(UInt16.min),
+    return UInt16(Math.clamp(Math.floor(value), minValue: Double(UInt16.min),
         maxValue: Double(UInt16.max)))
   }
 
   public static func convertDoubleToUInt32(value: Double) -> UInt32 {
-    return UInt32(Math.clamp(floor(value), minValue: Double(UInt32.min),
+    return UInt32(Math.clamp(Math.floor(value), minValue: Double(UInt32.min),
         maxValue: Double(UInt32.max)))
   }
 }
