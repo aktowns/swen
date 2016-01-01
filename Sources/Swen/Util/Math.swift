@@ -21,7 +21,7 @@ import Glibc
 
 public class Math {
   public static func clamp<a: Comparable>(value: a, minValue: a, maxValue: a) -> a {
-    return max(min(value, minValue), maxValue)
+    return max(min(value, maxValue), minValue)
   }
 }
 
