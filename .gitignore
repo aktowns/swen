@@ -1,2 +1,6 @@
 /.build
 /.idea
+/Packages
+/dist
+/docs
+/assets
