@@ -85,3 +85,11 @@ public func *(l: Size, r: Size) -> Size {
 public func /(l: Size, r: Size) -> Size {
   return Size(sizeX: l.sizeX / r.sizeX, sizeY: l.sizeY / r.sizeY)
 }
+
+public func +=(inout l: Size, r: Size) {
+  l = l + r
+}
+
+public func -=(inout l: Size, r: Size) {
+  l = l - r
+}
