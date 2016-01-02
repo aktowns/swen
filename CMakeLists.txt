@@ -41,13 +41,13 @@ set(SOURCE_FILES
         Sources/Swen/Events/TextInputEvent.swift
         Sources/Swen/Events/UserEvent.swift
         Sources/Swen/Events/WindowEvent.swift
-        Sources/Swen/Extensions/SDLExtension.swift
-        Sources/Swen/Extensions/SDLExtensionCore.swift
-        Sources/Swen/Extensions/SDLExtensionImage.swift
-        Sources/Swen/Extensions/SDLExtensionLoader.swift
-        Sources/Swen/Extensions/SDLExtensionMixer.swift
-        Sources/Swen/Extensions/SDLExtensionNet.swift
-        Sources/Swen/Extensions/SDLExtensionTTF.swift
+        Sources/Swen/SDL/Extensions/SDLExtension.swift
+        Sources/Swen/SDL/Extensions/SDLExtensionCore.swift
+        Sources/Swen/SDL/Extensions/SDLExtensionImage.swift
+        Sources/Swen/SDL/Extensions/SDLExtensionLoader.swift
+        Sources/Swen/SDL/Extensions/SDLExtensionMixer.swift
+        Sources/Swen/SDL/Extensions/SDLExtensionNet.swift
+        Sources/Swen/SDL/Extensions/SDLExtensionTTF.swift
         Sources/Swen/GameBase.swift
         Sources/Swen/GameLoop.swift
         Sources/Swen/Network/Socket.swift
@@ -80,8 +80,8 @@ set(SOURCE_FILES
         Sources/Swen/Input/Mouse.swift
         Sources/Swen/Util/Rect.swift
         Sources/Swen/Input/ScanCode.swift
-        Sources/Swen/Util/SDLConvertHelper.swift
-        Sources/Swen/Util/ChipmunkConvertHelper.swift
+        Sources/Swen/Util/ConvertHelpers/SDLConvertHelper.swift
+        Sources/Swen/Util/ConvertHelpers/ChipmunkConvertHelper.swift
         Sources/Swen/Util/Size.swift
         Sources/Swen/Util/Vector.swift
         Package.swift)
