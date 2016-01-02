@@ -25,8 +25,9 @@ public protocol GameBaseDelegate: GameLoop {
 
 public struct Game {
   public let fps: Float
-  public var frame: Int
-  public var keyEvents: [KeyboardEvent]
+  public let frame: Int
+  public let keyEvents: [KeyboardEvent]
+  public let settings: GameSettings
 }
 
 public class GameBase<GameDelegate:GameBaseDelegate> {
@@ -35,15 +36,25 @@ public class GameBase<GameDelegate:GameBaseDelegate> {
   public let delegate: GameDelegate
   public let fpsTimer: Timer
   public let space: PhySpace
+  public let settings: GameSettings
 
-  public init(withTitle title: String, size: Size, andDelegate delegate: GameDelegate.Type) throws {
+  public init(withTitle title: String,
+              size: Size,
+              settings: GameSettings,
+              andDelegate delegate: GameDelegate.Type) throws {
     try SDL.initSDL()
 
     self.window = try Window(withTitle: title, andSize: size)
     self.pipeline = ContentPipeline(withRenderer: self.window.renderer)
-    self.space = PhySpace()
-    self.delegate = delegate.init(withWindow: window, pipeline: pipeline, andSpace: space)
     self.fpsTimer = Timer()
+
+    // Physics setup
+    self.space = PhySpace()
+    space.iterations = settings.physics.iterations
+    space.gravity = settings.physics.gravity
+
+    self.delegate = delegate.init(withWindow: window, pipeline: pipeline, andSpace: space)
+    self.settings = settings
   }
 
   public func start() {
@@ -66,15 +77,16 @@ public class GameBase<GameDelegate:GameBaseDelegate> {
         }
       }
 
-      let game = Game(fps: averageFrames, frame: countedFrames, keyEvents: keyEvents)
+      let game = Game(fps: averageFrames, frame: countedFrames, keyEvents: keyEvents, settings: settings)
 
-      window.renderer.drawColour = Colour.white
+      window.renderer.drawColour = settings.backgroundColour
+
       window.renderer.clear()
       delegate.draw(game)
       delegate.update(game)
       window.renderer.present()
 
-      space.step(Double(countedFrames) / 20000)
+      space.step(settings.physics.timestep)
 
       countedFrames += 1
       keyEvents = []

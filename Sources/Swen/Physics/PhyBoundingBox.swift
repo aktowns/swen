@@ -1,7 +1,7 @@
 //
 //   PhyBoundingBox.swift created on 2/01/16
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2016 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,9 @@ public class PhyBoundingBox {
     self.handle = handle
   }
 
-  public convenience init(topLeft: Vector, bottomRight: Vector) {
-    let bb = cpBBNew(topLeft.x, bottomRight.y, bottomRight.x, topLeft.y)
+  public convenience init(size: Rect) {
+
+    let bb = cpBBNew(size.x, size.sizeY, size.sizeX, size.y)
 
     self.init(fromHandle: bb)
   }

@@ -19,6 +19,7 @@
 
 import Swen
 
-let game = try! GameBase(withTitle: "swEn Demo", size: Size(sizeX: 1920.0, sizeY: 1080.0), andDelegate: SwenDemo.self)
+let game = try! GameBase(withTitle: "swEn Demo", size: Size(sizeX: 1920.0, sizeY: 1080.0),
+    settings: GameSettings(), andDelegate: SwenDemo.self)
 game.start()
 game.close()

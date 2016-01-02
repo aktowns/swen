@@ -40,11 +40,21 @@ public class PhyDebugSDL: PhyDebugDrawDelegate {
                          fillColor: Colour) {
     renderer.fillCircle(position: pos, rad: radius.int16, colour: fillColor)
     renderer.drawCircle(position: pos, rad: radius.int16, colour: outlineColor)
-
   }
 
-  public func drawColour(shape shape: COpaquePointer) -> Colour {
-    return Colour.red.alpha(100)
+  public func drawColour(shape shape: PhyShape) -> Colour {
+    guard let tag = shape.tag else {
+      return Colour.red.alpha(100)
+    }
+
+    switch tag {
+      case "wall": return Colour.black.alpha(100)
+      case "box": return Colour.yellow.alpha(100)
+      case "ball": return Colour.red.alpha(100)
+      case "player": return Colour.orange.alpha(100)
+      default: return Colour.red.alpha(100)
+    }
+
   }
 
   public func drawFatSegment(a a: Vector,

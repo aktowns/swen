@@ -1,5 +1,5 @@
 //
-//   PhyDebugDrawDelegate.swift created on 2/01/16
+//   GameSettings.swift created on 2/01/16
 //   Swen project
 //
 //   Copyright 2016 Ashley Towns <code@ashleytowns.id.au>
@@ -17,16 +17,15 @@
 //   limitations under the License.
 //
 
-public protocol PhyDebugDrawDelegate {
-  func drawCircle(pos pos: Vector, angle: Double, radius: Double, outlineColor: Colour, fillColor: Colour)
+public struct GamePhysicSettings {
+  public var gravity: Vector = Vector(x: 0.0, y: 500.0)
+  public var iterations: Int32 = 10
+  public var timestep: Double = 1.0 / 60.0
+}
 
-  func drawSegment(a a: Vector, b: Vector, color: Colour)
+public struct GameSettings {
+  public var physics: GamePhysicSettings = GamePhysicSettings()
+  public var backgroundColour: Colour = Colour.black
 
-  func drawFatSegment(a a: Vector, b: Vector, radius: Double, outlineColor: Colour, fillColor: Colour)
-
-  func drawPolygon(count count: Int32, verts: Array<Vector>, radius: Double, outlineColor: Colour, fillColor: Colour)
-
-  func drawDot(size size: Double, pos: Vector, color: Colour)
-
-  func drawColour(shape shape: PhyShape) -> Colour
+  public init() {}
 }

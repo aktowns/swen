@@ -50,6 +50,7 @@ set(SOURCE_FILES
         Sources/Swen/SDL/Extensions/SDLExtensionTTF.swift
         Sources/Swen/GameBase.swift
         Sources/Swen/GameLoop.swift
+        Sources/Swen/GameSettings.swift
         Sources/Swen/Network/Socket.swift
         Sources/Swen/Network/TCPSocket.swift
         Sources/Swen/Network/UDPSocket.swift

@@ -1,7 +1,7 @@
 //
 //   PhySpace.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +47,7 @@ public class PhySpace {
   public func addShape(shape: PhyShape) -> PhyShape {
     let shape = cpSpaceAddShape(self.handle, shape.handle)
 
-    return PhyShape(fromHandle: shape)
+    return PhyShape.fromHandle(shape)
   }
 
   public func addBody(body: PhyBody) -> PhyBody {

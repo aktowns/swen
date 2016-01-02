@@ -1,7 +1,7 @@
 //
 //   PhyShape.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,62 @@
 
 import CChipmunk
 
-public class PhyShape {
-  public let handle: COpaquePointer
+public protocol LowLevelHandle {
+  var handle: COpaquePointer { get }
 
-  public init(fromHandle handle: COpaquePointer) {
+  init(fromHandle: COpaquePointer)
+}
+
+public protocol LowLevelMemoizedHandle : LowLevelHandle {
+  static func fromHandle(handle: COpaquePointer) -> Self
+
+  static var memoized: [COpaquePointer: Self] { get set }
+}
+
+
+public final class PhyShape: LowLevelMemoizedHandle {
+  public let handle: COpaquePointer
+  public var tag: String?
+  public static var memoized: [COpaquePointer: PhyShape] = Dictionary<COpaquePointer, PhyShape>()
+
+  public required init(fromHandle handle: COpaquePointer) {
     self.handle = handle
+    self.tag = Optional.None
+
+    assert(PhyShape.memoized[handle] == nil, "PhyShape.init(fromHandle:) initialised with tagged handler")
+
+    PhyShape.memoized[handle] = self
+
+    //let associated = cpShapeGetUserData(handle)
+    //assert(associated == nil, "PhyShape.init(fromHandle:) initialised with tagged handler")
+
+    //let vptr = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
+    //cpShapeSetUserData(handle, vptr)
 
     assert(handle != nil, "PhyShape.init(fromHandle:) handed a null handle")
+  }
+
+  // try UserData falling back to creating a new instance
+  public static func fromHandle(handle: COpaquePointer) -> PhyShape {
+    let mptr = PhyShape.memoized[handle]
+
+    if let ptr = mptr {
+      return ptr
+    }
+
+    return PhyShape(fromHandle: handle)
+
+//    let associated = cpShapeGetUserData(handle)
+//    if associated != nil {
+//      print(associated)
+//      let obj = unsafeBitCast(associated, PhyShape.self)
+//
+//      //if obj != nil {
+//        return obj
+//      //}
+//    }
+//
+//    return PhyShape(fromHandle: handle)
   }
 
   public convenience init(segmentedShapeFrom body: PhyBody, a: Vector, b: Vector, radius: Double) {
@@ -40,8 +89,8 @@ public class PhyShape {
     self.init(fromHandle: ptr)
   }
 
-  public convenience init(boxShapeFrom body: PhyBody, width: Double, height: Double, radius: Double) {
-    let ptr = cpBoxShapeNew(body.handle, width, height, radius)
+  public convenience init(boxShapeFrom body: PhyBody, size: Size, radius: Double) {
+    let ptr = cpBoxShapeNew(body.handle, size.sizeX, size.sizeY, radius)
 
     self.init(fromHandle: ptr)
   }
@@ -53,6 +102,7 @@ public class PhyShape {
   }
 
 //  deinit {
+//    cpShapeSetUserData(self.handle, nil)
 //    cpShapeFree(self.handle)
 //  }
 
@@ -82,19 +132,4 @@ public class PhyShape {
       cpShapeSetCollisionType(self.handle, newValue)
     }
   }
-
-  public var tag: String? {
-    get {
-      let ptr = unsafeBitCast(cpShapeGetUserData(self.handle), String.self)
-
-      return String.fromCString(ptr)
-    }
-    set {
-      var str = newValue
-
-      cpShapeSetUserData(self.handle, &str)
-    }
-
-  }
-
 }

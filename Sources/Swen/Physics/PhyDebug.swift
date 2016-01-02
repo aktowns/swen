@@ -191,7 +191,7 @@ public final class PhyDebug: AnyObject {
   }
 
   private func drawColourTrampoline(shape: COpaquePointer) -> cpSpaceDebugColor {
-    let colour = delegate.drawColour(shape: shape)
+    let colour = delegate.drawColour(shape: PhyShape.fromHandle(shape))
 
     return cpSpaceDebugColor.fromColour(colour)
   }
