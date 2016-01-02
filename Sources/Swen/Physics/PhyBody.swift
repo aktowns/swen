@@ -1,7 +1,7 @@
 //
 //   PhyBody.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,29 @@
 
 import CChipmunk
 
-public class PhyBody {
-  let handle: COpaquePointer
+public final class PhyBody : LowLevelMemoizedHandle {
+  public let handle: COpaquePointer
+  public static var memoized: [COpaquePointer: PhyBody] = Dictionary<COpaquePointer, PhyBody>()
 
-  public init(fromHandle handle: COpaquePointer) {
+  public required init(fromHandle handle: COpaquePointer) {
     self.handle = handle
 
     assert(handle != nil, "PhyBody.init(fromHandle:) handed a null handle")
+
+    assert(PhyBody.memoized[handle] == nil, "PhyBody.init(fromHandle:) initialised with tagged handler")
+
+    PhyBody.memoized[handle] = self
+  }
+
+  // try UserData falling back to creating a new instance
+  public static func fromHandle(handle: COpaquePointer) -> PhyBody {
+    let mptr = PhyBody.memoized[handle]
+
+    if let ptr = mptr {
+      return ptr
+    }
+
+    return PhyBody(fromHandle: handle)
   }
 
   public convenience init(mass: Double, moment: Double) {

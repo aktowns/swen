@@ -19,19 +19,6 @@
 
 import CChipmunk
 
-public protocol LowLevelHandle {
-  var handle: COpaquePointer { get }
-
-  init(fromHandle: COpaquePointer)
-}
-
-public protocol LowLevelMemoizedHandle : LowLevelHandle {
-  static func fromHandle(handle: COpaquePointer) -> Self
-
-  static var memoized: [COpaquePointer: Self] { get set }
-}
-
-
 public final class PhyShape: LowLevelMemoizedHandle {
   public let handle: COpaquePointer
   public var tag: String?
@@ -41,17 +28,11 @@ public final class PhyShape: LowLevelMemoizedHandle {
     self.handle = handle
     self.tag = Optional.None
 
+    assert(handle != nil, "PhyShape.init(fromHandle:) handed a null handle")
+
     assert(PhyShape.memoized[handle] == nil, "PhyShape.init(fromHandle:) initialised with tagged handler")
 
     PhyShape.memoized[handle] = self
-
-    //let associated = cpShapeGetUserData(handle)
-    //assert(associated == nil, "PhyShape.init(fromHandle:) initialised with tagged handler")
-
-    //let vptr = unsafeBitCast(self, UnsafeMutablePointer<Void>.self)
-    //cpShapeSetUserData(handle, vptr)
-
-    assert(handle != nil, "PhyShape.init(fromHandle:) handed a null handle")
   }
 
   // try UserData falling back to creating a new instance
@@ -63,18 +44,6 @@ public final class PhyShape: LowLevelMemoizedHandle {
     }
 
     return PhyShape(fromHandle: handle)
-
-//    let associated = cpShapeGetUserData(handle)
-//    if associated != nil {
-//      print(associated)
-//      let obj = unsafeBitCast(associated, PhyShape.self)
-//
-//      //if obj != nil {
-//        return obj
-//      //}
-//    }
-//
-//    return PhyShape(fromHandle: handle)
   }
 
   public convenience init(segmentedShapeFrom body: PhyBody, a: Vector, b: Vector, radius: Double) {

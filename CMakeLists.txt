@@ -75,6 +75,7 @@ set(SOURCE_FILES
         Sources/Swen/Util/IPAddress.swift
         Sources/Swen/Util/XPathDocument.swift
         Sources/Swen/Util/Math.swift
+        Sources/Swen/Util/LowLevelHandle.swift
         Sources/Swen/Input/Keyboard.swift
         Sources/Swen/Input/KeyCode.swift
         Sources/Swen/Input/KeyMod.swift

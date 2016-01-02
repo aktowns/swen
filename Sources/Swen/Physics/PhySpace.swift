@@ -53,7 +53,7 @@ public class PhySpace {
   public func addBody(body: PhyBody) -> PhyBody {
     let body = cpSpaceAddBody(self.handle, body.handle)
 
-    return PhyBody(fromHandle: body)
+    return PhyBody.fromHandle(body)
   }
 
   public func step(dt: Double) {
@@ -96,7 +96,7 @@ public class PhySpace {
   }
 
   public var staticBody: PhyBody {
-    return PhyBody(fromHandle: cpSpaceGetStaticBody(self.handle))
+    return PhyBody.fromHandle(cpSpaceGetStaticBody(self.handle))
   }
 }
 
