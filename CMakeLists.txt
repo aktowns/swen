@@ -60,6 +60,8 @@ set(SOURCE_FILES
         Sources/Swen/Physics/PhyDebug.swift
         Sources/Swen/Physics/PhyConstraint.swift
         Sources/Swen/Physics/PhyBoundingBox.swift
+        Sources/Swen/Physics/PhyDebugDrawDelegate.swift
+        Sources/Swen/Physics/PhyDebugSDL.swift
         Sources/Swen/Renderer.swift
         Sources/Swen/SDL/SDL.swift
         Sources/Swen/SDL/SDLError.swift

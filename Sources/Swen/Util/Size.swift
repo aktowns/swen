@@ -48,6 +48,10 @@ public struct Size : Comparable, CustomStringConvertible {
     return Vector(x: self.sizeX, y: self.sizeY)
   }
 
+  public var center: Vector {
+    return Vector(x: self.sizeX / 2, y: self.sizeY / 2)
+  }
+
   public var description : String {
     return "\(self.dynamicType)(sizeX:\(sizeX), sizeY:\(sizeY))"
   }

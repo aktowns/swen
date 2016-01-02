@@ -217,6 +217,16 @@ public class Renderer {
     return SDL_RenderIsClipEnabled(self.handle) == SDL_TRUE
   }
 
+  public var outputSize: Size {
+    var w: Int32 = 0, h: Int32 = 0
+
+    let res = SDL_GetRendererOutputSize(self.handle, &w, &h)
+
+    assert(res == 0, "SDL_GetRendererOutputSize failed: \(SDL.getErrorMessage())")
+
+    return Size(sizeX: w, sizeY: h)
+  }
+
   public var logicalSize: Size {
     get {
       var w: Int32 = 0, h: Int32 = 0
