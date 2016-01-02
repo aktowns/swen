@@ -1,7 +1,7 @@
 //
 //   ChipmunkConvertHelper.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@ extension cpSpaceDebugColor {
   static func fromColour(colour: Colour) -> cpSpaceDebugColor {
     return cpSpaceDebugColor(r: Float(colour.r), g: Float(colour.g), b: Float(colour.b), a: Float(colour.a ?? 0))
   }
+
   func toColour() -> Colour {
     return Colour(r: UInt8(self.r), g: UInt8(self.g), b: UInt8(self.b), a: UInt8(self.a))
   }

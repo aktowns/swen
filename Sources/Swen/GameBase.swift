@@ -19,7 +19,7 @@
 
 import Glibc
 
-public protocol GameBaseDelegate : GameLoop {
+public protocol GameBaseDelegate: GameLoop {
   init(withWindow: Window, pipeline: ContentPipeline, andSpace: PhySpace)
 }
 
@@ -29,7 +29,7 @@ public struct Game {
   public var keyEvents: [KeyboardEvent]
 }
 
-public class GameBase<GameDelegate: GameBaseDelegate> {
+public class GameBase<GameDelegate:GameBaseDelegate> {
   public let pipeline: ContentPipeline
   public let window: Window
   public let delegate: GameDelegate
@@ -57,7 +57,8 @@ public class GameBase<GameDelegate: GameBaseDelegate> {
     while running {
       let averageFrames = Float(countedFrames) / (Float(fpsTimer.ticks()) / 1000.0)
 
-      Event.poll { event in
+      Event.poll {
+        event in
         switch event {
         case is QuitEvent: running = false
         case let kbd as KeyboardEvent: keyEvents.append(kbd)
@@ -70,7 +71,7 @@ public class GameBase<GameDelegate: GameBaseDelegate> {
       window.renderer.drawColour = Colour.white
       window.renderer.clear()
       delegate.draw(game)
-      delegate.loop(game)
+      delegate.update(game)
       window.renderer.present()
 
       space.step(Double(countedFrames) / 20000)

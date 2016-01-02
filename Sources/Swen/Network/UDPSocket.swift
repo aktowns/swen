@@ -19,6 +19,6 @@
 
 import CSDL
 
-public class UDPSocket : Socket {
+public class UDPSocket: Socket {
 
 }

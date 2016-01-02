@@ -38,9 +38,9 @@ public struct Colour {
 
   public init(hex: UInt32) {
     self.init(r: UInt8(hex >> 24 & 255),
-              g: UInt8(hex >> 16 & 255),
-              b: UInt8(hex >> 8 & 255),
-              a: UInt8(hex & 255))
+        g: UInt8(hex >> 16 & 255),
+        b: UInt8(hex >> 8 & 255),
+        a: UInt8(hex & 255))
   }
 
   public init(rgba: (UInt8, UInt8, UInt8, UInt8)) {

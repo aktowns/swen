@@ -19,7 +19,9 @@
 
 extension Optional {
   public func join(opt: Wrapped?) -> Wrapped? {
-    return try! self.flatMap { $0 }
+    return try! self.flatMap {
+      $0
+    }
   }
 
   func toPointer() -> UnsafeMutablePointer<Wrapped> {

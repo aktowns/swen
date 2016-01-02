@@ -19,7 +19,7 @@
 
 import CSDL
 
-public struct MixerInitFlags : OptionSetType {
+public struct MixerInitFlags: OptionSetType {
   public let rawValue: Int32
 
   public init(rawValue: Int32) {
@@ -30,15 +30,15 @@ public struct MixerInitFlags : OptionSetType {
     self.rawValue = Int32(rawValue)
   }
 
-  static let FLAC       = MixerInitFlags(rawValue: MIX_INIT_FLAC.rawValue)
-  static let MOD        = MixerInitFlags(rawValue: MIX_INIT_MOD.rawValue)
-  static let MODPLUG    = MixerInitFlags(rawValue: MIX_INIT_MODPLUG.rawValue)
-  static let MP3        = MixerInitFlags(rawValue: MIX_INIT_MP3.rawValue)
-  static let OGG        = MixerInitFlags(rawValue: MIX_INIT_OGG.rawValue)
+  static let FLAC = MixerInitFlags(rawValue: MIX_INIT_FLAC.rawValue)
+  static let MOD = MixerInitFlags(rawValue: MIX_INIT_MOD.rawValue)
+  static let MODPLUG = MixerInitFlags(rawValue: MIX_INIT_MODPLUG.rawValue)
+  static let MP3 = MixerInitFlags(rawValue: MIX_INIT_MP3.rawValue)
+  static let OGG = MixerInitFlags(rawValue: MIX_INIT_OGG.rawValue)
   static let FLUIDSYNTH = MixerInitFlags(rawValue: MIX_INIT_FLUIDSYNTH.rawValue)
 }
 
-public class SDLExtensionMixer : SDLExtension {
+public class SDLExtensionMixer: SDLExtension {
   let flags: MixerInitFlags
 
   let defaultFlags: MixerInitFlags = [MixerInitFlags.FLAC,
@@ -84,7 +84,7 @@ public class SDLExtensionMixer : SDLExtension {
       print("Warning: Failed to load FLUIDSYNTH audio support: \(SDL.getErrorMessage())")
     }
 
-    if Mix_OpenAudio(44100, UInt16(MIX_DEFAULT_FORMAT), 2, 2048 ) < 0 {
+    if Mix_OpenAudio(44100, UInt16(MIX_DEFAULT_FORMAT), 2, 2048) < 0 {
       throw SDLError.MixerOpenError(message: SDL.getErrorMessage())
     }
   }

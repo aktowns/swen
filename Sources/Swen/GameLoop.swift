@@ -21,5 +21,6 @@ import Foundation
 
 public protocol GameLoop {
   func draw(game: Game)
-  func loop(game: Game)
+
+  func update(game: Game)
 }

@@ -1,7 +1,7 @@
 //
 //   Math.swift created on 31/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ public class Math {
   public static let DBL_MIN = 2.22507385850720138309e-308
   public static let DBL_MAX = 1.79769313486231570815e+308
 
-  public static func clamp<a: Comparable>(value: a, minValue: a, maxValue: a) -> a {
+  public static func clamp<a:Comparable>(value: a, minValue: a, maxValue: a) -> a {
     return max(min(value, maxValue), minValue)
   }
 

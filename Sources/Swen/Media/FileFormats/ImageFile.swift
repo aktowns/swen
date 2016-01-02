@@ -19,7 +19,7 @@
 
 import CSDL
 
-public class ImageFile : FileType {
+public class ImageFile: FileType {
   let renderer: Renderer?
   let path: String
 

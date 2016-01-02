@@ -29,16 +29,28 @@ import CSDL
 // Sint32 xrel;        /**< The relative motion in the X direction */
 // Sint32 yrel;        /**< The relative motion in the Y direction */
 
-public class MouseMotionEvent : CommonEvent {
-  private var motionEvent: SDL_MouseMotionEvent { return self.handle.motion }
+public class MouseMotionEvent: CommonEvent {
+  private var motionEvent: SDL_MouseMotionEvent {
+    return self.handle.motion
+  }
 
-  public var windowId: UInt32 { return motionEvent.windowID }
-  public var which: UInt32 { return motionEvent.which }
-  public var state: UInt32 { return motionEvent.state }
-  public var position: Vector { return Vector.fromInt32(x: motionEvent.x, y: motionEvent.y) }
-  public var relativePosition: Vector { return Vector.fromInt32(x: motionEvent.xrel, y: motionEvent.yrel) }
+  public var windowId: UInt32 {
+    return motionEvent.windowID
+  }
+  public var which: UInt32 {
+    return motionEvent.which
+  }
+  public var state: UInt32 {
+    return motionEvent.state
+  }
+  public var position: Vector {
+    return Vector.fromInt32(x: motionEvent.x, y: motionEvent.y)
+  }
+  public var relativePosition: Vector {
+    return Vector.fromInt32(x: motionEvent.xrel, y: motionEvent.yrel)
+  }
 
-  override public var description : String {
+  override public var description: String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), windowId:\(windowId), " +
         "which:\(which), state:\(state), position:\(position), relativePosition:\(relativePosition))"
   }

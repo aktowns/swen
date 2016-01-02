@@ -39,18 +39,32 @@ public enum KeyState: Uint8 {
   case Pressed = 1
 }
 
-public class KeyboardEvent : CommonEvent {
-  private var keyEvent: SDL_KeyboardEvent { return self.handle.key }
+public class KeyboardEvent: CommonEvent {
+  private var keyEvent: SDL_KeyboardEvent {
+    return self.handle.key
+  }
 
-  public var windowId: UInt32 { return keyEvent.windowID }
-  public var state: KeyState { return KeyState(rawValue: keyEvent.state)! }
-  public var keyRepeat: Bool { return keyEvent.`repeat` != 0 }
+  public var windowId: UInt32 {
+    return keyEvent.windowID
+  }
+  public var state: KeyState {
+    return KeyState(rawValue: keyEvent.state)!
+  }
+  public var keyRepeat: Bool {
+    return keyEvent.`repeat` != 0
+  }
 
-  public var keyMod: KeyMod { return KeyMod(rawValue: keyEvent.keysym.mod) }
-  public var scanCode: ScanCode { return ScanCode(rawValue: keyEvent.keysym.scancode.rawValue)! }
-  public var keyCode: KeyCode? { return KeyCode(rawValue: keyEvent.keysym.sym) }
+  public var keyMod: KeyMod {
+    return KeyMod(rawValue: keyEvent.keysym.mod)
+  }
+  public var scanCode: ScanCode {
+    return ScanCode(rawValue: keyEvent.keysym.scancode.rawValue)!
+  }
+  public var keyCode: KeyCode? {
+    return KeyCode(rawValue: keyEvent.keysym.sym)
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), windowId:\(windowId) " +
         "state:\(state), keyRepeat:\(keyRepeat), keyMod:\(keyMod), scanCode:\(scanCode), keyCode:\(keyCode))"
   }

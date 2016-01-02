@@ -20,7 +20,7 @@
 import Swen
 import Glibc
 
-public class SwenDemo : GameBaseDelegate {
+public class SwenDemo: GameBaseDelegate {
   let window: Window
   let pipeline: ContentPipeline
 
@@ -36,7 +36,7 @@ public class SwenDemo : GameBaseDelegate {
   var hudHeart: Texture
   var hudJewel: Texture
 
-  var hudSpriteMapping: [String: Rect]
+  var hudSpriteMapping: [String:Rect]
   var hudSpriteTexture: Texture
 
   var player: Player
@@ -47,16 +47,16 @@ public class SwenDemo : GameBaseDelegate {
 
   var space: PhySpace
   var phydebug: PhyDebug
-  let timeStep = 1.0/100.0
+  let timeStep = 1.0 / 100.0
   var physicsStep: Double = 0
 
   static let PLAYER_VELOCITY = 500.0
 
   static let PLAYER_GROUND_ACCEL_TIME = 0.1
-  static let PLAYER_GROUND_ACCEL = (PLAYER_VELOCITY/PLAYER_GROUND_ACCEL_TIME)
+  static let PLAYER_GROUND_ACCEL = (PLAYER_VELOCITY / PLAYER_GROUND_ACCEL_TIME)
 
   static let PLAYER_AIR_ACCEL_TIME = 0.25
-  static let PLAYER_AIR_ACCEL = (PLAYER_VELOCITY/PLAYER_AIR_ACCEL_TIME)
+  static let PLAYER_AIR_ACCEL = (PLAYER_VELOCITY / PLAYER_AIR_ACCEL_TIME)
 
   static let JUMP_HEIGHT = 100.0
   static let JUMP_BOOST_HEIGHT = 55.0
@@ -106,6 +106,7 @@ public class SwenDemo : GameBaseDelegate {
     } catch {
       fatalError("Unexpected error occured")
     }
+
 
     let debugDraw = PhyDebugSDL(withRenderer: pipeline.renderer!)
 
@@ -198,7 +199,7 @@ public class SwenDemo : GameBaseDelegate {
 //    ballShape.friction = 1
 //    ballShape.elasticity = 0.6
 
-    
+
   }
 
   // Rendering
@@ -226,21 +227,21 @@ public class SwenDemo : GameBaseDelegate {
   }
 
   // Game logic
-  public func loop(game: Game) {
+  public func update(game: Game) {
     if let statusText = try? normalFont.asTexture(withText: "FPS: \(game.fps)", size: 28, andColour: Colour.black) {
       self.statusText = statusText
     }
 
     for keyEvent in game.keyEvents {
       switch keyEvent.scanCode {
-        case .ScanCodeSpace:
-          let jumpV = Math.sqrt(2.0 * SwenDemo.JUMP_HEIGHT * SwenDemo.GRAVITY)
-          playerBody.velocity += Vector(x: 0.0, y: -jumpV)
-        case .ScanCodeLeft:
-          playerBody.velocity += Vector(x: -60.0, y: 0)
-        case .ScanCodeRight:
-          playerBody.velocity += Vector(x: 60.0, y: 0)
-        default: Void()
+      case .ScanCodeSpace:
+        let jumpV = Math.sqrt(2.0 * SwenDemo.JUMP_HEIGHT * SwenDemo.GRAVITY)
+        playerBody.velocity += Vector(x: 0.0, y: -jumpV)
+      case .ScanCodeLeft:
+        playerBody.velocity += Vector(x: -60.0, y: 0)
+      case .ScanCodeRight:
+        playerBody.velocity += Vector(x: 60.0, y: 0)
+      default: Void()
       }
       print(keyEvent)
     }

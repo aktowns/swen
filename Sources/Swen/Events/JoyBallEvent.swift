@@ -29,14 +29,22 @@ import CSDL
 // Sint16 xrel;        /**< The relative motion in the X direction */
 // Sint16 yrel;        /**< The relative motion in the Y direction */
 
-public class JoyBallEvent : CommonEvent {
-  private var jballEvent: SDL_JoyBallEvent { return self.handle.jball }
+public class JoyBallEvent: CommonEvent {
+  private var jballEvent: SDL_JoyBallEvent {
+    return self.handle.jball
+  }
 
-  public var which: SDL_JoystickID { return jballEvent.which }
-  public var ball: UInt8 { return jballEvent.ball }
-  public var motion: Vector { return Vector.fromInt16(x: jballEvent.xrel, y: jballEvent.yrel) }
+  public var which: SDL_JoystickID {
+    return jballEvent.which
+  }
+  public var ball: UInt8 {
+    return jballEvent.ball
+  }
+  public var motion: Vector {
+    return Vector.fromInt16(x: jballEvent.xrel, y: jballEvent.yrel)
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +
         "ball:\(ball), motion:\(motion))"
   }

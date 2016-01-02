@@ -19,32 +19,32 @@
 
 import CSDL
 
-public struct RenderFlip : OptionSetType {
+public struct RenderFlip: OptionSetType {
   public let rawValue: UInt32
 
   public init(rawValue: UInt32) {
     self.rawValue = rawValue
   }
 
-  static let None       = RenderFlip(rawValue: SDL_FLIP_NONE.rawValue)
+  static let None = RenderFlip(rawValue: SDL_FLIP_NONE.rawValue)
   static let Horizontal = RenderFlip(rawValue: SDL_FLIP_HORIZONTAL.rawValue)
-  static let Vertical   = RenderFlip(rawValue: SDL_FLIP_VERTICAL.rawValue)
+  static let Vertical = RenderFlip(rawValue: SDL_FLIP_VERTICAL.rawValue)
 
   var asSDL: SDL_RendererFlip {
     return SDL_RendererFlip(self.rawValue)
   }
 }
 
-public struct RenderFlags : OptionSetType {
+public struct RenderFlags: OptionSetType {
   public let rawValue: UInt32
 
   public init(rawValue: UInt32) {
     self.rawValue = rawValue
   }
 
-  static let Software      = RenderFlags(rawValue: SDL_RENDERER_SOFTWARE.rawValue)
-  static let Accelerated   = RenderFlags(rawValue: SDL_RENDERER_ACCELERATED.rawValue)
-  static let PresentVSync  = RenderFlags(rawValue: SDL_RENDERER_PRESENTVSYNC.rawValue)
+  static let Software = RenderFlags(rawValue: SDL_RENDERER_SOFTWARE.rawValue)
+  static let Accelerated = RenderFlags(rawValue: SDL_RENDERER_ACCELERATED.rawValue)
+  static let PresentVSync = RenderFlags(rawValue: SDL_RENDERER_PRESENTVSYNC.rawValue)
   static let TargetTexture = RenderFlags(rawValue: SDL_RENDERER_TARGETTEXTURE.rawValue)
 }
 
@@ -132,12 +132,16 @@ public class Renderer {
                    angle: Double,
                    center: Vector,
                    flip: RenderFlip) throws {
-    let srcSDLRect: SDL_Rect? = srcrect.map { SDL_Rect.fromRect($0) }
-    let dstSDLRect: SDL_Rect? = dstrect.map { SDL_Rect.fromRect($0) }
+    let srcSDLRect: SDL_Rect? = srcrect.map {
+      SDL_Rect.fromRect($0)
+    }
+    let dstSDLRect: SDL_Rect? = dstrect.map {
+      SDL_Rect.fromRect($0)
+    }
     var sdlCenterPtr = SDL_Point.fromPoint(center)
 
     let res = SDL_RenderCopyEx(self.handle, texture.handle, srcSDLRect.toPointer(), dstSDLRect.toPointer(),
-                               angle, &sdlCenterPtr, flip.asSDL)
+        angle, &sdlCenterPtr, flip.asSDL)
     assert(res == 0, "SDL_RenderCopyEx failed")
   }
 
@@ -192,7 +196,7 @@ public class Renderer {
       let res = SDL_GetRenderDrawColor(self.handle, &r, &g, &b, &a)
       assert(res == 0, "SDL_GetRenderDrawColor failed")
 
-      return Colour(rgba:(r,g,b,a))
+      return Colour(rgba: (r, g, b, a))
     }
     set {
       let res = SDL_SetRenderDrawColor(self.handle, newValue.r, newValue.g, newValue.b, newValue.a)
@@ -213,7 +217,7 @@ public class Renderer {
     }
   }
 
-  public var clipEnabled : Bool {
+  public var clipEnabled: Bool {
     return SDL_RenderIsClipEnabled(self.handle) == SDL_TRUE
   }
 
@@ -257,16 +261,26 @@ public class Renderer {
     assert(res == 0, "circleRGBA failed")
   }
 
-  public func drawPolygon(vx vx: Array<Int16>, vy: Array<Int16>, colour: Colour) {
-    assert(vx.count == vy.count, "vx, vy lengths differ")
+  public func drawPolygon(verts verts: Array<Vector>, colour: Colour) {
+    let vx = verts.map {
+      $0.x.int16
+    }
+    let vy = verts.map {
+      $0.y.int16
+    }
 
     let res = polygonRGBA(self.handle, vx, vy, Int32(vx.count), colour.r, colour.g, colour.b, colour.a)
 
     assert(res == 0, "polygonRGBA failed")
   }
 
-  public func fillPolygon(vx vx: Array<Int16>, vy: Array<Int16>, colour: Colour) {
-    assert(vx.count == vy.count, "vx, vy lengths differ")
+  public func fillPolygon(verts verts: Array<Vector>, colour: Colour) {
+    let vx = verts.map {
+      $0.x.int16
+    }
+    let vy = verts.map {
+      $0.y.int16
+    }
 
     let res = filledPolygonRGBA(self.handle, vx, vy, Int32(vx.count), colour.r, colour.g, colour.b, colour.a)
 

@@ -1,7 +1,7 @@
 //
 //   PhyDebug.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,19 +31,20 @@
 import CSDL
 import CChipmunk
 
-public struct DebugDrawFlags : OptionSetType {
+public struct DebugDrawFlags: OptionSetType {
   public let rawValue: UInt32
 
   public init(rawValue: UInt32) {
     self.rawValue = rawValue
   }
 
-  static let Shapes           = DebugDrawFlags(rawValue: CP_SPACE_DEBUG_DRAW_SHAPES.rawValue)
-  static let Constraints      = DebugDrawFlags(rawValue: CP_SPACE_DEBUG_DRAW_CONSTRAINTS.rawValue)
-  static let CollisionPoints  = DebugDrawFlags(rawValue: CP_SPACE_DEBUG_DRAW_COLLISION_POINTS.rawValue)
+  static let Shapes = DebugDrawFlags(rawValue: CP_SPACE_DEBUG_DRAW_SHAPES.rawValue)
+  static let Constraints = DebugDrawFlags(rawValue: CP_SPACE_DEBUG_DRAW_CONSTRAINTS.rawValue)
+  static let CollisionPoints = DebugDrawFlags(rawValue: CP_SPACE_DEBUG_DRAW_COLLISION_POINTS.rawValue)
 }
 
 // Why not generics? Closures can't capture generic classes.
+
 public final class PhyDebug: AnyObject {
   let delegate: PhyDebugDrawDelegate
 

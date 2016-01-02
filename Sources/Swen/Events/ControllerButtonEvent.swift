@@ -27,14 +27,22 @@ import CSDL
 // Uint8 padding1;
 // Uint8 padding2;
 
-public class ControllerButtonEvent : CommonEvent {
-  private var cbuttonEvent: SDL_ControllerButtonEvent { return self.handle.cbutton }
+public class ControllerButtonEvent: CommonEvent {
+  private var cbuttonEvent: SDL_ControllerButtonEvent {
+    return self.handle.cbutton
+  }
 
-  public var which: SDL_JoystickID { return cbuttonEvent.which }
-  public var button: UInt8 { return cbuttonEvent.button }
-  public var state: UInt8 { return cbuttonEvent.state }
+  public var which: SDL_JoystickID {
+    return cbuttonEvent.which
+  }
+  public var button: UInt8 {
+    return cbuttonEvent.button
+  }
+  public var state: UInt8 {
+    return cbuttonEvent.state
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +
         "button:\(button), state:\(state))"
   }

@@ -27,14 +27,22 @@ import CSDL
 // Uint8 padding1;
 // Uint8 padding2;
 
-public class JoyButtonEvent : CommonEvent {
-  private var jbuttonEvent: SDL_JoyButtonEvent { return self.handle.jbutton }
+public class JoyButtonEvent: CommonEvent {
+  private var jbuttonEvent: SDL_JoyButtonEvent {
+    return self.handle.jbutton
+  }
 
-  public var which: SDL_JoystickID { return jbuttonEvent.which }
-  public var button: UInt8 { return jbuttonEvent.button }
-  public var state: UInt8 { return jbuttonEvent.state }
+  public var which: SDL_JoystickID {
+    return jbuttonEvent.which
+  }
+  public var button: UInt8 {
+    return jbuttonEvent.button
+  }
+  public var state: UInt8 {
+    return jbuttonEvent.state
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +
         "button:\(button), state:\(state))"
   }

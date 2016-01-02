@@ -29,12 +29,16 @@ import CSDL
 //  XEvent event;
 // } x11;
 
-public class SysWMEvent : CommonEvent {
-  private var syswmEvent: SDL_SysWMEvent { return self.handle.syswm }
+public class SysWMEvent: CommonEvent {
+  private var syswmEvent: SDL_SysWMEvent {
+    return self.handle.syswm
+  }
 
-  public var msg: UnsafeMutablePointer<SDL_SysWMmsg> { return syswmEvent.msg }
+  public var msg: UnsafeMutablePointer<SDL_SysWMmsg> {
+    return syswmEvent.msg
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), msg:\(msg))"
   }
 }

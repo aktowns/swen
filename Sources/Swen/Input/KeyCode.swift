@@ -16,84 +16,85 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 //
+
 import CSDL
 
-public enum KeyCode : Int32 {
+public enum KeyCode: Int32 {
   case KeyCodeUnknown = 0
 
   // SDLK_ESCAPE = '\033',
-  case KeyCodeBackspace     = 8
-  case KeyCodeTab           = 9
-  case KeyCodeReturn        = 13
-  case KeyCodeSpace         = 32
-  case KeyCodeExclaim       = 33
-  case KeyCodeQuoteDBL      = 34
-  case KeyCodeHash          = 35
-  case KeyCodePercent       = 37
-  case KeyCodeDollar        = 36
-  case KeyCodeAmpersand     = 38
-  case KeyCodeQuote         = 39
-  case KeyCodeLeftParen     = 40
-  case KeyCodeRightParen    = 41
-  case KeyCodeAsterisk      = 42
-  case KeyCodePlus          = 43
-  case KeyCodeComma         = 44
-  case KeyCodeMinus         = 45
-  case KeyCodePeroid        = 46
-  case KeyCodeSlash         = 47
+  case KeyCodeBackspace = 8
+  case KeyCodeTab = 9
+  case KeyCodeReturn = 13
+  case KeyCodeSpace = 32
+  case KeyCodeExclaim = 33
+  case KeyCodeQuoteDBL = 34
+  case KeyCodeHash = 35
+  case KeyCodePercent = 37
+  case KeyCodeDollar = 36
+  case KeyCodeAmpersand = 38
+  case KeyCodeQuote = 39
+  case KeyCodeLeftParen = 40
+  case KeyCodeRightParen = 41
+  case KeyCodeAsterisk = 42
+  case KeyCodePlus = 43
+  case KeyCodeComma = 44
+  case KeyCodeMinus = 45
+  case KeyCodePeroid = 46
+  case KeyCodeSlash = 47
 
-  case KeyCode0             = 48
-  case KeyCode1             = 49
-  case KeyCode2             = 50
-  case KeyCode3             = 51
-  case KeyCode4             = 52
-  case KeyCode5             = 53
-  case KeyCode6             = 54
-  case KeyCode7             = 55
-  case KeyCode8             = 56
-  case KeyCode9             = 57
+  case KeyCode0 = 48
+  case KeyCode1 = 49
+  case KeyCode2 = 50
+  case KeyCode3 = 51
+  case KeyCode4 = 52
+  case KeyCode5 = 53
+  case KeyCode6 = 54
+  case KeyCode7 = 55
+  case KeyCode8 = 56
+  case KeyCode9 = 57
 
-  case KeyCodeColon         = 58
-  case KeyCodeSemiColon     = 59
-  case KeyCodeLess          = 60
-  case KeyCodeEquals        = 61
-  case KeyCodeGreater       = 62
-  case KeyCodeQuestion      = 63
-  case KeyCodeAtSign        = 64
+  case KeyCodeColon = 58
+  case KeyCodeSemiColon = 59
+  case KeyCodeLess = 60
+  case KeyCodeEquals = 61
+  case KeyCodeGreater = 62
+  case KeyCodeQuestion = 63
+  case KeyCodeAtSign = 64
 
-  case KeyCodeLeftBracket   = 91
-  case KeyCodeBackslash     = 92
-  case KeyCodeRightBracket  = 93
-  case KeyCodeCaret         = 94
-  case KeyCodeUnderscore    = 95
-  case KeyCodeBackQuote     = 96
+  case KeyCodeLeftBracket = 91
+  case KeyCodeBackslash = 92
+  case KeyCodeRightBracket = 93
+  case KeyCodeCaret = 94
+  case KeyCodeUnderscore = 95
+  case KeyCodeBackQuote = 96
 
-  case KeyCodeA             = 97
-  case KeyCodeB             = 98
-  case KeyCodeC             = 99
-  case KeyCodeD             = 100
-  case KeyCodeE             = 101
-  case KeyCodeF             = 102
-  case KeyCodeG             = 103
-  case KeyCodeH             = 104
-  case KeyCodeI             = 105
-  case KeyCodeJ             = 106
-  case KeyCodeK             = 107
-  case KeyCodeL             = 108
-  case KeyCodeM             = 109
-  case KeyCodeN             = 110
-  case KeyCodeO             = 111
-  case KeyCodeP             = 112
-  case KeyCodeQ             = 113
-  case KeyCodeR             = 114
-  case KeyCodeS             = 115
-  case KeyCodeT             = 116
-  case KeyCodeU             = 117
-  case KeyCodeV             = 118
-  case KeyCodeW             = 119
-  case KeyCodeX             = 120
-  case KeyCodeY             = 121
-  case KeyCodeZ             = 122
+  case KeyCodeA = 97
+  case KeyCodeB = 98
+  case KeyCodeC = 99
+  case KeyCodeD = 100
+  case KeyCodeE = 101
+  case KeyCodeF = 102
+  case KeyCodeG = 103
+  case KeyCodeH = 104
+  case KeyCodeI = 105
+  case KeyCodeJ = 106
+  case KeyCodeK = 107
+  case KeyCodeL = 108
+  case KeyCodeM = 109
+  case KeyCodeN = 110
+  case KeyCodeO = 111
+  case KeyCodeP = 112
+  case KeyCodeQ = 113
+  case KeyCodeR = 114
+  case KeyCodeS = 115
+  case KeyCodeT = 116
+  case KeyCodeU = 117
+  case KeyCodeV = 118
+  case KeyCodeW = 119
+  case KeyCodeX = 120
+  case KeyCodeY = 121
+  case KeyCodeZ = 122
 
   public init?(fromName name: String) {
     self.init(rawValue: SDL_GetKeyFromName(name))

@@ -43,11 +43,11 @@ public struct DefaultBodyPhysics {
 
 }
 
-public class Player : GameLoop, PhysicsBody {
+public class Player: GameLoop, PhysicsBody {
   private let pipeline: ContentPipeline
 
   var player: Texture
-  var playerMap: [String: Rect]
+  var playerMap: [String:Rect]
   let walkingAnimation = ["alienBlue_walk1", "alienBlue_stand", "alienBlue_walk2"]
   var animationStep: Int = 0
   var playerVelocity: Int = 20
@@ -82,8 +82,8 @@ public class Player : GameLoop, PhysicsBody {
     player.render(atPoint: position, clip: animation!)
   }
 
-  public func loop(game: Game) {
-   // velocity.x = 0
+  public func update(game: Game) {
+    // velocity.x = 0
 
 //    for keyEvent in game.keyEvents {
 //      switch keyEvent.scanCode {
@@ -109,11 +109,11 @@ public class Player : GameLoop, PhysicsBody {
 //      position.y -= 1
 //    }
 
-   // if velocity.x != 0 {
-      self.animationStep += 1
-      if (self.animationStep >= walkingAnimation.count) {
-        self.animationStep = 0
-      }
+    // if velocity.x != 0 {
+    self.animationStep += 1
+    if (self.animationStep >= walkingAnimation.count) {
+      self.animationStep = 0
     }
+  }
   //}
 }

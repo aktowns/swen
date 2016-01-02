@@ -19,7 +19,7 @@
 
 import Foundation
 
-public class AudioLoader : AssetAudioLoader {
+public class AudioLoader: AssetAudioLoader {
   private let path: String
 
   public required init(withPath path: String) {

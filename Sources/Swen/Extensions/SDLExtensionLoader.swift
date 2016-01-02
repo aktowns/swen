@@ -30,7 +30,9 @@ public class SDLExtensionLoader {
   private static var loadedExtensions: [SDLExtension] = []
 
   public static func loadAll() throws {
-    self.loadedExtensions = SDLExtensionLoader.extensions.map{$0()}
+    self.loadedExtensions = SDLExtensionLoader.extensions.map {
+      $0()
+    }
   }
 
   public static func prepareAll() throws {

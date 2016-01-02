@@ -29,14 +29,22 @@ import CSDL
 // Sint16 value;       /**< The axis value (range: -32768 to 32767) */
 // Uint16 padding4;
 
-public class JoyAxisEvent : CommonEvent {
-  private var jaxisEvent: SDL_JoyAxisEvent { return self.handle.jaxis }
+public class JoyAxisEvent: CommonEvent {
+  private var jaxisEvent: SDL_JoyAxisEvent {
+    return self.handle.jaxis
+  }
 
-  public var which: SDL_JoystickID { return jaxisEvent.which }
-  public var axis: UInt8 { return jaxisEvent.axis }
-  public var value: Int16 { return jaxisEvent.value }
+  public var which: SDL_JoystickID {
+    return jaxisEvent.which
+  }
+  public var axis: UInt8 {
+    return jaxisEvent.axis
+  }
+  public var value: Int16 {
+    return jaxisEvent.value
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which), " +
         "axis:\(axis), value:\(value))"
   }

@@ -19,32 +19,32 @@
 
 import CSDL
 
-public struct WindowFlags : OptionSetType {
+public struct WindowFlags: OptionSetType {
   public let rawValue: UInt32
 
   public init(rawValue: UInt32) {
     self.rawValue = rawValue
   }
 
-  static let Fullscreen         = WindowFlags(rawValue: SDL_WINDOW_FULLSCREEN.rawValue)
-  static let OpenGL             = WindowFlags(rawValue: SDL_WINDOW_OPENGL.rawValue)
-  static let Shown              = WindowFlags(rawValue: SDL_WINDOW_SHOWN.rawValue)
-  static let Hidden             = WindowFlags(rawValue: SDL_WINDOW_HIDDEN.rawValue)
-  static let Borderless         = WindowFlags(rawValue: SDL_WINDOW_BORDERLESS.rawValue)
-  static let Resizable          = WindowFlags(rawValue: SDL_WINDOW_RESIZABLE.rawValue)
-  static let Minimised          = WindowFlags(rawValue: SDL_WINDOW_MINIMIZED.rawValue)
-  static let Maximised          = WindowFlags(rawValue: SDL_WINDOW_MAXIMIZED.rawValue)
-  static let InputGrabbed       = WindowFlags(rawValue: SDL_WINDOW_INPUT_GRABBED.rawValue)
-  static let InputFocus         = WindowFlags(rawValue: SDL_WINDOW_INPUT_FOCUS.rawValue)
-  static let MouseFocus         = WindowFlags(rawValue: SDL_WINDOW_MOUSE_FOCUS.rawValue)
-  static let FullscreenDesktop  = WindowFlags(rawValue: SDL_WINDOW_FULLSCREEN_DESKTOP.rawValue)
-  static let Foreign            = WindowFlags(rawValue: SDL_WINDOW_FOREIGN.rawValue)
-  static let AllowHighDPI       = WindowFlags(rawValue: SDL_WINDOW_ALLOW_HIGHDPI.rawValue)
-  static let MouseCapture       = WindowFlags(rawValue: SDL_WINDOW_MOUSE_CAPTURE.rawValue)
+  static let Fullscreen = WindowFlags(rawValue: SDL_WINDOW_FULLSCREEN.rawValue)
+  static let OpenGL = WindowFlags(rawValue: SDL_WINDOW_OPENGL.rawValue)
+  static let Shown = WindowFlags(rawValue: SDL_WINDOW_SHOWN.rawValue)
+  static let Hidden = WindowFlags(rawValue: SDL_WINDOW_HIDDEN.rawValue)
+  static let Borderless = WindowFlags(rawValue: SDL_WINDOW_BORDERLESS.rawValue)
+  static let Resizable = WindowFlags(rawValue: SDL_WINDOW_RESIZABLE.rawValue)
+  static let Minimised = WindowFlags(rawValue: SDL_WINDOW_MINIMIZED.rawValue)
+  static let Maximised = WindowFlags(rawValue: SDL_WINDOW_MAXIMIZED.rawValue)
+  static let InputGrabbed = WindowFlags(rawValue: SDL_WINDOW_INPUT_GRABBED.rawValue)
+  static let InputFocus = WindowFlags(rawValue: SDL_WINDOW_INPUT_FOCUS.rawValue)
+  static let MouseFocus = WindowFlags(rawValue: SDL_WINDOW_MOUSE_FOCUS.rawValue)
+  static let FullscreenDesktop = WindowFlags(rawValue: SDL_WINDOW_FULLSCREEN_DESKTOP.rawValue)
+  static let Foreign = WindowFlags(rawValue: SDL_WINDOW_FOREIGN.rawValue)
+  static let AllowHighDPI = WindowFlags(rawValue: SDL_WINDOW_ALLOW_HIGHDPI.rawValue)
+  static let MouseCapture = WindowFlags(rawValue: SDL_WINDOW_MOUSE_CAPTURE.rawValue)
 }
 
-let WindowPosUndefined = SDL_WINDOWPOS_UNDEFINED_MASK|0
-let WindowPosCentered  = SDL_WINDOWPOS_CENTERED_MASK|0
+let WindowPosUndefined = SDL_WINDOWPOS_UNDEFINED_MASK | 0
+let WindowPosCentered = SDL_WINDOWPOS_CENTERED_MASK | 0
 
 public class Window {
   public typealias RawWindow = COpaquePointer
@@ -60,14 +60,14 @@ public class Window {
   }
 
   public convenience init(withTitle title: String,
-                   position: Vector,
-                   size: Size,
-                   andFlags flags: WindowFlags) throws {
+                          position: Vector,
+                          size: Size,
+                          andFlags flags: WindowFlags) throws {
 
     // Hmm could possibly just use SDL_CreateWindowAndRenderer
     let window = SDL_CreateWindow(title, Int32(position.x), Int32(position.y),
         Int32(size.sizeX), Int32(size.sizeY), flags.rawValue)
-    
+
     assert(window != nil, "SDL_CreateWindow failed: \(SDL.getErrorMessage())")
 
     try self.init(fromHandle: window)
@@ -75,16 +75,16 @@ public class Window {
 
   public convenience init(withTitle title: String, position: Vector, andSize size: Size) throws {
     try self.init(withTitle: title,
-                  position: position,
-                  size: size,
-                  andFlags: [WindowFlags.Shown, WindowFlags.AllowHighDPI])
+        position: position,
+        size: size,
+        andFlags: [WindowFlags.Shown, WindowFlags.AllowHighDPI])
   }
 
   public convenience init(withTitle title: String,
-                   andSize size: Size) throws {
+                          andSize size: Size) throws {
     try self.init(withTitle: title,
-                  position: Vector.fromInt32(x: WindowPosUndefined, y: WindowPosUndefined),
-                  andSize: size)
+        position: Vector.fromInt32(x: WindowPosUndefined, y: WindowPosUndefined),
+        andSize: size)
   }
 
   public var surface: Surface {

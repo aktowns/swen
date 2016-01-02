@@ -19,7 +19,7 @@
 
 import CSDL
 
-public struct ImageInitFlags : OptionSetType {
+public struct ImageInitFlags: OptionSetType {
   public let rawValue: Int32
 
   public init(rawValue: Int32) {
@@ -30,13 +30,13 @@ public struct ImageInitFlags : OptionSetType {
     self.rawValue = Int32(rawValue)
   }
 
-  static let JPG  = ImageInitFlags(rawValue: IMG_INIT_JPG.rawValue)
-  static let PNG  = ImageInitFlags(rawValue: IMG_INIT_PNG.rawValue)
-  static let TIF  = ImageInitFlags(rawValue: IMG_INIT_TIF.rawValue)
+  static let JPG = ImageInitFlags(rawValue: IMG_INIT_JPG.rawValue)
+  static let PNG = ImageInitFlags(rawValue: IMG_INIT_PNG.rawValue)
+  static let TIF = ImageInitFlags(rawValue: IMG_INIT_TIF.rawValue)
   static let WEBP = ImageInitFlags(rawValue: IMG_INIT_WEBP.rawValue)
 }
 
-public class SDLExtensionImage : SDLExtension {
+public class SDLExtensionImage: SDLExtension {
   let flags: ImageInitFlags
   let defaultFlags: ImageInitFlags = [ImageInitFlags.JPG,
                                       ImageInitFlags.PNG,

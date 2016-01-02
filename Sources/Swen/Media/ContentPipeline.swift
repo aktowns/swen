@@ -43,27 +43,35 @@ public class ContentPipeline {
   }
 
   public func get(fromPath path: String) -> FontFile? {
-    let loader: AssetFontLoader.Type? = fontLoaders.findFirst { $0.canHandle(path) }
+    let loader: AssetFontLoader.Type? = fontLoaders.findFirst {
+      $0.canHandle(path)
+    }
     let loaderInst = loader?.init(withPath: path, andRenderer: renderer)
 
     return loaderInst?.load()
   }
 
   public func get(fromPath path: String) -> ImageMapFile? {
-    let loader: AssetImageMapLoader.Type? = imageMapLoaders.findFirst { $0.canHandle(path) }
+    let loader: AssetImageMapLoader.Type? = imageMapLoaders.findFirst {
+      $0.canHandle(path)
+    }
     let loaderInst = loader?.init(withPath: path, andRenderer: renderer)
 
     return loaderInst?.load()
   }
 
   public func get(fromPath path: String) -> ImageFile? {
-    let loader: AssetImageLoader.Type? = imageLoaders.findFirst { $0.canHandle(path) }
+    let loader: AssetImageLoader.Type? = imageLoaders.findFirst {
+      $0.canHandle(path)
+    }
     let loaderInst = loader?.init(withPath: path, andRenderer: renderer)
     return loaderInst?.load()
   }
 
   public func get(fromPath path: String) -> AudioFile? {
-    let loader: AssetAudioLoader.Type? = audioLoaders.findFirst { $0.canHandle(path) }
+    let loader: AssetAudioLoader.Type? = audioLoaders.findFirst {
+      $0.canHandle(path)
+    }
     let loaderInst = loader?.init(withPath: path)
     return loaderInst?.load()
   }

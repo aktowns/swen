@@ -17,12 +17,12 @@
 //   limitations under the License.
 //
 
-public enum SDLError : ErrorType {
-  case UnexpectedNullPointer(message: String)
-  case InitialisationError(message: String)
-  case MixerOpenError(message: String)
-  case ConvertSurfaceError(message: String)
-  case UnknownError(message: String)
+public enum SDLError: ErrorType {
+  case UnexpectedNullPointer(message:String)
+  case InitialisationError(message:String)
+  case MixerOpenError(message:String)
+  case ConvertSurfaceError(message:String)
+  case UnknownError(message:String)
 
   public var description: String {
     switch self {

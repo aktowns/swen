@@ -17,12 +17,10 @@
 //   limitations under the License.
 //
 
-public class AudioFile : FileType {
+public class AudioFile: FileType {
   let path: String
 
   init(fromPath path: String) {
     self.path = path
   }
-
-
 }

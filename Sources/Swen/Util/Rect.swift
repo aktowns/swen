@@ -18,7 +18,7 @@
 //
 
 
-public struct Rect : Comparable, CustomStringConvertible {
+public struct Rect: Comparable, CustomStringConvertible {
   /// The x coordinate of the top-left corner of this Rectangle.
   public var x: Double
   /// The y coordinate of the top-left corner of this Rectangle.
@@ -35,24 +35,40 @@ public struct Rect : Comparable, CustomStringConvertible {
     self.sizeY = sizeY
   }
 
-  public static func empty() -> Rect {
+  public init(size: Size) {
+    self.init(x: 0, y: 0, sizeX: size.sizeX, sizeY: size.sizeY)
+  }
+
+  public static var empty: Rect {
     return Rect(x: 0, y: 0, sizeX: 0, sizeY: 0)
   }
 
-  public var isEmpty: Bool { return (self.sizeX == 0) && (self.sizeY == 0) }
+  public var isEmpty: Bool {
+    return (self.sizeX == 0) && (self.sizeY == 0)
+  }
 
   /// Returns the x coordinate of the left edge of this Rectangle.
-  public var left: Double { return self.x }
+  public var left: Double {
+    return self.x
+  }
   /// Returns the x coordinate of the right edge of this Rectangle.
-  public var right: Double { return self.x + self.sizeX }
+  public var right: Double {
+    return self.x + self.sizeX
+  }
   /// Returns the y coordinate of the top edge of this Rectangle.
-  public var top: Double { return self.y }
+  public var top: Double {
+    return self.y
+  }
   /// Returns the y coordinate of the bottom edge of this Rectangle.
-  public var bottom: Double { return self.y + self.sizeY }
+  public var bottom: Double {
+    return self.y + self.sizeY
+  }
 
   /// The top-left coordinates of this Rectangle.
-  public var location: Vector {
-    get { return Vector(x: self.x, y: self.y) }
+  public var position: Vector {
+    get {
+      return Vector(x: self.x, y: self.y)
+    }
     set {
       self.x = newValue.x
       self.y = newValue.y
@@ -61,7 +77,9 @@ public struct Rect : Comparable, CustomStringConvertible {
 
   /// The width-height coordinates of this Rectangle.
   public var size: Size {
-    get { return Size(sizeX: sizeX, sizeY: sizeY) }
+    get {
+      return Size(sizeX: sizeX, sizeY: sizeY)
+    }
     set {
       self.sizeX = newValue.sizeX
       self.sizeY = newValue.sizeY
@@ -71,33 +89,33 @@ public struct Rect : Comparable, CustomStringConvertible {
   /// A Point located in the center of this Rectangle.
   public var center: Vector {
     return Vector(x: (self.x + (self.sizeX / 2)),
-                  y: (self.y + (self.sizeY / 2)))
+        y: (self.y + (self.sizeY / 2)))
   }
 
   /// Gets whether or not the provided coordinates lie within the bounds of this Rectangle.
   public func contains(x: Double, y: Double) -> Bool {
     return ((self.x <= x) && (x < (self.x + self.sizeX)) &&
-            (self.y <= y) && (y < (self.y + self.sizeY)))
+        (self.y <= y) && (y < (self.y + self.sizeY)))
   }
 
   /// Gets whether or not the provided Vector lies within the bounds of this Rectangle.
   public func contains(vector: Vector) -> Bool {
     return ((self.x <= vector.x) && (vector.x < (self.x + self.sizeX)) &&
-            (self.y <= vector.y) && (vector.y < (self.y + self.sizeY)))
+        (self.y <= vector.y) && (vector.y < (self.y + self.sizeY)))
   }
 
   /// Gets whether or not the provided Rectangle lies within the bounds of this Rectangle.
   public func contains(rect: Rect) -> Bool {
     return ((self.x <= rect.x) && ((rect.x + rect.sizeX) <= (self.x + self.sizeX)) &&
-            (self.y <= rect.y) && ((rect.y + rect.sizeY) <= (self.y + self.sizeY)))
+        (self.y <= rect.y) && ((rect.y + rect.sizeY) <= (self.y + self.sizeY)))
   }
 
   /// Adjusts the edges of this Rectangle by specified horizontal and vertical amounts.
   public func inflate(infX: Double, infY: Double) -> Rect {
     return Rect(x: (self.x - infX),
-                y: (self.y - infY),
-                sizeX: (self.sizeX - (infX * 2)),
-                sizeY: (self.sizeY - (infX * 2)))
+        y: (self.y - infY),
+        sizeX: (self.sizeX - (infX * 2)),
+        sizeY: (self.sizeY - (infX * 2)))
   }
 
   /// Adjusts the edges of this Rectangle by specified horizontal and vertical amounts. modifies current rect
@@ -111,9 +129,9 @@ public struct Rect : Comparable, CustomStringConvertible {
   /// Gets whether or not the other Rectangle intersects with this rectangle.
   public func intersects(rect: Rect) -> Bool {
     return ((rect.left < right) &&
-            (left < rect.right) &&
-            (rect.top < bottom) &&
-            (top < rect.bottom))
+        (left < rect.right) &&
+        (rect.top < bottom) &&
+        (top < rect.bottom))
   }
 
   /// Creates a new Rectangle that contains overlapping region of two other rectangles.
@@ -126,24 +144,24 @@ public struct Rect : Comparable, CustomStringConvertible {
 
       return Rect(x: leftSide, y: topSide, sizeX: rightSide - leftSide, sizeY: bottomSide - topSide)
     } else {
-      return Rect.empty()
+      return Rect.empty
     }
   }
 
   /// Changes the Location of this Rectangle.
   public func offset(offsetX: Double, offsetY: Double) -> Rect {
     return Rect(x: self.x - offsetX,
-                y: self.y - offsetY,
-                sizeX: self.sizeX,
-                sizeY: self.sizeY)
+        y: self.y - offsetY,
+        sizeX: self.sizeX,
+        sizeY: self.sizeY)
   }
 
   /// Changes the Location of this Rectangle.
   public func offset(vec: Vector) -> Rect {
     return Rect(x: self.x - vec.x,
-                y: self.y - vec.y,
-                sizeX: self.sizeX,
-                sizeY: self.sizeY)
+        y: self.y - vec.y,
+        sizeX: self.sizeX,
+        sizeY: self.sizeY)
   }
 
   /// Changes the Location of this Rectangle. Modifies the rect in place
@@ -168,16 +186,17 @@ public struct Rect : Comparable, CustomStringConvertible {
     return Rect(x: x, y: y, sizeX: sizeX, sizeY: sizeY)
   }
 
-  public var description : String {
+  public var description: String {
     return "#\(self.dynamicType)(x:\(x), y:\(y), sizeX:\(sizeX), sizeY:\(sizeY))"
   }
 }
 
 public func ==(l: Rect, r: Rect) -> Bool {
   return (l.x == r.x && l.sizeX == r.sizeX &&
-          l.y == r.y && l.sizeY == r.sizeY)
+      l.y == r.y && l.sizeY == r.sizeY)
 }
+
 public func <(l: Rect, r: Rect) -> Bool {
   return (l.x < r.x && l.sizeX == r.sizeX &&
-          l.y < r.y && l.sizeY == r.sizeY)
+      l.y < r.y && l.sizeY == r.sizeY)
 }

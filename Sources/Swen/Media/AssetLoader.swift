@@ -17,10 +17,10 @@
 //   limitations under the License.
 //
 
-public enum AssetLoaderError : ErrorType {
-  case InitialisationError(message: String)
-  case OpenError(message: String)
-  case ConfigKeyNotFound(message: String)
+public enum AssetLoaderError: ErrorType {
+  case InitialisationError(message:String)
+  case OpenError(message:String)
+  case ConfigKeyNotFound(message:String)
 }
 
 public protocol FileType {
@@ -35,22 +35,22 @@ public protocol AssetBaseLoader {
   func unload() -> Void
 }
 
-public protocol AssetRenderableBaseLoader : AssetBaseLoader {
+public protocol AssetRenderableBaseLoader: AssetBaseLoader {
   init(withPath _: String, andRenderer: Renderer?)
 }
 
-public protocol AssetFontLoader : AssetRenderableBaseLoader {
+public protocol AssetFontLoader: AssetRenderableBaseLoader {
   func load() -> FontFile
 }
 
-protocol AssetImageLoader : AssetRenderableBaseLoader {
+protocol AssetImageLoader: AssetRenderableBaseLoader {
   func load() -> ImageFile
 }
 
-protocol AssetAudioLoader : AssetBaseLoader {
+protocol AssetAudioLoader: AssetBaseLoader {
   func load() -> AudioFile
 }
 
-protocol AssetImageMapLoader : AssetRenderableBaseLoader {
+protocol AssetImageMapLoader: AssetRenderableBaseLoader {
   func load() -> ImageMapFile
 }

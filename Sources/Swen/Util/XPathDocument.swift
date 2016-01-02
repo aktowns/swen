@@ -1,7 +1,7 @@
 //
 //   XPathDocument.swift created on 29/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,27 +26,27 @@
 
 import CXML2
 
-enum XMLElementType : UInt32 {
-  case ElementNode      = 1
-  case AttributeNode    = 2
-  case TextNode         = 3
+enum XMLElementType: UInt32 {
+  case ElementNode = 1
+  case AttributeNode = 2
+  case TextNode = 3
   case CDATASectionNode = 4
-  case EntityRefNode    = 5
-  case EntityNode       = 6
-  case PINode           = 7
-  case CommentNode      = 8
-  case DocumentNode     = 9
+  case EntityRefNode = 5
+  case EntityNode = 6
+  case PINode = 7
+  case CommentNode = 8
+  case DocumentNode = 9
   case DocumentTypeNode = 10
   case DocumentFragNode = 11
-  case NotationNode     = 12
+  case NotationNode = 12
   case HTMLDocumentNode = 13
-  case DTDNode          = 14
-  case ElementDecl      = 15
-  case AttributeDecl    = 16
-  case EntityDecl       = 17
-  case NamespaceDecl    = 18
-  case XIncludeStart    = 19
-  case XIncludeEnd      = 20
+  case DTDNode = 14
+  case ElementDecl = 15
+  case AttributeDecl = 16
+  case EntityDecl = 17
+  case NamespaceDecl = 18
+  case XIncludeStart = 19
+  case XIncludeEnd = 20
 }
 
 public class XMLNode: CustomStringConvertible {

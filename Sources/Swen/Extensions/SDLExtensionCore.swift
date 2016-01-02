@@ -19,7 +19,7 @@
 
 import CSDL
 
-public class SDLExtensionCore : SDLExtension {
+public class SDLExtensionCore: SDLExtension {
   let subsystems = [
       "Timer": SDL_INIT_TIMER,
       "Audio": SDL_INIT_AUDIO,

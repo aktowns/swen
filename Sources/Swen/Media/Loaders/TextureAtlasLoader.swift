@@ -1,7 +1,7 @@
 //
 //   TextureAtlasLoader.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@
 
 import Foundation
 
-public class TextureAtlasLoader : AssetImageMapLoader {
+public class TextureAtlasLoader: AssetImageMapLoader {
   private let path: String
   private let renderer: Renderer?
 
@@ -67,7 +67,7 @@ public class TextureAtlasLoader : AssetImageMapLoader {
     return Optional.None
   }
 
-  private func createMapping(xmlDoc: XPathDocument) -> [String: Rect] {
+  private func createMapping(xmlDoc: XPathDocument) -> [String:Rect] {
     let nodes = xmlDoc.search(withXPath: "/TextureAtlas/SubTexture")
 
     var retDict = Dictionary<String, Rect>()

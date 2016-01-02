@@ -30,17 +30,31 @@ import CSDL
 // Sint32 x;           /**< X coordinate, relative to window */
 // Sint32 y;           /**< Y coordinate, relative to window */
 
-public class MouseButtonEvent : CommonEvent {
-  private var buttonEvent: SDL_MouseButtonEvent { return self.handle.button }
+public class MouseButtonEvent: CommonEvent {
+  private var buttonEvent: SDL_MouseButtonEvent {
+    return self.handle.button
+  }
 
-  public var windowId: UInt32 { return buttonEvent.windowID }
-  public var which: UInt32 { return buttonEvent.which }
-  public var button: UInt8 { return buttonEvent.button }
-  public var state: UInt8 { return buttonEvent.state }
-  public var clicks: UInt8 { return buttonEvent.clicks }
-  public var position: Vector { return Vector.fromInt32(x: buttonEvent.x, y: buttonEvent.y) }
+  public var windowId: UInt32 {
+    return buttonEvent.windowID
+  }
+  public var which: UInt32 {
+    return buttonEvent.which
+  }
+  public var button: UInt8 {
+    return buttonEvent.button
+  }
+  public var state: UInt8 {
+    return buttonEvent.state
+  }
+  public var clicks: UInt8 {
+    return buttonEvent.clicks
+  }
+  public var position: Vector {
+    return Vector.fromInt32(x: buttonEvent.x, y: buttonEvent.y)
+  }
 
-  override public var description : String {
+  override public var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), windowId:\(windowId), " +
         "which:\(which), button:\(button), state:\(state), clicks:\(clicks), position:\(position))"
   }

@@ -25,12 +25,16 @@ import CSDL
 // Sint32 which;       /**< The joystick device index for the ADDED event, instance id for
 //                          the REMOVED or REMAPPED event */
 
-public class ControllerDeviceEvent : CommonEvent {
-  private var cdeviceEvent: SDL_ControllerDeviceEvent { return self.handle.cdevice }
+public class ControllerDeviceEvent: CommonEvent {
+  private var cdeviceEvent: SDL_ControllerDeviceEvent {
+    return self.handle.cdevice
+  }
 
-  public var which: Int32 { return cdeviceEvent.which }
+  public var which: Int32 {
+    return cdeviceEvent.which
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), which:\(which))"
   }
 }

@@ -132,5 +132,4 @@ public class Texture {
       return Size(sizeX: w, sizeY: h)
     }
   }
-
 }

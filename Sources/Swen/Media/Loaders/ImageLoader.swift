@@ -19,7 +19,7 @@
 
 import Foundation
 
-public class ImageLoader : AssetImageLoader {
+public class ImageLoader: AssetImageLoader {
   private let path: String
   private let renderer: Renderer?
 

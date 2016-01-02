@@ -1,7 +1,7 @@
 //
 //   PhyDebugSDL.swift created on 2/01/16
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2016 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,8 @@
 //   limitations under the License.
 //
 
-public class PhyDebugSDL : PhyDebugDrawDelegate {
-  let renderer : Renderer
+public class PhyDebugSDL: PhyDebugDrawDelegate {
+  let renderer: Renderer
 
   public init(withRenderer: Renderer) {
     self.renderer = withRenderer
@@ -93,10 +93,7 @@ public class PhyDebugSDL : PhyDebugDrawDelegate {
                           radius: Double,
                           outlineColor: Colour,
                           fillColor: Colour) {
-    let vx = verts.map { $0.x.int16 }
-    let vy = verts.map { $0.y.int16 }
-
-    renderer.fillPolygon(vx: vx, vy: vy, colour: fillColor)
-    renderer.drawPolygon(vx: vx, vy: vy, colour: outlineColor)
+    renderer.fillPolygon(verts: verts, colour: fillColor)
+    renderer.drawPolygon(verts: verts, colour: outlineColor)
   }
 }

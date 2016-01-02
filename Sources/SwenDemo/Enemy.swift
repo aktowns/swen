@@ -1,7 +1,7 @@
 //
 //   Enemy.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +19,11 @@
 
 import Swen
 
-public class Enemy : GameLoop {
+public class Enemy: GameLoop {
   private let pipeline: ContentPipeline
 
   var enemy: Texture
-  var enemyMap: [String: Rect]
+  var enemyMap: [String:Rect]
   let walkingAnimation = ["bee", "bee_move", "bee_dead"]
   var animationStep: Int = 0
 
@@ -42,7 +42,7 @@ public class Enemy : GameLoop {
     enemy.render(atPoint: position, clip: enemyMap[walkingAnimation[self.animationStep / 6]]!)
   }
 
-  public func loop(game: Game) {
+  public func update(game: Game) {
     self.animationStep += 1
     if ((self.animationStep / 6) >= walkingAnimation.count) {
       self.animationStep = 0

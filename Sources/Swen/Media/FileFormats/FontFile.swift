@@ -19,7 +19,7 @@
 
 import CSDL
 
-public class FontFile : FileType {
+public class FontFile: FileType {
   let renderer: Renderer?
   let path: String
 

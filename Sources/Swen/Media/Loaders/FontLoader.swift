@@ -19,7 +19,7 @@
 
 import Foundation
 
-public class FontLoader : AssetFontLoader {
+public class FontLoader: AssetFontLoader {
   private let renderer: Renderer?
   private let path: String
 

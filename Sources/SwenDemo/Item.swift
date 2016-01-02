@@ -1,7 +1,7 @@
 //
 //   Item.swift created on 30/12/15
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +19,11 @@
 
 import Swen
 
-public class Item : GameLoop {
+public class Item: GameLoop {
   private let pipeline: ContentPipeline
 
   var items: Texture
-  var itemsMap: [String: Rect]
+  var itemsMap: [String:Rect]
   let walkingAnimation = ["coinBronze", "coinSilver", "coinGold"]
   var animationStep: Int = 0
 
@@ -43,7 +43,7 @@ public class Item : GameLoop {
     items.render(atPoint: position, clip: itemsMap[walkingAnimation[self.animationStep / 6]]!)
   }
 
-  public func loop(game: Game) {
+  public func update(game: Game) {
     self.animationStep += 1
     if ((self.animationStep / 6) >= walkingAnimation.count) {
       self.animationStep = 0

@@ -19,6 +19,6 @@
 
 import CSDL
 
-public class TCPSocket : Socket {
+public class TCPSocket: Socket {
 
 }

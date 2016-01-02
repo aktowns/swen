@@ -28,15 +28,25 @@ import CSDL
 // Uint32 direction;   /**< Set to one of the SDL_MOUSEWHEEL_* defines. When FLIPPED the
 //                          values in X and Y will be opposite. Multiply by -1 to change them back */
 
-public class MouseWheelEvent : CommonEvent {
-  private var wheelEvent: SDL_MouseWheelEvent { return self.handle.wheel }
+public class MouseWheelEvent: CommonEvent {
+  private var wheelEvent: SDL_MouseWheelEvent {
+    return self.handle.wheel
+  }
 
-  public var windowId: UInt32 { return wheelEvent.windowID }
-  public var which: UInt32 { return wheelEvent.which }
-  public var direction: UInt32 { return wheelEvent.direction }
-  public var position: Vector { return Vector.fromInt32(x: wheelEvent.x, y: wheelEvent.y) }
+  public var windowId: UInt32 {
+    return wheelEvent.windowID
+  }
+  public var which: UInt32 {
+    return wheelEvent.which
+  }
+  public var direction: UInt32 {
+    return wheelEvent.direction
+  }
+  public var position: Vector {
+    return Vector.fromInt32(x: wheelEvent.x, y: wheelEvent.y)
+  }
 
-  override public var description : String {
+  override public var description: String {
     return "#\(self.dynamicType)(handle:\(handle), timestamp:\(timestamp), windowId:\(windowId), " +
         "which:\(which), position:\(position), direction:\(direction))"
   }

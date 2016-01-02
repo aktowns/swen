@@ -23,12 +23,16 @@ import CSDL
 // Uint32 timestamp;
 // char *file;         /**< The file name, which should be freed with SDL_free() */
 
-public class DropEvent : CommonEvent {
-  private var dropEvent: SDL_DropEvent { return self.handle.drop }
+public class DropEvent: CommonEvent {
+  private var dropEvent: SDL_DropEvent {
+    return self.handle.drop
+  }
 
-  public var file: String? { return String.fromCString(dropEvent.file) }
+  public var file: String? {
+    return String.fromCString(dropEvent.file)
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), file:\(file))"
   }
 }

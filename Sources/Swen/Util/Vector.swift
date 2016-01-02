@@ -17,7 +17,7 @@
 //   limitations under the License.
 //
 
-public struct Vector : Comparable {
+public struct Vector: Comparable {
   /// The x coordinate of this Vector.
   public var x: Double
   /// The y coordinate of this Vector2.
@@ -128,6 +128,7 @@ public struct Vector : Comparable {
 public func ==(l: Vector, r: Vector) -> Bool {
   return (l.x == r.x && l.y == r.y)
 }
+
 public func <(l: Vector, r: Vector) -> Bool {
   return (l.x < r.x && l.y < r.y)
 }
@@ -137,7 +138,7 @@ public func +(l: Vector, r: Vector) -> Vector {
   return Vector(x: l.x + r.x, y: l.y + r.y)
 }
 
-public func += (inout l: Vector, r: Vector) {
+public func +=(inout l: Vector, r: Vector) {
   l = l + r
 }
 

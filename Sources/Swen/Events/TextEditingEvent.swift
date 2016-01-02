@@ -26,19 +26,29 @@ import CSDL
 // Sint32 start;                               /**< The start cursor of selected editing text */
 // Sint32 length;                              /**< The length of selected editing text */
 
-public class TextEditingEvent : CommonEvent {
-  private var editEvent: SDL_TextEditingEvent { return self.handle.edit }
+public class TextEditingEvent: CommonEvent {
+  private var editEvent: SDL_TextEditingEvent {
+    return self.handle.edit
+  }
 
-  public var windowId: UInt32 { return editEvent.windowID }
+  public var windowId: UInt32 {
+    return editEvent.windowID
+  }
   public var text: String? {
     // for some reason fixed width arrays are converted to tuples..
-    let mirror: Array<Int8> = Mirror(reflecting: editEvent.text).children.map{$0.value as! Int8}
+    let mirror: Array<Int8> = Mirror(reflecting: editEvent.text).children.map {
+      $0.value as! Int8
+    }
     return String.fromCString(UnsafePointer(mirror))
   }
-  public var start: Int32 { return editEvent.start }
-  public var length: Int32 { return editEvent.length }
+  public var start: Int32 {
+    return editEvent.start
+  }
+  public var length: Int32 {
+    return editEvent.length
+  }
 
-  public override var description : String {
+  public override var description: String {
     return "#\(self.dynamicType)(handle:\(handle), type:\(type), timestamp:\(timestamp), " +
         "windowId:\(windowId), text:\(text), start:\(start), length:\(length))"
   }

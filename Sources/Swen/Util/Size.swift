@@ -18,7 +18,7 @@
 //
 
 
-public struct Size : Comparable, CustomStringConvertible {
+public struct Size: Comparable, CustomStringConvertible {
   /// The with.
   public var sizeX: Double
   /// The height.
@@ -52,7 +52,12 @@ public struct Size : Comparable, CustomStringConvertible {
     return Vector(x: self.sizeX / 2, y: self.sizeY / 2)
   }
 
-  public var description : String {
+  public func contains(vect: Vector) -> Bool {
+    return vect.x > 0 && vect.y > 0 &&
+        vect.x < self.sizeX && vect.y < self.sizeY
+  }
+
+  public var description: String {
     return "\(self.dynamicType)(sizeX:\(sizeX), sizeY:\(sizeY))"
   }
 }
