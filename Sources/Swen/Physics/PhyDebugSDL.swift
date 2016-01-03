@@ -48,7 +48,7 @@ public class PhyDebugSDL: PhyDebugDrawDelegate {
     }
 
     switch tag {
-      case "wall": return Colour.black.alpha(100)
+      case "wall": return Colour.black.alpha(5)
       case "box": return Colour.yellow.alpha(100)
       case "ball": return Colour.red.alpha(100)
       case "player": return Colour.orange.alpha(100)

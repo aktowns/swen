@@ -47,8 +47,6 @@ public class SwenDemo: GameBaseDelegate {
 
   var space: PhySpace
   var phydebug: PhyDebug
-  let timeStep = 1.0 / 100.0
-  var physicsStep: Double = 0
 
   static let PLAYER_VELOCITY = 500.0
 
@@ -106,7 +104,6 @@ public class SwenDemo: GameBaseDelegate {
       fatalError("Unexpected error occured")
     }
 
-
     let debugDraw = PhyDebugSDL(withRenderer: pipeline.renderer!)
 
     self.phydebug = PhyDebug(delegate: debugDraw)
@@ -148,14 +145,6 @@ public class SwenDemo: GameBaseDelegate {
     twall.elasticity = 1.0
     space.addShape(twall)
 
-//    let rwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
-//        a: Vector(x: window.size.sizeX - 20, y: -20.0),
-//        b: Vector(x: window.size.sizeX, y: window.size.sizeY + 20),
-//        radius: 20.0)
-//    rwall.friction = 1
-//    rwall.elasticity = 0.7
-//    space.addShape(rwall)
-
     let body = space.addBody(PhyBody(mass: 20.0, moment: Double.infinity))
     body.position = player.position
     let shape = space.addShape(PhyShape(boxShapeFrom: body,
@@ -175,7 +164,7 @@ public class SwenDemo: GameBaseDelegate {
         body.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
 
         let shape = space.addShape(PhyShape(boxShapeFrom: body, size: Size(sizeX: 50.0, sizeY: 50.0), radius: 0.0))
-        shape.elasticity = 1.0
+        shape.elasticity = 0.8
         shape.friction = 0.7
         shape.tag = "box"
       }
@@ -220,19 +209,19 @@ public class SwenDemo: GameBaseDelegate {
     titleText.render(atPoint: Vector(x: (window.size.sizeX - titleText.size.sizeX) / 2, y: 25))
     statusText.render(atPoint: Vector(x: 10.0, y: 10.0))
 
-//    hudHeart.render(atPoint: Vector(x: 10, y: window.size.sizeY - hudHeart.size.sizeY))
-//    hud3.render(atPoint: Vector(x: hudHeart.size.sizeX, y: window.size.sizeY - hud3.size.sizeY))
-//
-//    hud1.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + 10),
-//        y: window.size.sizeY - hud1.size.sizeY))
-//    hudJewel.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + hudJewel.size.sizeX),
-//        y: window.size.sizeY - hudJewel.size.sizeY))
-//
-// enemy.draw(game)
-// item1.draw(game)
-// item2.draw(game)
-// item3.draw(game)
-// player.draw(game)
+    hudHeart.render(atPoint: Vector(x: 10, y: window.size.sizeY - hudHeart.size.sizeY))
+    hud3.render(atPoint: Vector(x: hudHeart.size.sizeX, y: window.size.sizeY - hud3.size.sizeY))
+
+    hud1.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + 10),
+        y: window.size.sizeY - hud1.size.sizeY))
+    hudJewel.render(atPoint: Vector(x: window.size.sizeX - (hud1.size.sizeX + hudJewel.size.sizeX),
+        y: window.size.sizeY - hudJewel.size.sizeY))
+
+    enemy.draw(game)
+    item1.draw(game)
+    item2.draw(game)
+    item3.draw(game)
+    player.draw(game)
 
     space.debugDraw(phydebug)
   }
@@ -257,10 +246,10 @@ public class SwenDemo: GameBaseDelegate {
       print(keyEvent)
     }
 
-//    enemy.loop(game)
-//    item1.loop(game)
-//    item2.loop(game)
-//    item3.loop(game)
-//    player.loop(game)
+    enemy.update(game)
+    item1.update(game)
+    item2.update(game)
+    item3.update(game)
+    player.update(game)
   }
 }

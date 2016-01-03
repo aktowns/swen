@@ -78,7 +78,7 @@ public class Player: GameLoop, PhysicsBody {
 //      }
 //    }()
 
-    let animation = playerMap[walkingAnimation[self.animationStep]]
+    let animation = playerMap[walkingAnimation[self.animationStep / 8]]
     player.render(atPoint: position, clip: animation!)
   }
 
@@ -111,7 +111,7 @@ public class Player: GameLoop, PhysicsBody {
 
     // if velocity.x != 0 {
     self.animationStep += 1
-    if (self.animationStep >= walkingAnimation.count) {
+    if ((self.animationStep / 8) >= walkingAnimation.count) {
       self.animationStep = 0
     }
   }
