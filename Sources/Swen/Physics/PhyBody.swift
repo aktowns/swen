@@ -23,6 +23,8 @@ public final class PhyBody : LowLevelMemoizedHandle {
   public let handle: COpaquePointer
   public static var memoized: [COpaquePointer: PhyBody] = Dictionary<COpaquePointer, PhyBody>()
 
+  public var positionChangedListeners: Array<(body: PhyBody) -> ()> = []
+
   public required init(fromHandle handle: COpaquePointer) {
     self.handle = handle
 
@@ -30,7 +32,24 @@ public final class PhyBody : LowLevelMemoizedHandle {
 
     assert(PhyBody.memoized[handle] == nil, "PhyBody.init(fromHandle:) initialised with tagged handler")
 
+    cpBodySetUserData(self.handle, unsafeBitCast(self, UnsafeMutablePointer<Void>.self))
+    cpBodySetPositionUpdateFunc(self.handle, {
+      (body: COpaquePointer, dt: Double) in
+      cpBodyUpdatePosition(body, dt)
+
+      let ud = cpBodyGetUserData(body)
+      let klass = unsafeBitCast(ud, PhyBody.self)
+
+      klass.firePositionChangedListeners()
+    })
+
     PhyBody.memoized[handle] = self
+  }
+
+  private func firePositionChangedListeners() {
+    for listener in positionChangedListeners {
+      listener(body: self)
+    }
   }
 
   // try UserData falling back to creating a new instance

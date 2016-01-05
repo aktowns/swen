@@ -19,16 +19,6 @@
 
 import Swen
 
-public protocol PhysicsSpace {
-  var friction: Double { get set }
-}
-
-public protocol PhysicsBody {
-  var position: Vector { get set }
-  var velocity: Vector { get set }
-  var size: Size { get set }
-}
-
 /*
     let body = space.addBody(PhyBody(mass: 20.0, moment: Double.infinity))
     body.position = player.position
@@ -55,7 +45,15 @@ public class Player: GameLoop, PhysicsBody {
   public var position: Vector = Vector(x: 320.0, y: 340.0)
   public var velocity: Vector = Vector.zero
   public var size: Size = Size.zero
+  public var mass = 20.0
+  public var elasticity = 0.0
+  public var friction = 0.7
+  public var moment = Double.infinity
+  public var radius = 20.0
 
+  public func setPosition(position: Vector) {
+    self.position = position
+  }
 
   public init(pipeline: ContentPipeline, space: PhySpace) throws {
     self.pipeline = pipeline

@@ -26,9 +26,14 @@ public class PhyBoundingBox {
     self.handle = handle
   }
 
-  public convenience init(size: Rect) {
+  public convenience init(rect: Rect) {
+    let bb = cpBBNew(rect.x, rect.y, rect.sizeX, rect.sizeY)
 
-    let bb = cpBBNew(size.x, size.sizeY, size.sizeX, size.y)
+    self.init(fromHandle: bb)
+  }
+
+  public convenience init(size: Size) {
+    let bb = cpBBNew(0, 0, size.sizeX, size.sizeY)
 
     self.init(fromHandle: bb)
   }

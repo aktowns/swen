@@ -45,7 +45,6 @@ public class SwenDemo: GameBaseDelegate {
   var item2: Item
   var item3: Item
 
-  var space: PhySpace
   var phydebug: PhyDebug
 
   static let PLAYER_VELOCITY = 500.0
@@ -60,14 +59,13 @@ public class SwenDemo: GameBaseDelegate {
   static let JUMP_BOOST_HEIGHT = 55.0
   static let FALL_VELOCITY = 900.0
 
-  var playerBody: PhyBody
-  var playerShape: PhyShape
+//  var playerBody: PhyBody
+//  var playerShape: PhyShape
 
   // Setup
-  public required init(withWindow window: Window, pipeline: ContentPipeline, andSpace space: PhySpace) {
+  public required init(withWindow window: Window, pipeline: ContentPipeline, andGame game: Game) {
     self.window = window
     self.pipeline = pipeline
-    self.space = space
 
     do {
       let backdropFile: ImageFile = pipeline.get(fromPath: "assets/backgrounds/blue_grass.png")!
@@ -93,7 +91,9 @@ public class SwenDemo: GameBaseDelegate {
       self.hudHeart = try hudHeartFile.asTexture()
       self.hudJewel = try hudJewelFile.asTexture()
 
-      self.player = try Player(pipeline: pipeline, space: space)
+      self.player = try Player(pipeline: pipeline, space: game.space)
+      game.registerBody(self.player)
+
       self.enemy = try Enemy(pipeline: pipeline)
       self.item1 = try Item(pipeline: pipeline, position: Vector(x: 920.0, y: 370.0))
       self.item2 = try Item(pipeline: pipeline, position: Vector(x: 1020.0, y: 370.0))
@@ -108,62 +108,62 @@ public class SwenDemo: GameBaseDelegate {
 
     self.phydebug = PhyDebug(delegate: debugDraw)
 
-    let ground: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+    let ground: PhyShape = PhyShape(segmentedShapeFrom: game.space.staticBody,
         a: Vector(x: 0.0, y: window.size.sizeY),
         b: Vector(x: window.size.sizeX, y: window.size.sizeY),
         radius: 50.0)
     ground.tag = "wall"
     ground.friction = 1.0
     ground.elasticity = 1.0
-    space.addShape(ground)
+    game.space.addShape(ground)
 
-    let rwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+    let rwall: PhyShape = PhyShape(segmentedShapeFrom: game.space.staticBody,
         a: Vector(x: window.size.sizeX, y: 0),
         b: Vector(x: window.size.sizeX, y: window.size.sizeY),
         radius: 50.0)
     rwall.tag = "wall"
     rwall.friction = 1.0
     rwall.elasticity = 1.0
-    space.addShape(rwall)
+    game.space.addShape(rwall)
 
-    let lwall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+    let lwall: PhyShape = PhyShape(segmentedShapeFrom: game.space.staticBody,
         a: Vector(x: 0.0, y: 0),
         b: Vector(x: 0.0, y: window.size.sizeY),
         radius: 50.0)
     lwall.tag = "wall"
     lwall.friction = 1.0
     lwall.elasticity = 1.0
-    space.addShape(lwall)
+    game.space.addShape(lwall)
 
 
-    let twall: PhyShape = PhyShape(segmentedShapeFrom: space.staticBody,
+    let twall: PhyShape = PhyShape(segmentedShapeFrom: game.space.staticBody,
         a: Vector(x: 0.0, y: 0),
         b: Vector(x: window.size.sizeX, y: 0),
         radius: 50.0)
     twall.tag = "wall"
     twall.friction = 1.0
     twall.elasticity = 1.0
-    space.addShape(twall)
+    game.space.addShape(twall)
 
-    let body = space.addBody(PhyBody(mass: 20.0, moment: Double.infinity))
-    body.position = player.position
-    let shape = space.addShape(PhyShape(boxShapeFrom: body,
-        box: PhyBoundingBox(size: Rect(x: -30, y: 250.0, sizeX: 30.0, sizeY: -250.0)), radius: 10.0))
-        //topLeft: Vector(x: -30.0, y: 50.0), bottomRight: Vector(x: 30.0, y: -50.0)), radius: 10.0))
-    shape.elasticity = 0.5
-    shape.friction = 0.0
-    shape.collisionType = 1
-    shape.tag = "player"
-
-    self.playerBody = body
-    self.playerShape = shape
+//    let body = game.space.addBody(PhyBody(mass: 20.0, moment: Double.infinity))
+//    body.position = player.position
+//    let shape = game.space.addShape(PhyShape(boxShapeFrom: body,
+//        box: PhyBoundingBox(size: Rect(x: -30, y: 250.0, sizeX: 30.0, sizeY: -250.0)), radius: 10.0))
+//        //topLeft: Vector(x: -30.0, y: 50.0), bottomRight: Vector(x: 30.0, y: -50.0)), radius: 10.0))
+//    shape.elasticity = 0.5
+//    shape.friction = 0.0
+//    shape.collisionType = 1
+//    shape.tag = "player"
+//
+//    self.playerBody = body
+//    self.playerShape = shape
 
     for i: Int32 in Range(start: 0, end: 3) {
       for j in Range(start: 0, end: 3) {
-        let body = space.addBody(PhyBody(mass: 1.0, moment: Double.infinity))
+        let body = game.space.addBody(PhyBody(mass: 1.0, moment: Double.infinity))
         body.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
 
-        let shape = space.addShape(PhyShape(boxShapeFrom: body, size: Size(sizeX: 50.0, sizeY: 50.0), radius: 0.0))
+        let shape = game.space.addShape(PhyShape(boxShapeFrom: body, size: Size(sizeX: 50.0, sizeY: 50.0), radius: 0.0))
         shape.elasticity = 0.8
         shape.friction = 0.7
         shape.tag = "box"
@@ -177,10 +177,10 @@ public class SwenDemo: GameBaseDelegate {
 
     for i: Int32 in Range(start: 0, end: 30) {
       for j in Range(start: 0, end: 30) {
-        let ballBody = space.addBody(PhyBody(mass: mass, moment: moment))
+        let ballBody = game.space.addBody(PhyBody(mass: mass, moment: moment))
         ballBody.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
 
-        let ballShape = space.addShape(PhyShape(circleShapeFrom: ballBody,
+        let ballShape = game.space.addShape(PhyShape(circleShapeFrom: ballBody,
             radius: radius, offset: Vector.zero))
         ballShape.friction = 1
         ballShape.elasticity = 1.0
@@ -223,7 +223,7 @@ public class SwenDemo: GameBaseDelegate {
     item3.draw(game)
     player.draw(game)
 
-    space.debugDraw(phydebug)
+    game.space.debugDraw(phydebug)
   }
 
   // Game logic
@@ -232,19 +232,19 @@ public class SwenDemo: GameBaseDelegate {
       self.statusText = statusText
     }
 
-    for keyEvent in game.keyEvents {
-      switch keyEvent.scanCode {
-      case .ScanCodeSpace:
-        let jumpV = Math.sqrt(2.0 * SwenDemo.JUMP_HEIGHT * space.gravity.y)
-        playerBody.velocity += Vector(x: 0.0, y: -jumpV)
-      case .ScanCodeLeft:
-        playerBody.velocity += Vector(x: -60.0, y: 0)
-      case .ScanCodeRight:
-        playerBody.velocity += Vector(x: 60.0, y: 0)
-      default: Void()
-      }
-      print(keyEvent)
-    }
+//    for keyEvent in game.keyEvents {
+//      switch keyEvent.scanCode {
+//      case .ScanCodeSpace:
+//        let jumpV = Math.sqrt(2.0 * SwenDemo.JUMP_HEIGHT * game.space.gravity.y)
+//        playerBody.velocity += Vector(x: 0.0, y: -jumpV)
+//      case .ScanCodeLeft:
+//        playerBody.velocity += Vector(x: -60.0, y: 0)
+//      case .ScanCodeRight:
+//        playerBody.velocity += Vector(x: 60.0, y: 0)
+//      default: Void()
+//      }
+//      print(keyEvent)
+//    }
 
     enemy.update(game)
     item1.update(game)

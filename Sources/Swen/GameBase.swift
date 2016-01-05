@@ -20,7 +20,30 @@
 import Glibc
 
 public protocol GameBaseDelegate: GameLoop {
-  init(withWindow: Window, pipeline: ContentPipeline, andSpace: PhySpace)
+  init(withWindow: Window, pipeline: ContentPipeline, andGame: Game)
+}
+
+public protocol PhysicsBody {
+  var position: Vector { get set }
+  var velocity: Vector { get set }
+  var size: Size { get set }
+  var mass: Double { get set }
+  var elasticity: Double { get set }
+  var friction: Double { get set }
+  var moment: Double { get set }
+  var radius: Double { get set }
+
+  func setPosition(pos: Vector)
+}
+
+extension PhysicsBody {
+  public var bodyRect: Rect {
+    return Rect(x: position.x, y: position.y, sizeX: size.sizeX, sizeY: size.sizeY)
+  }
+}
+
+public protocol Sprite: PhysicsBody, GameLoop {
+
 }
 
 public struct Game {
@@ -28,6 +51,24 @@ public struct Game {
   public let frame: Int
   public let keyEvents: [KeyboardEvent]
   public let settings: GameSettings
+  public let space: PhySpace
+
+  public func registerBody(sprite: PhysicsBody) {
+    let body = space.addBody(PhyBody(mass: sprite.mass, moment: sprite.moment))
+    body.position = sprite.position
+
+    body.positionChangedListeners.append({(bodyEv: PhyBody) in
+      sprite.setPosition(bodyEv.position)
+    })
+
+    let shape = space.addShape(PhyShape(boxShapeFrom: body, box: PhyBoundingBox(size: sprite.size),
+        radius: sprite.radius))
+
+    shape.elasticity = sprite.elasticity
+    shape.friction = sprite.friction
+    shape.collisionType = 1
+    shape.tag = "player"
+  }
 }
 
 public class GameBase<GameDelegate:GameBaseDelegate> {
@@ -53,8 +94,10 @@ public class GameBase<GameDelegate:GameBaseDelegate> {
     space.iterations = settings.physics.iterations
     space.gravity = settings.physics.gravity
 
-    self.delegate = delegate.init(withWindow: window, pipeline: pipeline, andSpace: space)
     self.settings = settings
+
+    let initialGame = Game(fps: 0, frame: 0, keyEvents: [], settings: settings, space: space)
+    self.delegate = delegate.init(withWindow: window, pipeline: pipeline, andGame: initialGame)
   }
 
   public func start() {
@@ -77,7 +120,7 @@ public class GameBase<GameDelegate:GameBaseDelegate> {
         }
       }
 
-      let game = Game(fps: averageFrames, frame: countedFrames, keyEvents: keyEvents, settings: settings)
+      let game = Game(fps: averageFrames, frame: countedFrames, keyEvents: keyEvents, settings: settings, space: space)
 
       window.renderer.drawColour = settings.backgroundColour
 

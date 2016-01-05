@@ -23,7 +23,7 @@ public class Texture {
   public typealias RawTexture = COpaquePointer
 
   let handle: RawTexture
-  private let renderer: Renderer
+  public let renderer: Renderer
 
   /// Create a texture from a raw handle
   public init(fromHandle handle: RawTexture, andRenderer renderer: Renderer) {
