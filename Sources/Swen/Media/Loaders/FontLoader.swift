@@ -44,4 +44,5 @@ public class FontLoader: AssetFontLoader {
   public func unload() {
 
   }
+
 }

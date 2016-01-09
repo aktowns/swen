@@ -47,17 +47,17 @@ public class SwenDemo: GameBaseDelegate {
 
   var phydebug: PhyDebug
 
-  static let PLAYER_VELOCITY = 500.0
+//  static let PLAYER_VELOCITY = 500.0
 
-  static let PLAYER_GROUND_ACCEL_TIME = 0.1
-  static let PLAYER_GROUND_ACCEL = (PLAYER_VELOCITY / PLAYER_GROUND_ACCEL_TIME)
+//  static let PLAYER_GROUND_ACCEL_TIME = 0.1
+//  static let PLAYER_GROUND_ACCEL = (PLAYER_VELOCITY / PLAYER_GROUND_ACCEL_TIME)
 
-  static let PLAYER_AIR_ACCEL_TIME = 0.25
-  static let PLAYER_AIR_ACCEL = (PLAYER_VELOCITY / PLAYER_AIR_ACCEL_TIME)
+//  static let PLAYER_AIR_ACCEL_TIME = 0.25
+//  static let PLAYER_AIR_ACCEL = (PLAYER_VELOCITY / PLAYER_AIR_ACCEL_TIME)
 
-  static let JUMP_HEIGHT = 100.0
-  static let JUMP_BOOST_HEIGHT = 55.0
-  static let FALL_VELOCITY = 900.0
+//  static let JUMP_HEIGHT = 100.0
+//  static let JUMP_BOOST_HEIGHT = 55.0
+//  static let FALL_VELOCITY = 900.0
 
 //  var playerBody: PhyBody
 //  var playerShape: PhyShape
@@ -91,13 +91,23 @@ public class SwenDemo: GameBaseDelegate {
       self.hudHeart = try hudHeartFile.asTexture()
       self.hudJewel = try hudJewelFile.asTexture()
 
-      self.player = try Player(pipeline: pipeline, space: game.space)
+      self.player = try Player(pipeline: pipeline)
       game.registerBody(self.player)
 
       self.enemy = try Enemy(pipeline: pipeline)
-      self.item1 = try Item(pipeline: pipeline, position: Vector(x: 920.0, y: 370.0))
-      self.item2 = try Item(pipeline: pipeline, position: Vector(x: 1020.0, y: 370.0))
-      self.item3 = try Item(pipeline: pipeline, position: Vector(x: 1120.0, y: 370.0))
+      game.registerBody(enemy)
+
+      self.item1 = try Item(pipeline: pipeline)
+      self.item1.position = Vector(x: 920.0, y: 370.0)
+      self.item2 = try Item(pipeline: pipeline)
+      self.item2.position = Vector(x: 1020.0, y: 370.0)
+      self.item3 = try Item(pipeline: pipeline)
+      self.item3.position = Vector(x: 1120.0, y: 370.0)
+
+      game.registerBody(self.item1)
+      game.registerBody(self.item2)
+      game.registerBody(self.item3)
+
     } catch let error as SDLError {
       fatalError("Failed to create a window: \(error.description)")
     } catch {
@@ -158,35 +168,35 @@ public class SwenDemo: GameBaseDelegate {
 //    self.playerBody = body
 //    self.playerShape = shape
 
-    for i: Int32 in Range(start: 0, end: 3) {
-      for j in Range(start: 0, end: 3) {
-        let body = game.space.addBody(PhyBody(mass: 1.0, moment: Double.infinity))
-        body.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
-
-        let shape = game.space.addShape(PhyShape(boxShapeFrom: body, size: Size(sizeX: 50.0, sizeY: 50.0), radius: 0.0))
-        shape.elasticity = 0.8
-        shape.friction = 0.7
-        shape.tag = "box"
-      }
-    }
-
-    let radius: Double = 15
-    let mass: Double = 1
-
-    let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector.zero)
-
-    for i: Int32 in Range(start: 0, end: 30) {
-      for j in Range(start: 0, end: 30) {
-        let ballBody = game.space.addBody(PhyBody(mass: mass, moment: moment))
-        ballBody.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
-
-        let ballShape = game.space.addShape(PhyShape(circleShapeFrom: ballBody,
-            radius: radius, offset: Vector.zero))
-        ballShape.friction = 1
-        ballShape.elasticity = 1.0
-        ballShape.tag = "ball"
-      }
-    }
+//    for i: Int32 in Range(start: 0, end: 3) {
+//      for j in Range(start: 0, end: 3) {
+//        let body = game.space.addBody(PhyBody(mass: 1.0, moment: Double.infinity))
+//        body.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
+//
+//        let shape = game.space.addShape(PhyShape(boxShapeFrom: body, size: Size(sizeX: 50.0, sizeY: 50.0), radius: 0.0))
+//        shape.elasticity = 0.8
+//        shape.friction = 0.7
+//        shape.tag = "box"
+//      }
+//    }
+//
+//    let radius: Double = 15
+//    let mass: Double = 1
+//
+//    let moment = PhyMisc.momentForCircle(m: mass, r1: 0, r2: radius, offset: Vector.zero)
+//
+//    for i: Int32 in Range(start: 0, end: 30) {
+//      for j in Range(start: 0, end: 30) {
+//        let ballBody = game.space.addBody(PhyBody(mass: mass, moment: moment))
+//        ballBody.position = Vector.fromInt32(x: 600 + j * 120, y: 200 + i * 120)
+//
+//        let ballShape = game.space.addShape(PhyShape(circleShapeFrom: ballBody,
+//            radius: radius, offset: Vector.zero))
+//        ballShape.friction = 1
+//        ballShape.elasticity = 1.0
+//        ballShape.tag = "ball"
+//      }
+//    }
 
 //    let playerMass: Double = 1
 //

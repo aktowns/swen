@@ -19,28 +19,27 @@
 
 import Swen
 
-public class Item: GameLoop {
-  private let pipeline: ContentPipeline
-
-  var items: Texture
-  var itemsMap: [String:Rect]
+public class Item: Sprite, GameLoop {
   let walkingAnimation = ["coinBronze", "coinSilver", "coinGold"]
+
+  var items: Texture?
+  var itemsMap: [String:Rect] = [:]
   var animationStep: Int = 0
 
-  var position: Vector = Vector(x: 920.0, y: 370.0)
-
-  public init(pipeline: ContentPipeline, position: Vector) throws {
-    self.pipeline = pipeline
-
+  public override func setup() {
     let itemsSpriteMap: ImageMapFile = pipeline.get(fromPath: "assets/sprites/spritesheet_items.xml")!
 
-    self.items = try itemsSpriteMap.imageFile.asTexture()
+    self.items = try? itemsSpriteMap.imageFile.asTexture()
     self.itemsMap = itemsSpriteMap.mapping
-    self.position = position
+
+    let anim = itemsMap[walkingAnimation[animationStep]]!
+
+    self.size = anim.size
+    self.position = Vector(x: 920.0, y: 370.0)
   }
 
   public func draw(game: Game) {
-    items.render(atPoint: position, clip: itemsMap[walkingAnimation[self.animationStep / 6]]!)
+    items!.render(atPoint: position, clip: itemsMap[walkingAnimation[self.animationStep / 6]]!)
   }
 
   public func update(game: Game) {

@@ -19,27 +19,26 @@
 
 import Swen
 
-public class Enemy: GameLoop {
-  private let pipeline: ContentPipeline
-
-  var enemy: Texture
-  var enemyMap: [String:Rect]
+public class Enemy: Sprite, GameLoop {
   let walkingAnimation = ["bee", "bee_move", "bee_dead"]
+  var enemy: Texture?
+  var enemyMap: [String:Rect] = [:]
   var animationStep: Int = 0
 
-  var position: Vector = Vector(x: 820.0, y: 290.0)
-
-  public init(pipeline: ContentPipeline) throws {
-    self.pipeline = pipeline
-
+  public override func setup() {
     let enemySpriteMap: ImageMapFile = pipeline.get(fromPath: "assets/sprites/spritesheet_enemies.xml")!
 
-    self.enemy = try enemySpriteMap.imageFile.asTexture()
+    self.enemy = try? enemySpriteMap.imageFile.asTexture()
     self.enemyMap = enemySpriteMap.mapping
+
+    let anim = enemyMap[walkingAnimation[animationStep]]!
+
+    self.size = anim.size
+    self.position = Vector(x: 820.0, y: 290.0)
   }
 
   public func draw(game: Game) {
-    enemy.render(atPoint: position, clip: enemyMap[walkingAnimation[self.animationStep / 6]]!)
+    enemy!.render(atPoint: position, clip: enemyMap[walkingAnimation[self.animationStep / 6]]!)
   }
 
   public func update(game: Game) {

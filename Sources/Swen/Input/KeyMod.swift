@@ -44,16 +44,16 @@ public struct KeyMod: OptionSetType {
   static let MODE = KeyMod(rawValue: KMOD_MODE.rawValue)
   static let RESERVED = KeyMod(rawValue: KMOD_RESERVED.rawValue)
 
-  public var Ctrl: Bool {
+  public var ctrl: Bool {
     return self.contains(KeyMod.LCtrl) || self.contains(KeyMod.RCtrl)
   }
-  public var Shift: Bool {
+  public var shift: Bool {
     return self.contains(KeyMod.LShift) || self.contains(KeyMod.RShift)
   }
-  public var Alt: Bool {
+  public var alt: Bool {
     return self.contains(KeyMod.LAlt) || self.contains(KeyMod.RAlt)
   }
-  public var GUI: Bool {
+  public var gui: Bool {
     return self.contains(KeyMod.LGUI) || self.contains(KeyMod.RGUI)
   }
 }

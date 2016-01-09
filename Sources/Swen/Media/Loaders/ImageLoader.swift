@@ -44,4 +44,5 @@ public class ImageLoader: AssetImageLoader {
   public func unload() -> Void {
 
   }
+
 }

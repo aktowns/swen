@@ -17,8 +17,6 @@
 //   limitations under the License.
 //
 
-import Foundation
-
 public protocol GameLoop {
   func draw(game: Game)
 

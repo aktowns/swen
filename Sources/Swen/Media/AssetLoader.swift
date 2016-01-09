@@ -18,9 +18,9 @@
 //
 
 public enum AssetLoaderError: ErrorType {
-  case InitialisationError(message:String)
-  case OpenError(message:String)
-  case ConfigKeyNotFound(message:String)
+  case InitialisationError(message: String)
+  case OpenError(message: String)
+  case ConfigKeyNotFound(message: String)
 }
 
 public protocol FileType {

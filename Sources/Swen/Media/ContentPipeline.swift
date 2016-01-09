@@ -82,4 +82,5 @@ public class ContentPipeline {
     imageMapLoaders.append(TextureAtlasLoader)
     audioLoaders.append(AudioLoader)
   }
+
 }

@@ -67,7 +67,7 @@ public class TextureAtlasLoader: AssetImageMapLoader {
     return Optional.None
   }
 
-  private func createMapping(xmlDoc: XPathDocument) -> [String:Rect] {
+  private func createMapping(xmlDoc: XPathDocument) -> [String: Rect] {
     let nodes = xmlDoc.search(withXPath: "/TextureAtlas/SubTexture")
 
     var retDict = Dictionary<String, Rect>()
@@ -86,4 +86,5 @@ public class TextureAtlasLoader: AssetImageMapLoader {
 
     return retDict
   }
+
 }

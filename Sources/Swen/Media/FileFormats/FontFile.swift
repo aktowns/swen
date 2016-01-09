@@ -67,4 +67,5 @@ public class FontFile: FileType {
 
     return font
   }
+
 }

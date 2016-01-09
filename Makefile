@@ -4,3 +4,7 @@ all: build
 build:
 	swift build -k
 	swift build
+
+check:
+	tailor Sources/
+

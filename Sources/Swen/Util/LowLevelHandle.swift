@@ -23,7 +23,7 @@ public protocol LowLevelHandle {
   init(fromHandle: COpaquePointer)
 }
 
-public protocol LowLevelMemoizedHandle : LowLevelHandle {
+public protocol LowLevelMemoizedHandle: LowLevelHandle {
   static func fromHandle(handle: COpaquePointer) -> Self
 
   static var memoized: [COpaquePointer: Self] { get set }

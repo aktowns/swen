@@ -1,7 +1,7 @@
 //
 //   PhyConstraint .swift created on 1/01/16
-//   Swen project 
-//   
+//   Swen project
+//
 //   Copyright 2016 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,4 +27,5 @@ public class PhyConstraint {
 
     assert(handle != nil, "PhyConstraint.init(fromHandle:) handed a null handle")
   }
+
 }

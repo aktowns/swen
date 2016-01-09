@@ -20,25 +20,33 @@
 import CSDL
 
 extension SDL_Rect {
+
   static func fromRect(rect: Rect) -> SDL_Rect {
     return SDL_Rect(x: Int32(rect.x), y: Int32(rect.y), w: Int32(rect.sizeX), h: Int32(rect.sizeY))
   }
+
 }
 
 extension SDL_Point {
+
   static func fromPoint(point: Vector) -> SDL_Point {
     return SDL_Point(x: Int32(point.x), y: Int32(point.y))
   }
+
 }
 
 extension SDL_Color {
+
   static func fromColour(colour: Colour) -> SDL_Color {
     return SDL_Color(r: colour.r, g: colour.g, b: colour.b, a: colour.a ?? 0)
   }
+
 }
 
 extension IPaddress {
+
   static func fromIPAddress(ipaddr: IPAddress) -> IPaddress {
     return IPaddress(host: ipaddr.host, port: ipaddr.port)
   }
+
 }

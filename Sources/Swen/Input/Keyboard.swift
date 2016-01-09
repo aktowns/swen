@@ -20,6 +20,7 @@
 import CSDL
 
 class Keyboard {
+
   static func getKeyboardFocus() -> Window? {
     let windowPtr = SDL_GetKeyboardFocus()
 
@@ -43,4 +44,5 @@ class Keyboard {
   static func stopTextInput() {
     SDL_StopTextInput()
   }
+
 }

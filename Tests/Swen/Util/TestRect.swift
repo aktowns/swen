@@ -1,8 +1,8 @@
 //
-//   AudioLoader.swift created on 28/12/15
+//   TestRect.swift created on 9/01/16
 //   Swen project
 //
-//   Copyright 2015 Ashley Towns <code@ashleytowns.id.au>
+//   Copyright 2016 Ashley Towns <code@ashleytowns.id.au>
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,25 +17,9 @@
 //   limitations under the License.
 //
 
-import Foundation
+import XCTest
+@Testable import Rect
 
-public class AudioLoader: AssetAudioLoader {
-  private let path: String
-
-  public required init(withPath path: String) {
-    self.path = path
-  }
-
-  public static func canHandle(file: String) -> Bool {
-    return file.hasSuffix("mp3") || file.hasPrefix("wav") || file.hasPrefix("ogg")
-  }
-
-  public func load() -> AudioFile {
-    return AudioFile(fromPath: self.path)
-  }
-
-  public func unload() {
-
-  }
+class TestRect: XCTestCase {
 
 }

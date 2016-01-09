@@ -30,7 +30,7 @@ set(SOURCE_FILES
         Sources/Swen/Events/JoyButtonEvent.swift
         Sources/Swen/Events/JoyDeviceEvent.swift
         Sources/Swen/Events/JoyHatEvent.swift
-        Sources/Swen/Event.swift
+        Sources/Swen/Events/SDLEvent.swift
         Sources/Swen/Events/KeyboardEvent.swift
         Sources/Swen/Events/MouseButtonEvent.swift
         Sources/Swen/Events/MouseMotionEvent.swift
@@ -66,6 +66,7 @@ set(SOURCE_FILES
         Sources/Swen/Renderer.swift
         Sources/Swen/SDL/SDL.swift
         Sources/Swen/SDL/SDLError.swift
+        Sources/Swen/Sprite.swift
         Sources/Swen/Surface.swift
         Sources/Swen/Timer.swift
         Sources/Swen/Window.swift
@@ -86,6 +87,8 @@ set(SOURCE_FILES
         Sources/Swen/Util/ConvertHelpers/ChipmunkConvertHelper.swift
         Sources/Swen/Util/Size.swift
         Sources/Swen/Util/Vector.swift
+        Tests/Swen/Util/TestRect.swift
+        Packages/Signals-2.2.1/Sources/Signal.swift
         Package.swift)
 
 #set(PACKAGES

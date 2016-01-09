@@ -23,7 +23,7 @@ public class Math {
   public static let DBL_MIN = 2.22507385850720138309e-308
   public static let DBL_MAX = 1.79769313486231570815e+308
 
-  public static func clamp<a:Comparable>(value: a, minValue: a, maxValue: a) -> a {
+  public static func clamp<Num: Comparable>(value: Num, minValue: Num, maxValue: Num) -> Num {
     return max(min(value, maxValue), minValue)
   }
 

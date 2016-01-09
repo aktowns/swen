@@ -32,18 +32,18 @@ public protocol PhysicsBody {
   var friction: Double { get set }
   var moment: Double { get set }
   var radius: Double { get set }
+}
 
-  func setPosition(pos: Vector)
+public protocol PhysicsUpdatable {
+  func willUpdatePosition(position: Vector) -> Bool
+
+  func willUpdateVelocity(velocity: Vector) -> Bool
 }
 
 extension PhysicsBody {
   public var bodyRect: Rect {
     return Rect(x: position.x, y: position.y, sizeX: size.sizeX, sizeY: size.sizeY)
   }
-}
-
-public protocol Sprite: PhysicsBody, GameLoop {
-
 }
 
 public struct Game {
@@ -57,9 +57,18 @@ public struct Game {
     let body = space.addBody(PhyBody(mass: sprite.mass, moment: sprite.moment))
     body.position = sprite.position
 
-    body.positionChangedListeners.append({(bodyEv: PhyBody) in
-      sprite.setPosition(bodyEv.position)
-    })
+//    switch sprite {
+//      case let spr as PhysicsUpdatable:
+//        body.positionChangedListeners.append({
+//          (bodyEv: PhyBody) in
+//          spr.willUpdatePosition(bodyEv.position)
+//        })
+//        body.velocityChangedListeners.append({
+//          (bodyEv: PhyBody) in
+//          spr.willUpdateVelocity(bodyEv.velocity)
+//        })
+//      default: Void()
+//    }
 
     let shape = space.addShape(PhyShape(boxShapeFrom: body, box: PhyBoundingBox(size: sprite.size),
         radius: sprite.radius))
@@ -111,7 +120,7 @@ public class GameBase<GameDelegate:GameBaseDelegate> {
     while running {
       let averageFrames = Float(countedFrames) / (Float(fpsTimer.ticks()) / 1000.0)
 
-      Event.poll {
+      SDLEvent.poll {
         event in
         switch event {
         case is QuitEvent: running = false
@@ -120,7 +129,8 @@ public class GameBase<GameDelegate:GameBaseDelegate> {
         }
       }
 
-      let game = Game(fps: averageFrames, frame: countedFrames, keyEvents: keyEvents, settings: settings, space: space)
+      let game = Game(fps: averageFrames, frame: countedFrames, keyEvents: keyEvents,
+          settings: settings, space: space)
 
       window.renderer.drawColour = settings.backgroundColour
 

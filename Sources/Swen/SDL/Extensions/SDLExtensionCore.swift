@@ -58,4 +58,5 @@ public class SDLExtensionCore: SDLExtension {
   public func quit() {
     SDL_Quit()
   }
+
 }

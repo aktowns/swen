@@ -18,12 +18,15 @@
 //
 
 import CChipmunk
+import Signals
 
-public final class PhyBody : LowLevelMemoizedHandle {
+
+public final class PhyBody: LowLevelMemoizedHandle {
   public let handle: COpaquePointer
   public static var memoized: [COpaquePointer: PhyBody] = Dictionary<COpaquePointer, PhyBody>()
 
-  public var positionChangedListeners: Array<(body: PhyBody) -> ()> = []
+  let onPositionChanged = Signal<PhyBody>()
+  let onVelocityChanged = Signal<PhyBody>()
 
   public required init(fromHandle handle: COpaquePointer) {
     self.handle = handle
@@ -40,16 +43,20 @@ public final class PhyBody : LowLevelMemoizedHandle {
       let ud = cpBodyGetUserData(body)
       let klass = unsafeBitCast(ud, PhyBody.self)
 
-      klass.firePositionChangedListeners()
+      klass.onPositionChanged.fire(klass)
+    })
+
+    cpBodySetVelocityUpdateFunc(self.handle, {
+      (body: COpaquePointer, gravity: cpVect, damping: Double, dt: Double) in
+      cpBodyUpdateVelocity(body, gravity, damping, dt)
+
+      let ud = cpBodyGetUserData(body)
+      let klass = unsafeBitCast(ud, PhyBody.self)
+
+      klass.onVelocityChanged.fire(klass)
     })
 
     PhyBody.memoized[handle] = self
-  }
-
-  private func firePositionChangedListeners() {
-    for listener in positionChangedListeners {
-      listener(body: self)
-    }
   }
 
   // try UserData falling back to creating a new instance
@@ -86,4 +93,5 @@ public final class PhyBody : LowLevelMemoizedHandle {
       cpBodySetVelocity(self.handle, cpVect.fromVector(newValue))
     }
   }
+
 }

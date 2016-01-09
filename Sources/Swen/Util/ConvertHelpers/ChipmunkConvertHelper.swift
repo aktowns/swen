@@ -20,6 +20,7 @@
 import CChipmunk
 
 extension cpVect {
+
   static func fromVector(vect: Vector) -> cpVect {
     return cpVect(x: vect.x, y: vect.y)
   }
@@ -27,9 +28,11 @@ extension cpVect {
   func toVector() -> Vector {
     return Vector(x: self.x, y: self.y)
   }
+
 }
 
 extension cpSpaceDebugColor {
+
   static func fromColour(colour: Colour) -> cpSpaceDebugColor {
     return cpSpaceDebugColor(r: Float(colour.r), g: Float(colour.g), b: Float(colour.b), a: Float(colour.a ?? 0))
   }
@@ -37,4 +40,5 @@ extension cpSpaceDebugColor {
   func toColour() -> Colour {
     return Colour(r: UInt8(self.r), g: UInt8(self.g), b: UInt8(self.b), a: UInt8(self.a))
   }
+
 }

@@ -19,11 +19,11 @@
 
 import CChipmunk
 
-//0 typedef enum cpSpaceDebugDrawFlags {
-//281 > CP_SPACE_DEBUG_DRAW_SHAPES = 1<<0,
-//282 > CP_SPACE_DEBUG_DRAW_CONSTRAINTS = 1<<1,
-//283 > CP_SPACE_DEBUG_DRAW_COLLISION_POINTS = 1<<2,
-//284 } cpSpaceDebugDrawFlags;
+// 0 typedef enum cpSpaceDebugDrawFlags {
+// 281 > CP_SPACE_DEBUG_DRAW_SHAPES = 1<<0,
+// 282 > CP_SPACE_DEBUG_DRAW_CONSTRAINTS = 1<<1,
+// 283 > CP_SPACE_DEBUG_DRAW_COLLISION_POINTS = 1<<2,
+// 284 } cpSpaceDebugDrawFlags;
 
 public class PhySpace {
   let handle: COpaquePointer

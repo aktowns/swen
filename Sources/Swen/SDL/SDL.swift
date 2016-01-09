@@ -20,6 +20,7 @@
 import CSDL
 
 public class SDL {
+
   public class func initSDL() throws -> Void {
     try SDLExtensionLoader.loadAll()
     try SDLExtensionLoader.prepareAll()
@@ -37,4 +38,5 @@ public class SDL {
   public class func delay(ms ms: UInt32) -> Void {
     SDL_Delay(ms)
   }
+
 }
