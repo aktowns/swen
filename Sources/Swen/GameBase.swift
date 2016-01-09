@@ -36,14 +36,14 @@ public struct Game {
 
     body.onPositionChanged.listen(sprite) {
       (newPos) in
-      if sprite.position != newPos.position {
-        sprite.willUpdatePosition(newPos.position)
+      if sprite.position != newPos {
+        sprite.willUpdatePosition(newPos)
       }
     }
     body.onVelocityChanged.listen(sprite) {
       (newVel) in
-      if sprite.velocity != newVel.velocity {
-        sprite.willUpdateVelocity(newVel.velocity)
+      if sprite.velocity != newVel {
+        sprite.willUpdateVelocity(newVel)
       }
     }
 
@@ -64,6 +64,16 @@ public struct Game {
     shape.friction = sprite.friction
     shape.collisionType = 1
     shape.tag = tag
+
+    sprite.onElasticityChanged.listen(shape) {
+      (newElas) in
+      shape.elasticity = newElas
+    }
+
+    sprite.onFrictionChanged.listen(shape) {
+      (newFric) in
+      shape.friction = newFric
+    }
   }
 }
 

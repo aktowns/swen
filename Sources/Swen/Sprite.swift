@@ -47,23 +47,35 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
 
   let onPositionChanged = Signal<Vector>()
   let onVelocityChanged = Signal<Vector>()
+  let onSizeChanged = Signal<Size>()
+  let onMassChanged = Signal<Double>()
+  let onElasticityChanged = Signal<Double>()
+  let onFrictionChanged = Signal<Double>()
 
   public var position: Vector {
-    didSet {
-      onPositionChanged.fire(position)
-    }
+    didSet { onPositionChanged => position }
   }
 
   public var velocity: Vector {
-    didSet {
-      onVelocityChanged.fire(velocity)
-    }
+    didSet { onVelocityChanged => velocity }
   }
 
-  public var size: Size = Size.zero
-  public var mass = 20.0
-  public var elasticity = 0.0
-  public var friction = 0.7
+  public var size: Size {
+    didSet { onSizeChanged => size }
+  }
+
+  public var mass: Double {
+    didSet { onMassChanged => mass }
+  }
+
+  public var elasticity: Double {
+    didSet { onElasticityChanged => elasticity }
+  }
+
+  public var friction: Double {
+    didSet { onFrictionChanged => friction }
+  }
+
   public var moment = Double.infinity
   public var radius = 20.0
 
@@ -71,6 +83,10 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
     self.pipeline = pipeline
     self.position = Vector.zero
     self.velocity = Vector.zero
+    self.size = Size.zero
+    self.mass = 20.0
+    self.elasticity = 0.0
+    self.friction = 0.7
 
     setup()
   }

@@ -25,8 +25,14 @@ public final class PhyBody: LowLevelMemoizedHandle {
   public let handle: COpaquePointer
   public static var memoized: [COpaquePointer: PhyBody] = Dictionary<COpaquePointer, PhyBody>()
 
-  let onPositionChanged = Signal<PhyBody>()
-  let onVelocityChanged = Signal<PhyBody>()
+  let onPositionChanged = Signal<Vector>()
+  let onVelocityChanged = Signal<Vector>()
+
+  public typealias PositionUpdateFunc = (body: PhyBody, dt: Double) -> Void
+  public typealias VelocityUpdateFunc = (body: PhyBody, gravity: Vector, damping: Double, dt: Double) -> Void
+
+  private var _velocityUpdateFunc: VelocityUpdateFunc
+  private var _positionUpdateFunc: PositionUpdateFunc
 
   public required init(fromHandle handle: COpaquePointer) {
     self.handle = handle
@@ -35,26 +41,12 @@ public final class PhyBody: LowLevelMemoizedHandle {
 
     assert(PhyBody.memoized[handle] == nil, "PhyBody.init(fromHandle:) initialised with tagged handler")
 
-    cpBodySetUserData(self.handle, unsafeBitCast(self, UnsafeMutablePointer<Void>.self))
-    cpBodySetPositionUpdateFunc(self.handle, {
-      (body: COpaquePointer, dt: Double) in
-      cpBodyUpdatePosition(body, dt)
+    // default update funcs just call the underlying updates
+    self._positionUpdateFunc = PhyBody.defaultPositionUpdateFunc
+    self._velocityUpdateFunc = PhyBody.defaultVelocityUpdateFunc
 
-      let ud = cpBodyGetUserData(body)
-      let klass = unsafeBitCast(ud, PhyBody.self)
-
-      klass.onPositionChanged.fire(klass)
-    })
-
-    cpBodySetVelocityUpdateFunc(self.handle, {
-      (body: COpaquePointer, gravity: cpVect, damping: Double, dt: Double) in
-      cpBodyUpdateVelocity(body, gravity, damping, dt)
-
-      let ud = cpBodyGetUserData(body)
-      let klass = unsafeBitCast(ud, PhyBody.self)
-
-      klass.onVelocityChanged.fire(klass)
-    })
+    setPositionUpdateFunc(PhyBody.defaultPositionUpdateFunc)
+    setVelocityUpdateFunc(PhyBody.defaultVelocityUpdateFunc)
 
     PhyBody.memoized[handle] = self
   }
@@ -92,6 +84,58 @@ public final class PhyBody: LowLevelMemoizedHandle {
     set {
       cpBodySetVelocity(self.handle, cpVect.fromVector(newValue))
     }
+  }
+
+  public static var defaultVelocityUpdateFunc: VelocityUpdateFunc {
+    get {
+      return {
+        (body: PhyBody, gravity: Vector, damping: Double, dt: Double) in
+        cpBodyUpdateVelocity(body.handle, cpVect.fromVector(gravity), damping, dt)
+      }
+    }
+  }
+
+  public static var defaultPositionUpdateFunc: PositionUpdateFunc {
+    get {
+      return {
+        (body: PhyBody, dt: Double) in
+        cpBodyUpdatePosition(body.handle, dt)
+      }
+    }
+  }
+
+  // WARN: this isn't re-entrant!!!!!
+  public func setVelocityUpdateFunc(f: VelocityUpdateFunc) {
+    self._velocityUpdateFunc = f
+    cpBodySetUserData(self.handle, unsafeBitCast(self, UnsafeMutablePointer<Void>.self))
+
+    cpBodySetVelocityUpdateFunc(self.handle, {
+      (body: COpaquePointer, gravity: cpVect, damping: Double, dt: Double) in
+
+      let ud = cpBodyGetUserData(body)
+      let klass = unsafeBitCast(ud, PhyBody.self)
+
+      klass._velocityUpdateFunc(body: klass, gravity: gravity.toVector(), damping: damping, dt: dt)
+
+      klass.onVelocityChanged => klass.velocity
+    })
+  }
+
+  // WARN: this isn't re-entrant!!!!!
+  public func setPositionUpdateFunc(f: PositionUpdateFunc) {
+    self._positionUpdateFunc = f
+    cpBodySetUserData(self.handle, unsafeBitCast(self, UnsafeMutablePointer<Void>.self))
+
+    cpBodySetPositionUpdateFunc(self.handle, {
+      (body: COpaquePointer, dt: Double) in
+
+      let ud = cpBodyGetUserData(body)
+      let klass = unsafeBitCast(ud, PhyBody.self)
+
+      klass._positionUpdateFunc(body: klass, dt: dt)
+
+      klass.onPositionChanged => klass.position
+    })
   }
 
 }
