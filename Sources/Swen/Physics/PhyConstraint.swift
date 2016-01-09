@@ -20,10 +20,12 @@
 import CChipmunk
 
 public final class PhyConstraint : LowLevelMemoizedHandle {
-  public let handle: COpaquePointer
-  public static var memoized: [COpaquePointer: PhyConstraint] = Dictionary<COpaquePointer, PhyConstraint>()
+  public typealias RawHandle = UnsafeMutablePointer<cpConstraint>
 
-  public required init(fromHandle handle: COpaquePointer) {
+  public let handle: RawHandle
+  public static var memoized: [RawHandle: PhyConstraint] = Dictionary<RawHandle, PhyConstraint>()
+
+  public required init(fromHandle handle: RawHandle) {
     self.handle = handle
 
     assert(handle != nil, "PhyConstraint.init(fromHandle:) handed a null handle")
@@ -34,7 +36,7 @@ public final class PhyConstraint : LowLevelMemoizedHandle {
   }
 
   // try UserData falling back to creating a new instance
-  public static func fromHandle(handle: COpaquePointer) -> PhyConstraint {
+  public static func fromHandle(handle: RawHandle) -> PhyConstraint {
     let mptr = PhyConstraint.memoized[handle]
 
     if let ptr = mptr {

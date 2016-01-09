@@ -20,11 +20,13 @@
 import CChipmunk
 
 public final class PhyShape: LowLevelMemoizedHandle {
-  public let handle: COpaquePointer
-  public var tag: String?
-  public static var memoized: [COpaquePointer: PhyShape] = Dictionary<COpaquePointer, PhyShape>()
+  public typealias RawHandle = UnsafeMutablePointer<cpShape>
 
-  public required init(fromHandle handle: COpaquePointer) {
+  public let handle: RawHandle
+  public var tag: String?
+  public static var memoized: [RawHandle: PhyShape] = Dictionary<RawHandle, PhyShape>()
+
+  public required init(fromHandle handle: RawHandle) {
     self.handle = handle
     self.tag = Optional.None
 
@@ -36,7 +38,7 @@ public final class PhyShape: LowLevelMemoizedHandle {
   }
 
   // try UserData falling back to creating a new instance
-  public static func fromHandle(handle: COpaquePointer) -> PhyShape {
+  public static func fromHandle(handle: RawHandle) -> PhyShape {
     let mptr = PhyShape.memoized[handle]
 
     if let ptr = mptr {

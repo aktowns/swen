@@ -26,10 +26,12 @@ import CChipmunk
 // 284 } cpSpaceDebugDrawFlags;
 
 public final class PhySpace : LowLevelMemoizedHandle {
-  public let handle: COpaquePointer
-  public static var memoized: [COpaquePointer: PhySpace] = Dictionary<COpaquePointer, PhySpace>()
+  public typealias RawHandle = UnsafeMutablePointer<cpSpace>
 
-  public init(fromHandle handle: COpaquePointer) {
+  public let handle: RawHandle
+  public static var memoized: [RawHandle: PhySpace] = Dictionary<RawHandle, PhySpace>()
+
+  public init(fromHandle handle: RawHandle) {
     self.handle = handle
 
     assert(handle != nil, "PhySpace.init(fromHandle:) handed a null handle")
@@ -40,7 +42,7 @@ public final class PhySpace : LowLevelMemoizedHandle {
   }
 
   // try UserData falling back to creating a new instance
-  public static func fromHandle(handle: COpaquePointer) -> PhySpace {
+  public static func fromHandle(handle: RawHandle) -> PhySpace {
     let mptr = PhySpace.memoized[handle]
 
     if let ptr = mptr {

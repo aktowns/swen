@@ -22,7 +22,7 @@ import CSDL
 extension SDL_Rect {
 
   static func fromRect(rect: Rect) -> SDL_Rect {
-    return SDL_Rect(x: Int32(rect.x), y: Int32(rect.y), w: Int32(rect.sizeX), h: Int32(rect.sizeY))
+    return SDL_Rect(x: rect.x.int32, y: rect.y.int32, w: rect.sizeX.int32, h: rect.sizeY.int32)
   }
 
 }
@@ -30,7 +30,7 @@ extension SDL_Rect {
 extension SDL_Point {
 
   static func fromPoint(point: Vector) -> SDL_Point {
-    return SDL_Point(x: Int32(point.x), y: Int32(point.y))
+    return SDL_Point(x: point.x.int32, y: point.y.int32)
   }
 
 }

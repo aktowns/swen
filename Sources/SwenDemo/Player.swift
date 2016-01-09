@@ -33,9 +33,7 @@ public class Player: Sprite, GameLoop, CustomVelocityPhysics {
   var lastJumpState: Bool = false
   var remainingBoost: Double = 0.0
 
-  let GRAVITY = 2000.0
-  let JUMP_HEIGHT = 50.0
-  let JUMP_BOOST_HEIGHT = 55.0
+  let FALL_VELOCITY = 900.0
 
   public override func setup() {
     let playerSpriteMap: ImageMapFile = pipeline.get(fromPath: "assets/sprites/spritesheet_players.xml")!
@@ -47,21 +45,26 @@ public class Player: Sprite, GameLoop, CustomVelocityPhysics {
 
     self.size = anim.size
     self.position = Vector(x: 300, y: 300)
+    self.friction = 0.0
+    self.elasticity = 0.0
+    self.mass = 1.0
   }
 
   public func draw(game: Game) {
     let animation = playerMap[currentAnimation[self.animationStep / 12]]
-    player!.render(atPoint: position, clip: animation!)
+    player!.render(atPoint: position, clip: animation!,
+        flip: direction.x < 0.0 ? RenderFlip.Horizontal : RenderFlip.None)
   }
 
   public func update(game: Game) {
+    let JUMP_HEIGHT = 150.0
+    let JUMP_BOOST_HEIGHT = 180.0
+
     let jumpState: Bool = direction.y > 0.0
 
     if jumpState && !lastJumpState && grounded {
-      print("Jumping!")
-      var jump_v = Math.sqrt(2.0 * JUMP_HEIGHT * GRAVITY)
-      spriteMainBody!.velocity += Vector(x: 0.0, y: jump_v)
-
+      let jump_v = Math.sqrt(2.0 * JUMP_HEIGHT * game.space.gravity.y)
+      velocity.y += -jump_v
       remainingBoost = JUMP_BOOST_HEIGHT / jump_v
     }
 
@@ -93,16 +96,13 @@ public class Player: Sprite, GameLoop, CustomVelocityPhysics {
     let PLAYER_AIR_ACCEL_TIME = 0.25
     let PLAYER_AIR_ACCEL = (PLAYER_VELOCITY / PLAYER_AIR_ACCEL_TIME)
 
-    let FALL_VELOCITY = 900.0
-
     let jumpState: Bool = direction.y > 0.0
 
-    var groundNormal: Vector = Vector.zero;
+    var groundNormal: Vector = Vector.zero
 
     body.eachArbiter() {
       (arbiter: PhyArbiter) in
-      print(arbiter)
-      let n: Vector = arbiter.normal.negated
+      let n: Vector = arbiter.normal
       if n.y > groundNormal.y {
         groundNormal = n
       }
@@ -122,12 +122,15 @@ public class Player: Sprite, GameLoop, CustomVelocityPhysics {
 
     let surfaceV = Vector(x: -targetVx, y: 0.0)
     spriteMainShape!.surfaceVelocity = surfaceV
-    spriteMainShape!.friction = grounded ? PLAYER_GROUND_ACCEL / GRAVITY : 0.0
+    spriteMainShape!.friction = grounded ? (PLAYER_GROUND_ACCEL / body.space.gravity.y) : 0.0
 
     if !grounded {
       body.velocity.x = Math.lerp(body.velocity.x, targetVx, PLAYER_AIR_ACCEL * dt)
     }
 
-    body.velocity.y = Math.clamp(body.velocity.y, minValue: -FALL_VELOCITY, maxValue: Double.infinity)
+    print("1.body.velocity=\(body.velocity)")
+
+    body.velocity.y = Math.clamp(body.velocity.y + 5, minValue: -Double.infinity, maxValue: FALL_VELOCITY)
+    print("2.body.velocity=\(body.velocity)")
   }
 }

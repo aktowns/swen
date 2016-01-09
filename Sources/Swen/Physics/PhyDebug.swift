@@ -115,7 +115,7 @@ public final class PhyDebug: AnyObject {
     }
 
     let drawColour: cpSpaceDebugDrawColorForShapeImpl = {
-      (shape: COpaquePointer,
+      (shape: PhyShape.RawHandle,
        data: cpDataPointer) in
 
       let klass = unsafeBitCast(data, PhyDebug.self)
@@ -190,7 +190,7 @@ public final class PhyDebug: AnyObject {
     delegate.drawDot(size: size, pos: pos.toVector(), color: color.toColour())
   }
 
-  private func drawColourTrampoline(shape: COpaquePointer) -> cpSpaceDebugColor {
+  private func drawColourTrampoline(shape: PhyShape.RawHandle) -> cpSpaceDebugColor {
     let colour = delegate.drawColour(shape: PhyShape.fromHandle(shape))
 
     return cpSpaceDebugColor.fromColour(colour)

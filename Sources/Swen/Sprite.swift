@@ -50,7 +50,6 @@ public protocol CustomPositionPhysics {
   func positionUpdate(body: PhyBody, dt: Double)
 }
 
-
 public class Sprite: PhysicsUpdatable, PhysicsBody {
   public let pipeline: ContentPipeline
 
@@ -86,7 +85,7 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
   }
 
   public var moment = Double.infinity
-  public var radius = 20.0
+  public var radius = 10.0
 
   public var spriteMainBody: PhyBody?
   public var spriteMainShape: PhyShape?
@@ -96,9 +95,9 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
     self.position = Vector.zero
     self.velocity = Vector.zero
     self.size = Size.zero
-    self.mass = 20.0
+    self.mass = 1.0
     self.elasticity = 0.0
-    self.friction = 0.7
+    self.friction = 0.0
 
     self.spriteMainBody = Optional.None
     self.spriteMainShape = Optional.None
@@ -147,6 +146,11 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
     self.onVelocityChanged.listen(body) {
       (newVel) in
       body.velocity = newVel
+    }
+
+    self.onMassChanged.listen(body) {
+      (newMass) in
+      body.mass = newMass
     }
 
     switch self {

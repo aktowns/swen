@@ -78,6 +78,12 @@ public class Texture {
     renderer.copy(texture: self, sourceRect: clip, destinationRect: destRect)
   }
 
+  public func render(atPoint point: Vector, clip: Rect, flip: RenderFlip) {
+    let destRect = Rect(x: point.x, y: point.y, sizeX: clip.sizeX, sizeY: clip.sizeY)
+
+    renderer.copy(texture: self, sourceRect: clip, destinationRect: destRect, flip: flip)
+  }
+
   public var colourMod: Colour {
     get {
       var r: UInt8 = 0, g: UInt8 = 0, b: UInt8 = 0

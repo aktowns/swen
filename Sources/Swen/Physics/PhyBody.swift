@@ -29,8 +29,10 @@ private final class FunctionPointerWrapper<T> {
 }
 
 public final class PhyBody: LowLevelMemoizedHandle {
-  public let handle: COpaquePointer
-  public static var memoized: [COpaquePointer: PhyBody] = Dictionary<COpaquePointer, PhyBody>()
+  public typealias RawHandle = UnsafeMutablePointer<cpBody>
+
+  public let handle: RawHandle
+  public static var memoized: [RawHandle: PhyBody] = Dictionary<RawHandle, PhyBody>()
 
   let onPositionChanged = Signal<Vector>()
   let onVelocityChanged = Signal<Vector>()
@@ -45,7 +47,7 @@ public final class PhyBody: LowLevelMemoizedHandle {
   private var _velocityUpdateFunc: VelocityUpdateFunc
   private var _positionUpdateFunc: PositionUpdateFunc
 
-  public required init(fromHandle handle: COpaquePointer) {
+  public required init(fromHandle handle: RawHandle) {
     self.handle = handle
 
     assert(handle != nil, "PhyBody.init(fromHandle:) handed a null handle")
@@ -63,7 +65,7 @@ public final class PhyBody: LowLevelMemoizedHandle {
   }
 
   // try UserData falling back to creating a new instance
-  public static func fromHandle(handle: COpaquePointer) -> PhyBody {
+  public static func fromHandle(handle: RawHandle) -> PhyBody {
     let mptr = PhyBody.memoized[handle]
 
     if let ptr = mptr {
@@ -97,6 +99,21 @@ public final class PhyBody: LowLevelMemoizedHandle {
     }
   }
 
+  public var mass: Double {
+    get {
+      return cpBodyGetMass(self.handle)
+    }
+    set {
+      cpBodySetMass(self.handle, newValue)
+    }
+  }
+
+  public var space: PhySpace {
+    get {
+      return PhySpace.fromHandle(cpBodyGetSpace(self.handle))
+    }
+  }
+
   public static var defaultVelocityUpdateFunc: VelocityUpdateFunc {
     get {
       return {
@@ -125,7 +142,7 @@ public final class PhyBody: LowLevelMemoizedHandle {
     cpBodySetUserData(self.handle, unsafeBitCast(self, UnsafeMutablePointer<Void>.self))
 
     cpBodySetVelocityUpdateFunc(self.handle, {
-      (body: COpaquePointer, gravity: cpVect, damping: Double, dt: Double) in
+      (body: RawHandle, gravity: cpVect, damping: Double, dt: Double) in
 
       let ud = cpBodyGetUserData(body)
       let klass = unsafeBitCast(ud, PhyBody.self)
@@ -142,7 +159,7 @@ public final class PhyBody: LowLevelMemoizedHandle {
     cpBodySetUserData(self.handle, unsafeBitCast(self, UnsafeMutablePointer<Void>.self))
 
     cpBodySetPositionUpdateFunc(self.handle, {
-      (body: COpaquePointer, dt: Double) in
+      (body: RawHandle, dt: Double) in
 
       let ud = cpBodyGetUserData(body)
       let klass = unsafeBitCast(ud, PhyBody.self)
@@ -159,7 +176,7 @@ public final class PhyBody: LowLevelMemoizedHandle {
     let fptr = unsafeBitCast(fp, UnsafeMutablePointer<Void>.self)
 
     let iterator: cpBodyArbiterIteratorFunc = {
-      (body: COpaquePointer, arb: COpaquePointer, me: UnsafeMutablePointer<Void>) in
+      (body: RawHandle, arb: PhyArbiter.RawHandle, me: UnsafeMutablePointer<Void>) in
       let f: FunctionPointerWrapper<ArbiterIterator> = unsafeBitCast(me, FunctionPointerWrapper<ArbiterIterator>.self)
       let arbiter = PhyArbiter.fromHandle(arb)
 
@@ -175,7 +192,7 @@ public final class PhyBody: LowLevelMemoizedHandle {
     let fptr = unsafeBitCast(fp, UnsafeMutablePointer<Void>.self)
 
     let iterator: cpBodyShapeIteratorFunc = {
-      (body: COpaquePointer, shp: COpaquePointer, me: UnsafeMutablePointer<Void>) in
+        (body: RawHandle, shp: PhyShape.RawHandle, me: UnsafeMutablePointer<Void>) in
       let f: FunctionPointerWrapper<ShapeIterator> = unsafeBitCast(me, FunctionPointerWrapper<ShapeIterator>.self)
       let shape = PhyShape.fromHandle(shp)
 
@@ -191,7 +208,7 @@ public final class PhyBody: LowLevelMemoizedHandle {
     let fptr = unsafeBitCast(fp, UnsafeMutablePointer<Void>.self)
 
     let iterator: cpBodyConstraintIteratorFunc = {
-      (body: COpaquePointer, constr: COpaquePointer, me: UnsafeMutablePointer<Void>) in
+      (body: RawHandle, constr: PhyConstraint.RawHandle, me: UnsafeMutablePointer<Void>) in
       let f = unsafeBitCast(me, FunctionPointerWrapper<ConstraintIterator>.self)
       let constraint = PhyConstraint.fromHandle(constr)
 

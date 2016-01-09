@@ -18,13 +18,14 @@
 //
 
 public protocol LowLevelHandle {
-  var handle: COpaquePointer { get }
+  typealias RawHandle : Hashable
+  var handle: RawHandle { get }
 
-  init(fromHandle: COpaquePointer)
+  init(fromHandle: RawHandle)
 }
 
 public protocol LowLevelMemoizedHandle: LowLevelHandle {
-  static func fromHandle(handle: COpaquePointer) -> Self
+  static func fromHandle(handle: RawHandle) -> Self
 
-  static var memoized: [COpaquePointer: Self] { get set }
+  static var memoized: [RawHandle: Self] { get set }
 }

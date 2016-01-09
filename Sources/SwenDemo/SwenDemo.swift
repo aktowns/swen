@@ -68,8 +68,8 @@ public class SwenDemo: GameBaseDelegate {
       self.blockFont = pipeline.get(fromPath: "assets/fonts/KenPixel Blocks.ttf")!
 
       self.backdrop = try backdropFile.asTexture()
-      self.titleText = try blockFont.asTexture(withText: "swEn demo", size: 68, andColour: Colour.black)
-      self.statusText = try normalFont.asTexture(withText: "Testing", size: 28, andColour: Colour.black)
+      self.titleText = try blockFont.asTexture(withText: "swEn demo", size: 68, andColour: Colour.white)
+      self.statusText = try normalFont.asTexture(withText: "Testing", size: 28, andColour: Colour.white)
 
       self.hud1 = try hud1File.asTexture()
       self.hud3 = try hud3File.asTexture()
@@ -107,7 +107,7 @@ public class SwenDemo: GameBaseDelegate {
     let ground: PhyShape = PhyShape(segmentedShapeFrom: game.space.staticBody,
         a: Vector(x: 0.0, y: window.size.sizeY),
         b: Vector(x: window.size.sizeX, y: window.size.sizeY),
-        radius: 50.0)
+        radius: 20.0)
     ground.tag = "wall"
     ground.friction = 1.0
     ground.elasticity = 1.0
@@ -219,18 +219,20 @@ public class SwenDemo: GameBaseDelegate {
     item3.draw(game)
     player.draw(game)
 
-    game.space.debugDraw(phydebug)
+//  z    game.space.debugDraw(phydebug)
   }
 
   // Game logic
   public func update(game: Game) {
-    if let statusText = try? normalFont.asTexture(withText: "FPS: \(game.fps)", size: 28, andColour: Colour.black) {
+    if let statusText = try? normalFont.asTexture(withText: "FPS: \(game.fps)", size: 28, andColour: Colour.white) {
       self.statusText = statusText
     }
 
     for keyEvent in game.keyEvents {
       if !keyEvent.keyRepeat {
         switch keyEvent.scanCode {
+        case .ScanCodeSpace:
+          player.position.y -= 10
         case .ScanCodeUp:
           player.direction.y += (keyEvent.state == KeyState.Pressed) ? 1.0 : -1.0
         case .ScanCodeDown:

@@ -26,11 +26,11 @@ public struct RenderFlip: OptionSetType {
     self.rawValue = rawValue
   }
 
-  static let None = RenderFlip(rawValue: SDL_FLIP_NONE.rawValue)
-  static let Horizontal = RenderFlip(rawValue: SDL_FLIP_HORIZONTAL.rawValue)
-  static let Vertical = RenderFlip(rawValue: SDL_FLIP_VERTICAL.rawValue)
+  public static let None = RenderFlip(rawValue: SDL_FLIP_NONE.rawValue)
+  public static let Horizontal = RenderFlip(rawValue: SDL_FLIP_HORIZONTAL.rawValue)
+  public static let Vertical = RenderFlip(rawValue: SDL_FLIP_VERTICAL.rawValue)
 
-  var asSDL: SDL_RendererFlip {
+  public var asSDL: SDL_RendererFlip {
     return SDL_RendererFlip(self.rawValue)
   }
 }
@@ -101,8 +101,7 @@ public class Renderer {
     assert(res == 0, "SDL_RenderCopy failed")
   }
 
-  public func copy(texture texture: Texture,
-                   sourceRect srcrect: Rect) {
+  public func copy(texture texture: Texture, sourceRect srcrect: Rect) {
     var srcSDLRect = SDL_Rect.fromRect(srcrect)
 
     let res = SDL_RenderCopy(self.handle, texture.handle, &srcSDLRect, nil)
@@ -124,6 +123,15 @@ public class Renderer {
 
     let res = SDL_RenderCopy(self.handle, texture.handle, &srcSDLRect, &dstSDLRect)
     assert(res == 0, "SDL_RenderCopy failed")
+  }
+
+  public func copy(texture texture: Texture, sourceRect srcrect: Rect,
+                   destinationRect dstrect: Rect, flip: RenderFlip) {
+    var srcSDLRect: SDL_Rect = SDL_Rect.fromRect(srcrect)
+    var dstSDLRect: SDL_Rect = SDL_Rect.fromRect(dstrect)
+
+    let res = SDL_RenderCopyEx(self.handle, texture.handle, &srcSDLRect, &dstSDLRect, 0.0, nil, flip.asSDL)
+    assert(res == 0, "SDL_RenderCopyEx failed")
   }
 
   public func copy(texture texture: Texture,
