@@ -20,7 +20,6 @@
 import CChipmunk
 import Signals
 
-
 public final class PhyBody: LowLevelMemoizedHandle {
   public let handle: COpaquePointer
   public static var memoized: [COpaquePointer: PhyBody] = Dictionary<COpaquePointer, PhyBody>()

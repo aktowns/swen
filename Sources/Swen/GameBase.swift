@@ -57,6 +57,14 @@ public struct Game {
       body.velocity = newVel
     }
 
+    switch sprite {
+      case let spr as CustomVelocityPhysics:
+        body.setVelocityUpdateFunc(spr.velocityUpdate)
+      case let spr as CustomPositionPhysics:
+        body.setPositionUpdateFunc(spr.positionUpdate)
+      default: Void()
+    }
+
     let shape = space.addShape(PhyShape(boxShapeFrom: body, box: PhyBoundingBox(size: sprite.size),
         radius: sprite.radius))
 

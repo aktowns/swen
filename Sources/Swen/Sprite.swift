@@ -42,6 +42,15 @@ public protocol PhysicsUpdatable {
   func willUpdateVelocity(velocity: Vector)
 }
 
+public protocol CustomVelocityPhysics {
+  func velocityUpdate(body: PhyBody, gravity: Vector, damping: Double, dt: Double)
+}
+
+public protocol CustomPositionPhysics {
+  func positionUpdate(body: PhyBody, dt: Double)
+}
+
+
 public class Sprite: PhysicsUpdatable, PhysicsBody {
   public let pipeline: ContentPipeline
 

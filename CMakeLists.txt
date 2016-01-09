@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.4)
 project(Swen)
 
 set(SOURCE_FILES
-        Sources/SwenDemo/Game.swift
+        Sources/SwenDemo/SwenDemo.swift
         Sources/SwenDemo/main.swift
         Sources/SwenDemo/Enemy.swift
         Sources/SwenDemo/Item.swift
@@ -54,6 +54,7 @@ set(SOURCE_FILES
         Sources/Swen/Network/Socket.swift
         Sources/Swen/Network/TCPSocket.swift
         Sources/Swen/Network/UDPSocket.swift
+        Sources/Swen/Physics/PhyArbiter.swift
         Sources/Swen/Physics/PhyShape.swift
         Sources/Swen/Physics/PhySpace.swift
         Sources/Swen/Physics/PhyBody.swift

@@ -19,7 +19,7 @@
 
 import Swen
 
-public class Player: Sprite, GameLoop {
+public class Player: Sprite, GameLoop, CustomVelocityPhysics {
   let walkingAnimation = ["alienBlue_walk1", "alienBlue_stand", "alienBlue_walk2"]
 
   var player: Texture?
@@ -49,5 +49,11 @@ public class Player: Sprite, GameLoop {
     if (self.animationStep / 8) >= walkingAnimation.count {
       self.animationStep = 0
     }
+  }
+
+  public func velocityUpdate(body: PhyBody, gravity: Vector, damping: Double, dt: Double) {
+    var groundNormal: Vector = Vector.zero;
+
+    PhyBody.defaultVelocityUpdateFunc(body: body, gravity: gravity, damping: damping, dt: dt)
   }
 }
