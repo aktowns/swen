@@ -23,29 +23,6 @@ public protocol GameBaseDelegate: GameLoop {
   init(withWindow: Window, pipeline: ContentPipeline, andGame: Game)
 }
 
-public protocol PhysicsBody {
-  var position: Vector { get set }
-  var velocity: Vector { get set }
-  var size: Size { get set }
-  var mass: Double { get set }
-  var elasticity: Double { get set }
-  var friction: Double { get set }
-  var moment: Double { get set }
-  var radius: Double { get set }
-}
-
-public protocol PhysicsUpdatable {
-  func willUpdatePosition(position: Vector) -> Bool
-
-  func willUpdateVelocity(velocity: Vector) -> Bool
-}
-
-extension PhysicsBody {
-  public var bodyRect: Rect {
-    return Rect(x: position.x, y: position.y, sizeX: size.sizeX, sizeY: size.sizeY)
-  }
-}
-
 public struct Game {
   public let fps: Float
   public let frame: Int
@@ -53,22 +30,32 @@ public struct Game {
   public let settings: GameSettings
   public let space: PhySpace
 
-  public func registerBody(sprite: PhysicsBody) {
+  public func registerSprite(sprite: Sprite, withTag tag: String) {
     let body = space.addBody(PhyBody(mass: sprite.mass, moment: sprite.moment))
     body.position = sprite.position
 
-//    switch sprite {
-//      case let spr as PhysicsUpdatable:
-//        body.positionChangedListeners.append({
-//          (bodyEv: PhyBody) in
-//          spr.willUpdatePosition(bodyEv.position)
-//        })
-//        body.velocityChangedListeners.append({
-//          (bodyEv: PhyBody) in
-//          spr.willUpdateVelocity(bodyEv.velocity)
-//        })
-//      default: Void()
-//    }
+    body.onPositionChanged.listen(sprite) {
+      (newPos) in
+      if sprite.position != newPos.position {
+        sprite.willUpdatePosition(newPos.position)
+      }
+    }
+    body.onVelocityChanged.listen(sprite) {
+      (newVel) in
+      if sprite.velocity != newVel.velocity {
+        sprite.willUpdateVelocity(newVel.velocity)
+      }
+    }
+
+    sprite.onPositionChanged.listen(body) {
+      (newPos) in
+      body.position = newPos
+    }
+
+    sprite.onVelocityChanged.listen(body) {
+      (newVel) in
+      body.velocity = newVel
+    }
 
     let shape = space.addShape(PhyShape(boxShapeFrom: body, box: PhyBoundingBox(size: sprite.size),
         radius: sprite.radius))
@@ -76,7 +63,7 @@ public struct Game {
     shape.elasticity = sprite.elasticity
     shape.friction = sprite.friction
     shape.collisionType = 1
-    shape.tag = "player"
+    shape.tag = tag
   }
 }
 

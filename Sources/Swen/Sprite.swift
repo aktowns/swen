@@ -17,11 +17,49 @@
 //   limitations under the License.
 //
 
+import Signals
+
+public protocol PhysicsBody {
+  var position: Vector { get set }
+  var velocity: Vector { get set }
+  var size: Size { get set }
+  var mass: Double { get set }
+  var elasticity: Double { get set }
+  var friction: Double { get set }
+  var moment: Double { get set }
+  var radius: Double { get set }
+}
+
+extension PhysicsBody {
+  public var bodyRect: Rect {
+    return Rect(x: position.x, y: position.y, sizeX: size.sizeX, sizeY: size.sizeY)
+  }
+}
+
+public protocol PhysicsUpdatable {
+  func willUpdatePosition(position: Vector)
+
+  func willUpdateVelocity(velocity: Vector)
+}
+
 public class Sprite: PhysicsUpdatable, PhysicsBody {
   public let pipeline: ContentPipeline
 
-  public var position: Vector = Vector.zero
-  public var velocity: Vector = Vector.zero
+  let onPositionChanged = Signal<Vector>()
+  let onVelocityChanged = Signal<Vector>()
+
+  public var position: Vector {
+    didSet {
+      onPositionChanged.fire(position)
+    }
+  }
+
+  public var velocity: Vector {
+    didSet {
+      onVelocityChanged.fire(velocity)
+    }
+  }
+
   public var size: Size = Size.zero
   public var mass = 20.0
   public var elasticity = 0.0
@@ -31,6 +69,8 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
 
   public init(pipeline: ContentPipeline) throws {
     self.pipeline = pipeline
+    self.position = Vector.zero
+    self.velocity = Vector.zero
 
     setup()
   }
@@ -39,15 +79,11 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
 
   }
 
-  public func willUpdatePosition(position: Vector) -> Bool {
+  public func willUpdatePosition(position: Vector) {
     self.position = position
-
-    return true
   }
 
-  public func willUpdateVelocity(velocity: Vector) -> Bool {
+  public func willUpdateVelocity(velocity: Vector) {
     self.velocity = velocity
-
-    return true
   }
 }

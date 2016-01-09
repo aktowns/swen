@@ -92,10 +92,10 @@ public class SwenDemo: GameBaseDelegate {
       self.hudJewel = try hudJewelFile.asTexture()
 
       self.player = try Player(pipeline: pipeline)
-      game.registerBody(self.player)
+      game.registerSprite(self.player, withTag: "player")
 
       self.enemy = try Enemy(pipeline: pipeline)
-      game.registerBody(enemy)
+      game.registerSprite(enemy, withTag: "enemy")
 
       self.item1 = try Item(pipeline: pipeline)
       self.item1.position = Vector(x: 920.0, y: 370.0)
@@ -104,9 +104,9 @@ public class SwenDemo: GameBaseDelegate {
       self.item3 = try Item(pipeline: pipeline)
       self.item3.position = Vector(x: 1120.0, y: 370.0)
 
-      game.registerBody(self.item1)
-      game.registerBody(self.item2)
-      game.registerBody(self.item3)
+      game.registerSprite(self.item1, withTag: "item")
+      game.registerSprite(self.item2, withTag: "item")
+      game.registerSprite(self.item3, withTag: "item")
 
     } catch let error as SDLError {
       fatalError("Failed to create a window: \(error.description)")
@@ -233,7 +233,7 @@ public class SwenDemo: GameBaseDelegate {
     item3.draw(game)
     player.draw(game)
 
-    game.space.debugDraw(phydebug)
+    //game.space.debugDraw(phydebug)
   }
 
   // Game logic
@@ -242,19 +242,19 @@ public class SwenDemo: GameBaseDelegate {
       self.statusText = statusText
     }
 
-//    for keyEvent in game.keyEvents {
-//      switch keyEvent.scanCode {
-//      case .ScanCodeSpace:
-//        let jumpV = Math.sqrt(2.0 * SwenDemo.JUMP_HEIGHT * game.space.gravity.y)
-//        playerBody.velocity += Vector(x: 0.0, y: -jumpV)
-//      case .ScanCodeLeft:
-//        playerBody.velocity += Vector(x: -60.0, y: 0)
-//      case .ScanCodeRight:
-//        playerBody.velocity += Vector(x: 60.0, y: 0)
-//      default: Void()
-//      }
-//      print(keyEvent)
-//    }
+    for keyEvent in game.keyEvents {
+      switch keyEvent.scanCode {
+      case .ScanCodeSpace:
+        let jumpV = Math.sqrt(2.0 * 100.0 * game.space.gravity.y)
+        player.velocity += Vector(x: 0.0, y: -jumpV)
+      case .ScanCodeLeft:
+        player.velocity += Vector(x: -60.0, y: 0)
+      case .ScanCodeRight:
+        player.velocity += Vector(x: 60.0, y: 0)
+      default: Void()
+      }
+      print(keyEvent)
+    }
 
     enemy.update(game)
     item1.update(game)
