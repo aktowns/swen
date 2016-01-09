@@ -20,12 +20,24 @@
 import CChipmunk
 import Signals
 
+private final class FunctionPointerWrapper<T> {
+  let fp: T
+
+  init(f: T) {
+    self.fp = f
+  }
+}
+
 public final class PhyBody: LowLevelMemoizedHandle {
   public let handle: COpaquePointer
   public static var memoized: [COpaquePointer: PhyBody] = Dictionary<COpaquePointer, PhyBody>()
 
   let onPositionChanged = Signal<Vector>()
   let onVelocityChanged = Signal<Vector>()
+
+  public typealias ArbiterIterator = (PhyArbiter) -> Void
+  public typealias ShapeIterator = (PhyShape) -> Void
+  public typealias ConstraintIterator = (PhyConstraint) -> Void
 
   public typealias PositionUpdateFunc = (body: PhyBody, dt: Double) -> Void
   public typealias VelocityUpdateFunc = (body: PhyBody, gravity: Vector, damping: Double, dt: Double) -> Void
@@ -137,4 +149,51 @@ public final class PhyBody: LowLevelMemoizedHandle {
     })
   }
 
+  public func eachArbiter(f: ArbiterIterator) {
+    // TODO: concerned about performance implications of this.
+    let fp = FunctionPointerWrapper<ArbiterIterator>(f: f)
+    let fptr = unsafeBitCast(fp, UnsafeMutablePointer<Void>.self)
+
+    let iterator: cpBodyArbiterIteratorFunc = {
+      (body: COpaquePointer, arb: COpaquePointer, me: UnsafeMutablePointer<Void>) in
+      let f: FunctionPointerWrapper<ArbiterIterator> = unsafeBitCast(me, FunctionPointerWrapper<ArbiterIterator>.self)
+      let arbiter = PhyArbiter.fromHandle(arb)
+
+      f.fp(arbiter)
+    }
+
+    cpBodyEachArbiter(self.handle, iterator, fptr)
+  }
+
+  public func eachShape(f: ShapeIterator) {
+    // TODO: concerned about performance implications of this.
+    let fp = FunctionPointerWrapper<ShapeIterator>(f: f)
+    let fptr = unsafeBitCast(fp, UnsafeMutablePointer<Void>.self)
+
+    let iterator: cpBodyShapeIteratorFunc = {
+      (body: COpaquePointer, shp: COpaquePointer, me: UnsafeMutablePointer<Void>) in
+      let f: FunctionPointerWrapper<ShapeIterator> = unsafeBitCast(me, FunctionPointerWrapper<ShapeIterator>.self)
+      let shape = PhyShape.fromHandle(shp)
+
+      f.fp(shape)
+    }
+
+    cpBodyEachShape(self.handle, iterator, fptr)
+  }
+
+  public func eachConstraint(f: ConstraintIterator) {
+    // TODO: concerned about performance implications of this.
+    let fp = FunctionPointerWrapper<ConstraintIterator>(f: f)
+    let fptr = unsafeBitCast(fp, UnsafeMutablePointer<Void>.self)
+
+    let iterator: cpBodyConstraintIteratorFunc = {
+      (body: COpaquePointer, constr: COpaquePointer, me: UnsafeMutablePointer<Void>) in
+      let f = unsafeBitCast(me, FunctionPointerWrapper<ConstraintIterator>.self)
+      let constraint = PhyConstraint.fromHandle(constr)
+
+      f.fp(constraint)
+    }
+
+    cpBodyEachConstraint(self.handle, iterator, fptr)
+  }
 }

@@ -54,6 +54,11 @@ public class Player: Sprite, GameLoop, CustomVelocityPhysics {
   public func velocityUpdate(body: PhyBody, gravity: Vector, damping: Double, dt: Double) {
     var groundNormal: Vector = Vector.zero;
 
+    body.eachArbiter() {
+      (arbiter: PhyArbiter) in
+        print(arbiter)
+    }
+
     PhyBody.defaultVelocityUpdateFunc(body: body, gravity: gravity, damping: damping, dt: dt)
   }
 }
