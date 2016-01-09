@@ -19,7 +19,7 @@
 
 import CChipmunk
 
-public class PhyBoundingBox {
+public final class PhyBoundingBox {
   public let handle: cpBB
 
   public init(fromHandle handle: cpBB) {

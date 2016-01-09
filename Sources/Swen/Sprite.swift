@@ -88,6 +88,9 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
   public var moment = Double.infinity
   public var radius = 20.0
 
+  public var spriteMainBody: PhyBody?
+  public var spriteMainShape: PhyShape?
+
   public init(pipeline: ContentPipeline) throws {
     self.pipeline = pipeline
     self.position = Vector.zero
@@ -96,6 +99,9 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
     self.mass = 20.0
     self.elasticity = 0.0
     self.friction = 0.7
+
+    self.spriteMainBody = Optional.None
+    self.spriteMainShape = Optional.None
 
     setup()
   }
@@ -110,5 +116,60 @@ public class Sprite: PhysicsUpdatable, PhysicsBody {
 
   public func willUpdateVelocity(velocity: Vector) {
     self.velocity = velocity
+  }
+
+  public func registerInSpace(space: PhySpace, withTag tag: String) {
+    self.spriteMainBody = PhyBody(mass: self.mass, moment: self.moment)
+    self.spriteMainShape = PhyShape(boxShapeFrom: spriteMainBody!, box: PhyBoundingBox(size: self.size),
+        radius: self.radius)
+
+    let body = space.addBody(self.spriteMainBody!)
+    body.position = self.position
+
+    body.onPositionChanged.listen(self) {
+      (newPos) in
+      if self.position != newPos {
+        self.willUpdatePosition(newPos)
+      }
+    }
+    body.onVelocityChanged.listen(self) {
+      (newVel) in
+      if self.velocity != newVel {
+        self.willUpdateVelocity(newVel)
+      }
+    }
+
+    self.onPositionChanged.listen(body) {
+      (newPos) in
+      body.position = newPos
+    }
+
+    self.onVelocityChanged.listen(body) {
+      (newVel) in
+      body.velocity = newVel
+    }
+
+    switch self {
+    case let spr as CustomVelocityPhysics: body.setVelocityUpdateFunc(spr.velocityUpdate)
+    case let spr as CustomPositionPhysics: body.setPositionUpdateFunc(spr.positionUpdate)
+    default: Void()
+    }
+
+    let shape = space.addShape(self.spriteMainShape!)
+
+    shape.elasticity = self.elasticity
+    shape.friction = self.friction
+    shape.collisionType = 1
+    shape.tag = tag
+
+    self.onElasticityChanged.listen(shape) {
+      (newElas) in
+      shape.elasticity = newElas
+    }
+
+    self.onFrictionChanged.listen(shape) {
+      (newFric) in
+      shape.friction = newFric
+    }
   }
 }

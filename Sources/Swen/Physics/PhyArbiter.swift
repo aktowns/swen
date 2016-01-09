@@ -44,4 +44,10 @@ public final class PhyArbiter: LowLevelMemoizedHandle {
     return PhyArbiter(fromHandle: handle)
   }
 
+  public var normal: Vector {
+    get {
+      return cpArbiterGetNormal(self.handle).toVector()
+    }
+  }
+
 }

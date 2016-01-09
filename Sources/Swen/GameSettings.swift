@@ -18,9 +18,9 @@
 //
 
 public struct GamePhysicSettings {
-  public var gravity: Vector = Vector(x: 0.0, y: 500.0)
+  public var gravity: Vector = Vector(x: 0.0, y: 2000.0)
   public var iterations: Int32 = 10
-  public var timestep: Double = 1.0 / 60.0
+  public var timestep: Double = 1.0 / 180.0
 }
 
 public struct GameSettings {

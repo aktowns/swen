@@ -23,7 +23,7 @@ public class Math {
   public static let DBL_MIN = 2.22507385850720138309e-308
   public static let DBL_MAX = 1.79769313486231570815e+308
 
-  public static func clamp<Num: Comparable>(value: Num, minValue: Num, maxValue: Num) -> Num {
+  public static func clamp<Num:Comparable>(value: Num, minValue: Num, maxValue: Num) -> Num {
     return max(min(value, maxValue), minValue)
   }
 
@@ -69,6 +69,11 @@ public class Math {
 
   public static func ceil(x: Double) -> Double {
     return Glibc.ceil(x)
+  }
+
+  /// Linearly interpolate from @c f1 to @c f2 by no more than @c d.
+  public static func lerp(f1: Double, _ f2: Double, _ d: Double) -> Double {
+    return f1 + Math.clamp(f2 - f1, minValue: -d, maxValue: d)
   }
 }
 

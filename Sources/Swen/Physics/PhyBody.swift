@@ -115,6 +115,10 @@ public final class PhyBody: LowLevelMemoizedHandle {
     }
   }
 
+  public func updateVelocity(gravity: Vector, damping: Double, dt: Double) {
+    PhyBody.defaultVelocityUpdateFunc(body: self, gravity: gravity, damping: damping, dt: dt)
+  }
+
   // WARN: this isn't re-entrant!!!!!
   public func setVelocityUpdateFunc(f: VelocityUpdateFunc) {
     self._velocityUpdateFunc = f

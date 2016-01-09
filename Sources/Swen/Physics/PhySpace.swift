@@ -25,13 +25,29 @@ import CChipmunk
 // 283 > CP_SPACE_DEBUG_DRAW_COLLISION_POINTS = 1<<2,
 // 284 } cpSpaceDebugDrawFlags;
 
-public class PhySpace {
-  let handle: COpaquePointer
+public final class PhySpace : LowLevelMemoizedHandle {
+  public let handle: COpaquePointer
+  public static var memoized: [COpaquePointer: PhySpace] = Dictionary<COpaquePointer, PhySpace>()
 
   public init(fromHandle handle: COpaquePointer) {
     self.handle = handle
 
     assert(handle != nil, "PhySpace.init(fromHandle:) handed a null handle")
+
+    assert(PhySpace.memoized[handle] == nil, "PhySpace.init(fromHandle:) initialised with tagged handler")
+
+    PhySpace.memoized[handle] = self
+  }
+
+  // try UserData falling back to creating a new instance
+  public static func fromHandle(handle: COpaquePointer) -> PhySpace {
+    let mptr = PhySpace.memoized[handle]
+
+    if let ptr = mptr {
+      return ptr
+    }
+
+    return PhySpace(fromHandle: handle)
   }
 
   public convenience init() {

@@ -29,60 +29,6 @@ public struct Game {
   public let keyEvents: [KeyboardEvent]
   public let settings: GameSettings
   public let space: PhySpace
-
-  public func registerSprite(sprite: Sprite, withTag tag: String) {
-    let body = space.addBody(PhyBody(mass: sprite.mass, moment: sprite.moment))
-    body.position = sprite.position
-
-    body.onPositionChanged.listen(sprite) {
-      (newPos) in
-      if sprite.position != newPos {
-        sprite.willUpdatePosition(newPos)
-      }
-    }
-    body.onVelocityChanged.listen(sprite) {
-      (newVel) in
-      if sprite.velocity != newVel {
-        sprite.willUpdateVelocity(newVel)
-      }
-    }
-
-    sprite.onPositionChanged.listen(body) {
-      (newPos) in
-      body.position = newPos
-    }
-
-    sprite.onVelocityChanged.listen(body) {
-      (newVel) in
-      body.velocity = newVel
-    }
-
-    switch sprite {
-      case let spr as CustomVelocityPhysics:
-        body.setVelocityUpdateFunc(spr.velocityUpdate)
-      case let spr as CustomPositionPhysics:
-        body.setPositionUpdateFunc(spr.positionUpdate)
-      default: Void()
-    }
-
-    let shape = space.addShape(PhyShape(boxShapeFrom: body, box: PhyBoundingBox(size: sprite.size),
-        radius: sprite.radius))
-
-    shape.elasticity = sprite.elasticity
-    shape.friction = sprite.friction
-    shape.collisionType = 1
-    shape.tag = tag
-
-    sprite.onElasticityChanged.listen(shape) {
-      (newElas) in
-      shape.elasticity = newElas
-    }
-
-    sprite.onFrictionChanged.listen(shape) {
-      (newFric) in
-      shape.friction = newFric
-    }
-  }
 }
 
 public class GameBase<GameDelegate:GameBaseDelegate> {

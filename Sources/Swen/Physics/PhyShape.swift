@@ -70,10 +70,10 @@ public final class PhyShape: LowLevelMemoizedHandle {
     self.init(fromHandle: ptr)
   }
 
-//  deinit {
-//    cpShapeSetUserData(self.handle, nil)
-//    cpShapeFree(self.handle)
-//  }
+  deinit {
+    cpShapeSetUserData(self.handle, nil)
+    cpShapeFree(self.handle)
+  }
 
   public var friction: Double {
     get {
@@ -99,6 +99,39 @@ public final class PhyShape: LowLevelMemoizedHandle {
     }
     set {
       cpShapeSetCollisionType(self.handle, newValue)
+    }
+  }
+
+  public var surfaceVelocity: Vector {
+    get {
+      return cpShapeGetSurfaceVelocity(self.handle).toVector()
+    }
+    set {
+      cpShapeSetSurfaceVelocity(self.handle, cpVect.fromVector(newValue))
+    }
+  }
+
+  public var sensor: Bool {
+    get {
+      return cpShapeGetSensor(self.handle) == PhyMisc.cpTrue
+    }
+    set {
+      cpShapeSetSensor(self.handle, newValue ? PhyMisc.cpTrue : PhyMisc.cpFalse)
+    }
+  }
+
+  public var body: PhyBody {
+    get {
+      return PhyBody.fromHandle(cpShapeGetBody(self.handle))
+    }
+    set {
+      cpShapeSetBody(self.handle, newValue.handle)
+    }
+  }
+
+  public var space: PhySpace {
+    get {
+      return PhySpace.fromHandle(cpShapeGetSpace(self.handle))
     }
   }
 }
